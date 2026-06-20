@@ -4,7 +4,11 @@ const passport = require("passport");
 const SteamStrategy = require("passport-steam").Strategy;
 
 const STEAM_API_KEY = "BC1836EB654E870330A748FC29490806";
+
 const app = express();
+
+const onlineUsers = new Map();
+
 app.use(express.static("public"));
 
 app.use(session({
@@ -51,6 +55,23 @@ app.get("/api/user", (req, res) => {
         avatar:
             req.user.photos?.[2]?.value ||
             req.user.photos?.[0]?.value
+    });
+});
+
+app.get("/api/ping", (req, res) => {
+    const id = req.user?.id || req.ip;
+    const now = Date.now();
+
+    onlineUsers.set(id, now);
+
+    for (const [key, lastSeen] of onlineUsers.entries()) {
+        if (now - lastSeen > 30000) {
+            onlineUsers.delete(key);
+        }
+    }
+
+    res.json({
+        online: onlineUsers.size
     });
 });
 
