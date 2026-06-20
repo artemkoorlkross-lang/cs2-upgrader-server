@@ -64,11 +64,96 @@ body {
     box-shadow: 0 0 20px rgba(138,43,226,.18);
 }
 
+/* Upgrade result animations */
+#screenFlash {
+    position: fixed;
+    inset: 0;
+    z-index: 9998;
+    pointer-events: none;
+    opacity: 0;
+    background: radial-gradient(circle at center, rgba(34,197,94,.45), rgba(168,85,247,.18), transparent 65%);
+}
+
+#screenFlash.win-active {
+    animation: winFlash .75s ease-out;
+}
+
+#screenFlash.loss-active {
+    background: radial-gradient(circle at center, rgba(239,68,68,.35), rgba(168,85,247,.12), transparent 65%);
+    animation: lossFlash .45s ease-out;
+}
+
+@keyframes winFlash {
+    0% { opacity: 0; transform: scale(.95); }
+    25% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.15); }
+}
+
+@keyframes lossFlash {
+    0% { opacity: 0; }
+    25% { opacity: .9; }
+    100% { opacity: 0; }
+}
+
+.win-item-pulse {
+    animation: winItemPulse 1.05s ease-out;
+}
+
+@keyframes winItemPulse {
+    0% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(34,197,94,0)); }
+    35% { transform: scale(1.08); filter: drop-shadow(0 0 30px rgba(34,197,94,.9)); }
+    100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(34,197,94,0)); }
+}
+
+.loss-shake {
+    animation: lossShake .42s ease-in-out;
+}
+
+@keyframes lossShake {
+    0%,100% { transform: translateX(0); }
+    20% { transform: translateX(-10px); }
+    40% { transform: translateX(10px); }
+    60% { transform: translateX(-7px); }
+    80% { transform: translateX(7px); }
+}
+
+.result-win-glow {
+    text-shadow: 0 0 12px rgba(34,197,94,.95), 0 0 34px rgba(34,197,94,.65);
+}
+
+.result-loss-glow {
+    text-shadow: 0 0 12px rgba(239,68,68,.95), 0 0 34px rgba(239,68,68,.55);
+}
+
+.particle {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    pointer-events: none;
+    z-index: 9999;
+    background: #d946ef;
+    box-shadow: 0 0 14px rgba(217,70,239,.9);
+    animation: particleFly .85s ease-out forwards;
+}
+
+@keyframes particleFly {
+    0% {
+        opacity: 1;
+        transform: translate(0,0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(var(--x), var(--y)) scale(.25);
+    }
+}
+
 </style>
 </head>
 <body class="text-white font-sans">
 <div id="steamProfile"><a href="/auth/steam">Sign in through Steam</a></div>
 <div id="onlineBadge"><span class="online-dot"></span><span id="onlineCount">0</span> players online</div>
+<div id="screenFlash"></div>
 
 <div id="homePage" class="max-w-7xl mx-auto p-6">
     <div class="text-center mb-10">
@@ -469,6 +554,59 @@ prepareAudio("wheelSound", 0.45);
 document.addEventListener("pointerdown", unlockSoundsOnce);
 document.addEventListener("keydown", unlockSoundsOnce);
 
+
+function restartClassAnimation(element, className, timeout = 900) {
+    if (!element) return;
+    element.classList.remove(className);
+    void element.offsetWidth;
+    element.classList.add(className);
+    setTimeout(() => element.classList.remove(className), timeout);
+}
+
+function createParticles(amount = 26) {
+    const wheel = document.getElementById("wheel");
+    if (!wheel) return;
+
+    const rect = wheel.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    for (let i = 0; i < amount; i++) {
+        const particle = document.createElement("span");
+        particle.className = "particle";
+
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 80 + Math.random() * 170;
+
+        particle.style.left = centerX + "px";
+        particle.style.top = centerY + "px";
+        particle.style.setProperty("--x", Math.cos(angle) * distance + "px");
+        particle.style.setProperty("--y", Math.sin(angle) * distance + "px");
+
+        document.body.appendChild(particle);
+        setTimeout(() => particle.remove(), 900);
+    }
+}
+
+function triggerWinAnimation() {
+    const flash = document.getElementById("screenFlash");
+    const targetImage = document.getElementById("targetItemImage");
+    const yourImage = document.getElementById("yourItemImage");
+
+    restartClassAnimation(flash, "win-active", 800);
+    restartClassAnimation(targetImage, "win-item-pulse", 1100);
+    restartClassAnimation(yourImage, "win-item-pulse", 1100);
+    createParticles(32);
+}
+
+function triggerLossAnimation() {
+    const flash = document.getElementById("screenFlash");
+    const wheel = document.getElementById("wheel");
+
+    restartClassAnimation(flash, "loss-active", 500);
+    restartClassAnimation(wheel, "loss-shake", 500);
+}
+
 function spinWheel(duration = 4500) {
     const item = getSelectedItem();
     if (!item) return;
@@ -518,14 +656,16 @@ function finishSpin() {
             saveBiggestWin();
         }
         playWinSound();
+        triggerWinAnimation();
         resultEl.textContent = `🎉 WIN: ${targetSkin.name}`;
-        resultEl.className = "result-popup mt-6 text-2xl font-black text-green-400 text-center";
+        resultEl.className = "result-popup mt-6 text-2xl font-black text-green-400 text-center result-win-glow";
     } else {
         const lostItem = getSelectedItem();
         inventory.splice(selectedInventoryIndex, 1);
         playLoseSound();
+        triggerLossAnimation();
         resultEl.textContent = `❌ LOSS: ${lostItem.name}`;
-        resultEl.className = "result-popup mt-6 text-2xl font-black text-red-400 text-center";
+        resultEl.className = "result-popup mt-6 text-2xl font-black text-red-400 text-center result-loss-glow";
     }
 
     if (selectedInventoryIndex >= inventory.length) selectedInventoryIndex = Math.max(0, inventory.length - 1);
