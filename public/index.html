@@ -603,6 +603,22 @@ updateStats();
 if (window.location.hash === "#profile") {
     showProfilePage();
 }
+async function updateOnlineCount() {
+    try {
+        const res = await fetch("/api/ping");
+        const data = await res.json();
+
+        const el = document.getElementById("onlineCounter");
+        if (el) {
+            el.textContent = `🟢 ${data.online} players online`;
+        }
+    } catch (err) {
+        console.log("Online counter error:", err);
+    }
+}
+
+updateOnlineCount();
+setInterval(updateOnlineCount, 15000);
 </script>
 </body>
 </html>
