@@ -819,11 +819,26 @@ function renderLiveFeed(items) {
         feed.appendChild(item);
     });
 }
+let lastFeedSignature = "";
 
 function loadLiveFeed() {
     fetch("/api/upgrades")
         .then(res => res.json())
-        .then(data => renderLiveFeed(data.upgrades || []))
+        .then(data => {
+
+            const upgrades = data.upgrades || [];
+
+            const signature = JSON.stringify(upgrades);
+
+            if (signature === lastFeedSignature) {
+                return;
+            }
+
+            lastFeedSignature = signature;
+
+            renderLiveFeed(upgrades);
+
+        })
         .catch(() => {});
 }
 
