@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CS2 Upgrader</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body {
+    background:
+        radial-gradient(circle at top, rgba(138,43,226,0.25), transparent 40%),
+        linear-gradient(135deg,#0d0b14,#181326);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+.cyber-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(160,32,240,.3);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 20px rgba(138,43,226,.15), inset 0 0 20px rgba(138,43,226,.05);
+}
+.glow { box-shadow: 0 0 15px rgba(160,32,240,.6), 0 0 40px rgba(160,32,240,.35); }
+.upgrade-btn { transition: all .25s ease; }
+.upgrade-btn:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(160,32,240,.8), 0 0 60px rgba(160,32,240,.5); }
+.pointer { width:0; height:0; border-left:18px solid transparent; border-right:18px solid transparent; border-top:32px solid #a020f0; filter: drop-shadow(0 0 10px #a020f0); }
+.result-popup { animation: pop .35s ease; }
+.skin-tile { cursor:pointer; transition:.2s; }
+.skin-tile:hover { transform: translateY(-3px); border-color: rgba(216,70,239,.8); box-shadow: 0 0 22px rgba(160,32,240,.35); }
+.skin-tile.selected { outline: 2px solid #d946ef; box-shadow: 0 0 25px rgba(217,70,239,.65); }
+#steamProfile { position:fixed; top:20px; right:20px; z-index:9999; display:flex; align-items:center; gap:10px; background:rgba(20,10,35,.85); border:1px solid rgba(160,32,240,.5); border-radius:16px; padding:10px 14px; color:white; font-weight:bold; box-shadow:0 0 20px rgba(160,32,240,.35); }
+#steamProfile a { color:white; text-decoration:none; }
+#steamProfile img { width:36px; height:36px; border-radius:50%; }
+@keyframes pop { from { transform:scale(.8); opacity:0; } to { transform:scale(1); opacity:1; } }
+.profile-clickable { cursor: pointer; }
+.profile-clickable:hover { transform: translateY(-1px); box-shadow: 0 0 30px rgba(160,32,240,.55); }
+.profile-stat-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(160,32,240,.35);
+    border-radius: 24px;
+    padding: 18px;
+    box-shadow: 0 0 20px rgba(138,43,226,.18);
+}
+
+</style>
+</head>
+<body class="text-white font-sans">
+<div id="steamProfile"><a href="/auth/steam">Sign in through Steam</a></div>
+
+<div class="max-w-7xl mx-auto p-6">
+    <div class="grid grid-cols-2 gap-4 mb-6">
+    
+    <div class="cyber-card rounded-3xl p-4">
+        <h3 class="text-purple-300 font-bold">
+            Inventory Value
+        </h3>
+
+        <div id="inventoryValue"
+             class="text-3xl font-black mt-2">
+            $0
+        </div>
+    </div>
+
+    <div class="cyber-card rounded-3xl p-4">
+        <h3 class="text-purple-300 font-bold">
+            Biggest Win
+        </h3>
+
+        <div id="biggestWin"
+             class="text-xl font-black mt-2">
+            None
+        </div>
+    </div>
+
+</div>
+    <div class="text-center mb-10">
+        <h1 class="text-5xl font-black tracking-wider">CS2 <span class="text-purple-400">UPGRADER</span></h1>
+        <p class="text-gray-400 mt-2">Upgrade your skins with a chance-based wheel.</p>
+    </div>
+
+    <div class="grid lg:grid-cols-3 gap-8 items-center">
+        <div class="cyber-card rounded-3xl p-6">
+            <h2 class="text-xl font-bold mb-4 text-purple-300">Your Item</h2>
+            <img id="yourItemImage" src="ak47.png.png" class="rounded-xl w-full h-48 object-cover" alt="Your item">
+            <div class="mt-4">
+                <div id="yourItemName" class="font-bold text-lg">AK-47 | Neon Rider</div>
+                <div id="yourItemPrice" class="text-purple-300 text-xl font-black mt-1">$50</div>
+            </div>
+            <p class="text-xs text-gray-500 mt-3">Choose from inventory below.</p>
+        </div>
+
+        <div class="flex flex-col items-center">
+            <div class="pointer mb-2"></div>
+            <div class="relative">
+                <canvas id="wheel" width="420" height="420" class="glow rounded-full"></canvas>
+                <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                    <div class="text-center">
+                        <div id="chanceText" class="text-6xl font-black text-purple-300">50%</div>
+                        <div class="text-gray-400">Success Chance</div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex gap-2 justify-center mt-5 flex-wrap">
+                <button class="chancePreset px-4 py-2 rounded-xl bg-purple-700" data-chance="10">10%</button>
+                <button class="chancePreset px-4 py-2 rounded-xl bg-purple-700" data-chance="25">25%</button>
+                <button class="chancePreset px-4 py-2 rounded-xl bg-purple-700" data-chance="50">50%</button>
+                <button class="chancePreset px-4 py-2 rounded-xl bg-purple-700" data-chance="75">75%</button>
+            </div>
+            <div class="flex gap-2 justify-center mt-3 flex-wrap">
+                <button class="multiplierPreset px-4 py-2 rounded-xl bg-fuchsia-700" data-mult="1.5">1.5x</button>
+                <button class="multiplierPreset px-4 py-2 rounded-xl bg-fuchsia-700" data-mult="2">2x</button>
+                <button class="multiplierPreset px-4 py-2 rounded-xl bg-fuchsia-700" data-mult="5">5x</button>
+                <button class="multiplierPreset px-4 py-2 rounded-xl bg-fuchsia-700" data-mult="10">10x</button>
+            </div>
+            <button id="upgradeBtn" class="upgrade-btn mt-8 px-10 py-4 rounded-2xl bg-purple-700 text-xl font-black tracking-wider glow">UPGRADE</button>
+            <button id="fastUpgradeBtn" class="upgrade-btn mt-3 px-8 py-3 rounded-2xl bg-fuchsia-700 text-lg font-black tracking-wider glow">⚡ FAST SPIN</button>
+            <div id="result" class="hidden result-popup mt-6 text-3xl font-black"></div>
+        </div>
+
+        <div class="cyber-card rounded-3xl p-6">
+            <h2 class="text-xl font-bold mb-4 text-purple-300">Target Item</h2>
+            <img id="targetItemImage" src="awp.png.png" class="rounded-xl w-full h-48 object-cover" alt="Target item">
+            <div class="mt-4">
+                <div id="targetItemName" class="font-bold text-lg">AWP | Dragon Lore</div>
+                <div id="targetPriceLabel" class="text-purple-300 text-xl font-black mt-1">$100</div>
+            </div>
+            <p class="text-xs text-gray-500 mt-3">Choose target from market below.</p>
+        </div>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-6 mt-10">
+        <div class="cyber-card rounded-3xl p-5">
+            <div class="flex items-center justify-between gap-3 mb-4">
+                <h2 class="text-2xl font-black text-purple-300">🎒 My Inventory <span id="inventoryCount" class="text-gray-400 text-base"></span></h2>
+                <button id="resetInventoryBtn" class="px-3 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-sm">Reset demo</button>
+            </div>
+            <div id="inventoryGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+        </div>
+
+        <div class="cyber-card rounded-3xl p-5">
+            <div class="flex items-center justify-between gap-3 mb-4">
+                <h2 class="text-2xl font-black text-purple-300">🎯 Choose Target</h2>
+                <input id="skinSearch" placeholder="Search skin..." class="bg-[#120d1f] border border-purple-900 rounded-xl px-3 py-2 text-sm outline-none w-44">
+            </div>
+            <div id="marketGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[420px] overflow-y-auto pr-1"></div>
+        </div>
+    </div>
+</div>
+
+<div id="profilePage" class="hidden max-w-5xl mx-auto p-6 pt-24">
+    <button id="backToUpgraderBtn" class="mb-6 px-4 py-2 rounded-xl bg-purple-800 hover:bg-purple-700 font-bold">
+        ← Back to upgrader
+    </button>
+
+    <div class="cyber-card rounded-3xl p-8">
+        <div class="flex flex-col sm:flex-row items-center gap-6 mb-8">
+            <img id="profileAvatar" src="" alt="Steam avatar" class="w-24 h-24 rounded-full border border-purple-500 glow">
+            <div class="text-center sm:text-left">
+                <h2 id="profileName" class="text-4xl font-black text-purple-300">Steam Profile</h2>
+                <p id="profileSteamId" class="text-gray-400 mt-2">SteamID: unknown</p>
+            </div>
+        </div>
+
+        <div class="grid sm:grid-cols-2 gap-4 mb-8">
+            <div class="profile-stat-card">
+                <h3 class="text-purple-300 font-bold">Inventory Value</h3>
+                <div id="inventoryValue" class="text-4xl font-black mt-2">$0</div>
+            </div>
+
+            <div class="profile-stat-card">
+                <h3 class="text-purple-300 font-bold">Biggest Win</h3>
+                <div id="biggestWin" class="text-2xl font-black mt-2">None ($0)</div>
+            </div>
+        </div>
+
+        <div class="profile-stat-card">
+            <h3 class="text-purple-300 font-bold mb-4">Inventory Preview</h3>
+            <div id="profileInventoryGrid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
+        </div>
+    </div>
+</div>
+
+<audio id="tickSound" src="sounds/tick.mp3"></audio>
+<audio id="winSound" src="sounds/win.mp3"></audio>
+<audio id="loseSound" src="sounds/lose.mp3"></audio>
+
+<script>
+const canvas = document.getElementById("wheel");
+const ctx = canvas.getContext("2d");
+
+const targetPriceLabel = document.getElementById("targetPriceLabel");
+const chanceText = document.getElementById("chanceText");
+const resultEl = document.getElementById("result");
+const upgradeBtn = document.getElementById("upgradeBtn");
+const fastUpgradeBtn = document.getElementById("fastUpgradeBtn");
+const inventoryGrid = document.getElementById("inventoryGrid");
+const marketGrid = document.getElementById("marketGrid");
+const inventoryCount = document.getElementById("inventoryCount");
+const skinSearch = document.getElementById("skinSearch");
+
+const yourItemImage = document.getElementById("yourItemImage");
+const yourItemName = document.getElementById("yourItemName");
+const yourItemPrice = document.getElementById("yourItemPrice");
+const targetItemImage = document.getElementById("targetItemImage");
+const targetItemName = document.getElementById("targetItemName");
+
+const MAX_CHANCE = 80;
+const allSkins = [
+    { id:"ak-neon", name:"AK-47 | Neon Rider", price:50, image:"ak47.png.png" },
+    { id:"awp-lore", name:"AWP | Dragon Lore", price:100, image:"awp.png.png" },
+    { id:"m4-emperor", name:"M4A4 | The Emperor", price:75, image:"ak47.png.png" },
+    { id:"usp-cortex", name:"USP-S | Cortex", price:20, image:"ak47.png.png" },
+    { id:"deagle-print", name:"Desert Eagle | Printstream", price:65, image:"awp.png.png" },
+    { id:"knife-fade", name:"★ Knife | Fade", price:250, image:"knife.fade.png" },
+    { id:"ak-redline", name:"AK-47 | Redline", price:35, image:"ak47.png.png" },
+    { id:"awp-asiimov", name:"AWP | Asiimov", price:120, image:"awp.png.png" }
+];
+
+let inventory = loadInventory();
+let selectedInventoryIndex = 0;
+let targetSkin = allSkins[1];
+let rotation = 0;
+let chance = 50;
+let previousSegment = -1;
+let biggestWin = loadBiggestWin();
+function cloneSkin(skin) {
+    return { ...skin, uid: crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random()) };
+}
+
+function defaultInventory() {
+    return [cloneSkin(allSkins[0]), cloneSkin(allSkins[3]), cloneSkin(allSkins[6])];
+}
+
+function loadInventory() {
+    try {
+        const saved = localStorage.getItem("cs2-upgrader-inventory");
+        return saved ? JSON.parse(saved) : defaultInventory();
+    } catch {
+        return defaultInventory();
+    }
+}
+
+function saveInventory() {
+    localStorage.setItem("cs2-upgrader-inventory", JSON.stringify(inventory));
+}
+
+function loadBiggestWin() {
+    try {
+        return JSON.parse(localStorage.getItem("cs2-upgrader-biggest-win")) || {
+            name: "None",
+            price: 0
+        };
+    } catch {
+        return {
+            name: "None",
+            price: 0
+        };
+    }
+}
+
+function saveBiggestWin() {
+    localStorage.setItem("cs2-upgrader-biggest-win", JSON.stringify(biggestWin));
+}
+
+function getSelectedItem() {
+    if (!inventory.length) return null;
+    if (selectedInventoryIndex >= inventory.length) selectedInventoryIndex = 0;
+    return inventory[selectedInventoryIndex];
+}
+
+function calculateChance() {
+    const item = getSelectedItem();
+    if (!item || !targetSkin) {
+        chanceText.textContent = "0%";
+        drawWheel(rotation);
+        return;
+    }
+    chance = Math.min(MAX_CHANCE, Math.max(1, (item.price / targetSkin.price) * 100));
+    chanceText.textContent = Math.round(chance) + "%";
+    drawWheel(rotation);
+}
+
+function updateMainCards() {
+    const item = getSelectedItem();
+    if (item) {
+        yourItemImage.src = item.image;
+        yourItemName.textContent = item.name;
+        yourItemPrice.textContent = `$${item.price}`;
+    } else {
+        yourItemImage.src = "";
+        yourItemName.textContent = "No item selected";
+        yourItemPrice.textContent = "$0";
+    }
+    targetItemImage.src = targetSkin.image;
+    targetItemName.textContent = targetSkin.name;
+    targetPriceLabel.textContent = `$${targetSkin.price}`;
+    calculateChance();
+}
+
+function renderInventory() {
+    inventoryGrid.innerHTML = "";
+    inventoryCount.textContent = `(${inventory.length})`;
+    if (!inventory.length) {
+        inventoryGrid.innerHTML = `<div class="text-gray-400 col-span-full text-center py-10">Inventory is empty. Press Reset demo.</div>`;
+        updateMainCards();
+        return;
+    }
+    inventory.forEach((skin, index) => {
+        const tile = document.createElement("button");
+        tile.className = `skin-tile text-left cyber-card rounded-2xl p-3 ${index === selectedInventoryIndex ? "selected" : ""}`;
+        tile.innerHTML = `
+            <img src="${skin.image}" class="w-full h-24 object-cover rounded-xl mb-2" alt="${skin.name}">
+            <div class="font-bold text-sm leading-tight">${skin.name}</div>
+            <div class="text-purple-300 font-black mt-1">$${skin.price}</div>
+        `;
+        tile.onclick = () => {
+            selectedInventoryIndex = index;
+            renderInventory();
+            updateMainCards();
+            updateStats();
+        };
+        inventoryGrid.appendChild(tile);
+    });
+}
+
+function renderMarket() {
+    const q = skinSearch.value.trim().toLowerCase();
+    marketGrid.innerHTML = "";
+    allSkins.filter(s => s.name.toLowerCase().includes(q)).forEach((skin) => {
+        const tile = document.createElement("button");
+        tile.className = `skin-tile text-left cyber-card rounded-2xl p-3 ${skin.id === targetSkin.id ? "selected" : ""}`;
+        tile.innerHTML = `
+            <img src="${skin.image}" class="w-full h-24 object-cover rounded-xl mb-2" alt="${skin.name}">
+            <div class="font-bold text-sm leading-tight">${skin.name}</div>
+            <div class="text-purple-300 font-black mt-1">$${skin.price}</div>
+        `;
+        tile.onclick = () => {
+            targetSkin = skin;
+            renderMarket();
+            updateMainCards();
+        };
+        marketGrid.appendChild(tile);
+    });
+}
+
+function drawWheel(angle) {
+    const size = canvas.width, center = size / 2, radius = 180;
+    ctx.clearRect(0,0,size,size);
+    ctx.save();
+    ctx.translate(center,center);
+    ctx.rotate(angle);
+    ctx.beginPath();
+    ctx.arc(0,0,radius,0,Math.PI*2);
+    ctx.lineWidth = 36;
+    ctx.strokeStyle = "#242136";
+    ctx.stroke();
+    const winningAngle = (chance / 100) * Math.PI * 2;
+    ctx.beginPath();
+    ctx.arc(0,0,radius,-Math.PI/2,-Math.PI/2 + winningAngle);
+    ctx.lineWidth = 36;
+    const grad = ctx.createLinearGradient(-radius,0,radius,0);
+    grad.addColorStop(0,"#8a2be2");
+    grad.addColorStop(1,"#d946ef");
+    ctx.strokeStyle = grad;
+    ctx.shadowBlur = 25;
+    ctx.shadowColor = "#a020f0";
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+    for(let i=0;i<100;i++){
+        const a=(Math.PI*2/100)*i, inner=radius-28, outer=radius+18;
+        ctx.beginPath();
+        ctx.moveTo(Math.cos(a)*inner, Math.sin(a)*inner);
+        ctx.lineTo(Math.cos(a)*outer, Math.sin(a)*outer);
+        ctx.strokeStyle = i%5===0 ? "#a855f7" : "#4c3b69";
+        ctx.lineWidth = i%5===0 ? 3 : 1;
+        ctx.stroke();
+    }
+    ctx.restore();
+}
+
+function playTickSound(){ const a=document.getElementById('tickSound'); a.currentTime=0; a.play().catch(()=>{}); }
+function playWinSound(){ document.getElementById('winSound').play().catch(()=>{}); }
+function playLoseSound(){ document.getElementById('loseSound').play().catch(()=>{}); }
+
+function spinWheel(duration = 4500) {
+    const item = getSelectedItem();
+    if (!item) return;
+    upgradeBtn.disabled = true;
+    fastUpgradeBtn.disabled = true;
+    resultEl.classList.add("hidden");
+    const randomAngle = Math.random() * Math.PI * 2;
+    const extraSpins = 8 * Math.PI * 2;
+    const startRotation = rotation;
+    const targetRotation = rotation + extraSpins + randomAngle;
+    const start = performance.now();
+    function animate(now){
+        const elapsed = now - start;
+        let progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1-progress, 4);
+        rotation = startRotation + (targetRotation - startRotation) * eased;
+        drawWheel(rotation);
+        const segmentSize=(Math.PI*2)/100;
+        const currentSegment=Math.floor((((rotation%(Math.PI*2))+Math.PI*2)%(Math.PI*2))/segmentSize);
+        if(currentSegment!==previousSegment){ previousSegment=currentSegment; playTickSound(); }
+        if(progress < 1) requestAnimationFrame(animate); else finishSpin();
+    }
+    requestAnimationFrame(animate);
+}
+
+function finishSpin() {
+    const TAU = Math.PI * 2;
+    const normalize = angle => ((angle % TAU) + TAU) % TAU;
+    const pointerAngle = -Math.PI / 2;
+    const angleUnderPointer = normalize(pointerAngle - rotation);
+    const winStart = normalize(-Math.PI / 2);
+    const winArc = (chance / 100) * TAU;
+    const distance = normalize(angleUnderPointer - winStart);
+    const won = distance <= winArc;
+    resultEl.classList.remove("hidden");
+
+    if (won) {
+        const oldName = getSelectedItem().name;
+        inventory.splice(selectedInventoryIndex, 1, cloneSkin(targetSkin));
+        if (targetSkin.price > biggestWin.price) {
+            biggestWin = {
+                name: targetSkin.name,
+                price: targetSkin.price
+            };
+            saveBiggestWin();
+        }
+        resultEl.textContent = `🎉 WIN: ${targetSkin.name}`;
+        resultEl.className = "result-popup mt-6 text-2xl font-black text-green-400 text-center";
+        playWinSound();
+    } else {
+        const lostItem = getSelectedItem();
+        inventory.splice(selectedInventoryIndex, 1);
+        resultEl.textContent = `❌ LOSS: ${lostItem.name}`;
+        resultEl.className = "result-popup mt-6 text-2xl font-black text-red-400 text-center";
+        playLoseSound();
+    }
+
+    if (selectedInventoryIndex >= inventory.length) selectedInventoryIndex = Math.max(0, inventory.length - 1);
+    saveInventory();
+    renderInventory();
+    renderMarket();
+    updateMainCards();
+    updateStats();
+    upgradeBtn.disabled = false;
+    fastUpgradeBtn.disabled = false;
+}
+
+document.querySelectorAll('.chancePreset').forEach((btn)=>{
+    btn.onclick = () => {
+        const item = getSelectedItem();
+        if (!item) return;
+        const wantedChance = Number(btn.dataset.chance);
+        targetSkin = { ...targetSkin, price: Math.max(1, Math.round(item.price / (wantedChance / 100))) };
+        renderMarket();
+        updateMainCards();
+    };
+});
+
+document.querySelectorAll('.multiplierPreset').forEach((btn)=>{
+    btn.onclick = () => {
+        const item = getSelectedItem();
+        if (!item) return;
+        const mult = Number(btn.dataset.mult);
+        targetSkin = { ...targetSkin, price: Math.round(item.price * mult) };
+        renderMarket();
+        updateMainCards();
+    };
+});
+
+upgradeBtn.addEventListener("click", () => spinWheel(4500));
+fastUpgradeBtn.addEventListener("click", () => spinWheel(400));
+skinSearch.addEventListener("input", renderMarket);
+document.getElementById("resetInventoryBtn").onclick = () => {
+    inventory = defaultInventory();
+    selectedInventoryIndex = 0;
+    biggestWin = { name: "None", price: 0 };
+    saveInventory();
+    saveBiggestWin();
+    renderInventory();
+    updateMainCards();
+    updateStats();
+};
+function updateStats() {
+    const total = inventory.reduce((sum, item) => sum + item.price, 0);
+
+    const inventoryValueEl = document.getElementById("inventoryValue");
+    const biggestWinEl = document.getElementById("biggestWin");
+
+    if (inventoryValueEl) {
+        inventoryValueEl.textContent = "$" + total;
+    }
+
+    if (biggestWinEl) {
+        biggestWinEl.textContent = `${biggestWin.name} ($${biggestWin.price})`;
+    }
+
+    renderProfileInventory();
+}
+
+function renderProfileInventory() {
+    const grid = document.getElementById("profileInventoryGrid");
+    if (!grid) return;
+
+    grid.innerHTML = "";
+
+    if (!inventory.length) {
+        grid.innerHTML = `<div class="text-gray-400 col-span-full text-center py-8">Inventory is empty.</div>`;
+        return;
+    }
+
+    inventory.forEach((skin) => {
+        const card = document.createElement("div");
+        card.className = "cyber-card rounded-2xl p-3";
+        card.innerHTML = `
+            <img src="${skin.image}" class="w-full h-24 object-cover rounded-xl mb-2" alt="${skin.name}">
+            <div class="font-bold text-sm leading-tight">${skin.name}</div>
+            <div class="text-purple-300 font-black mt-1">$${skin.price}</div>
+        `;
+        grid.appendChild(card);
+    });
+}
+
+function showProfilePage() {
+    document.getElementById("homePage").classList.add("hidden");
+    document.getElementById("profilePage").classList.remove("hidden");
+    updateStats();
+    window.location.hash = "profile";
+}
+
+function showHomePage() {
+    document.getElementById("profilePage").classList.add("hidden");
+    document.getElementById("homePage").classList.remove("hidden");
+    if (window.location.hash === "#profile") {
+        history.pushState("", document.title, window.location.pathname + window.location.search);
+    }
+}
+fetch("/api/user", { credentials: "include" })
+.then(res => res.json())
+.then(user => {
+    const profile = document.getElementById("steamProfile");
+
+    if (user.loggedIn) {
+        profile.classList.add("profile-clickable");
+        profile.innerHTML = `
+            <img id="topProfileAvatar" src="${user.avatar}" alt="Steam avatar">
+            <span id="topProfileName">${user.name}</span>
+            <a href="/logout" style="color:#c084fc;text-decoration:none;margin-left:8px;">Logout</a>
+        `;
+
+        document.getElementById("profileAvatar").src = user.avatar;
+        document.getElementById("profileName").textContent = user.name;
+        document.getElementById("profileSteamId").textContent = "SteamID: " + user.steamId;
+
+        document.getElementById("topProfileAvatar").onclick = showProfilePage;
+        document.getElementById("topProfileName").onclick = showProfilePage;
+    }
+})
+.catch(() => {});
+
+document.getElementById("backToUpgraderBtn").onclick = showHomePage;
+
+renderInventory();
+renderMarket();
+updateMainCards();
+updateStats();
+
+if (window.location.hash === "#profile") {
+    showProfilePage();
+}
+</script>
+</body>
+</html>
