@@ -147,13 +147,66 @@ body {
         transform: translate(var(--x), var(--y)) scale(.25);
     }
 }
+#liveFeed{
+    position:fixed;
+    top:90px;
+    left:20px;
+    width:220px;
+    height:700px;
+    overflow:hidden;
+    z-index:999;
+}
 
+.feed-item{
+    display:flex;
+    gap:10px;
+    align-items:center;
+
+    margin-bottom:10px;
+    padding:10px;
+
+    background:rgba(20,10,35,.9);
+    border:1px solid rgba(160,32,240,.4);
+
+    border-radius:14px;
+
+    animation:feedAppear .5s ease;
+}
+
+.feed-item img{
+    width:55px;
+    height:55px;
+    object-fit:cover;
+    border-radius:8px;
+}
+
+.feed-win{
+    border-left:4px solid #22c55e;
+}
+
+.feed-loss{
+    border-left:4px solid #ef4444;
+}
+
+@keyframes feedAppear{
+    from{
+        opacity:0;
+        transform:translateX(-30px);
+    }
+    to{
+        opacity:1;
+        transform:translateX(0);
+    }
+}
 </style>
 </head>
 <body class="text-white font-sans">
 <div id="steamProfile"><a href="/auth/steam">Sign in through Steam</a></div>
 <div id="onlineBadge"><span class="online-dot"></span><span id="onlineCount">0</span> players online</div>
-<div id="screenFlash"></div>
+<div id="liveFeed">
+    <div id="feedItems"></div>
+</div>
+    <div id="screenFlash"></div>
 
 <div id="homePage" class="max-w-7xl mx-auto p-6">
     <div class="text-center mb-10">
@@ -384,8 +437,68 @@ function updateMainCards() {
     targetPriceLabel.textContent = `$${targetSkin.price}`;
     calculateChance();
 }
+const fakeNames = [
+    "GuArd",
+    "Nikita",
+    "Shadow",
+    "Player123",
+    "Dragon",
+    "S1mpleFan",
+    "Cyber",
+    "Phoenix",
+    "RustKing"
+];
 
-function renderInventory() {
+function addFeedItem() {
+
+    const feed = document.getElementById("feedItems");
+
+    const skin =
+        allSkins[Math.floor(Math.random() * allSkins.length)];
+
+    const win = Math.random() > 0.35;
+
+    const name =
+        fakeNames[Math.floor(Math.random() * fakeNames.length)];
+
+    const item = document.createElement("div");
+
+    item.className =
+        `feed-item ${win ? "feed-win" : "feed-loss"}`;
+
+    item.innerHTML = `
+        <img src="${skin.image}">
+        <div>
+            <div style="font-weight:bold">
+                ${name}
+            </div>
+
+            <div style="
+                font-size:12px;
+                color:${win ? "#22c55e" : "#ef4444"};
+            ">
+                ${win ? "WIN" : "LOSS"}
+            </div>
+
+            <div style="font-size:12px">
+                ${skin.name}
+            </div>
+        </div>
+    `;
+
+    feed.prepend(item);
+
+    if(feed.children.length > 12){
+        feed.removeChild(feed.lastChild);
+    }
+}
+
+setInterval(addFeedItem, 2500);
+
+for(let i=0;i<8;i++){
+    addFeedItem();
+}
+function </style>() {
     inventoryGrid.innerHTML = "";
     inventoryCount.textContent = `(${inventory.length})`;
     if (!inventory.length) {
@@ -403,7 +516,7 @@ function renderInventory() {
         `;
         tile.onclick = () => {
             selectedInventoryIndex = index;
-            renderInventory();
+            </style>();
             updateMainCards();
             updateStats();
         };
@@ -670,7 +783,7 @@ function finishSpin() {
 
     if (selectedInventoryIndex >= inventory.length) selectedInventoryIndex = Math.max(0, inventory.length - 1);
     saveInventory();
-    renderInventory();
+    </style>();
     renderMarket();
     updateMainCards();
     updateStats();
@@ -709,7 +822,7 @@ document.getElementById("resetInventoryBtn").onclick = () => {
     biggestWin = { name: "None", price: 0 };
     saveInventory();
     saveBiggestWin();
-    renderInventory();
+    </style>();
     updateMainCards();
     updateStats();
 };
@@ -818,7 +931,7 @@ fetch("/api/user", { credentials: "include" })
 
 document.getElementById("backToUpgraderBtn").onclick = showHomePage;
 
-renderInventory();
+</style>();
 renderMarket();
 updateMainCards();
 updateStats();
