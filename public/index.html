@@ -186,7 +186,7 @@ body {
 <audio id="tickSound" src="sounds/tick.mp3"></audio>
 <audio id="winSound" src="sounds/win.mp3"></audio>
 <audio id="loseSound" src="sounds/lose.mp3"></audio>
-
+<audio id="wheelSound" src="sounds/wheel.mp3" loop></audio>
 <script>
 const canvas = document.getElementById("wheel");
 const ctx = canvas.getContext("2d");
@@ -390,7 +390,11 @@ function spinWheel(duration = 4500) {
     if (!item) return;
     upgradeBtn.disabled = true;
     fastUpgradeBtn.disabled = true;
-    resultEl.classList.add("hidden");
+    const wheelSound = document.getElementById("wheelSound");
+if (wheelSound) {
+    wheelSound.currentTime = 0;
+    wheelSound.play().catch(() => {});
+}
     const randomAngle = Math.random() * Math.PI * 2;
     const extraSpins = 8 * Math.PI * 2;
     const startRotation = rotation;
@@ -411,6 +415,11 @@ function spinWheel(duration = 4500) {
 }
 
 function finishSpin() {
+    const wheelSound = document.getElementById("wheelSound");
+if (wheelSound) {
+    wheelSound.pause();
+    wheelSound.currentTime = 0;
+}
     const TAU = Math.PI * 2;
     const normalize = angle => ((angle % TAU) + TAU) % TAU;
     const pointerAngle = -Math.PI / 2;
