@@ -183,10 +183,10 @@ body {
     </div>
 </div>
 
-<audio id="tickSound" src="sounds/tick.mp3"></audio>
-<audio id="winSound" src="sounds/win.mp3"></audio>
-<audio id="loseSound" src="sounds/lose.mp3"></audio>
-<audio id="wheelSound" src="sounds/wheel.mp3" loop></audio>
+<audio id="tickSound" src="sounds/tick.mp3" preload="auto"></audio>
+<audio id="winSound" src="sounds/win.mp3" preload="auto"></audio>
+<audio id="loseSound" src="sounds/lose.mp3" preload="auto"></audio>
+<audio id="wheelSound" src="sounds/wheel.mp3" preload="auto" loop></audio>
 <script>
 const canvas = document.getElementById("wheel");
 const ctx = canvas.getContext("2d");
@@ -381,9 +381,27 @@ function drawWheel(angle) {
     ctx.restore();
 }
 
-function playTickSound(){ const a=document.getElementById('tickSound'); a.currentTime=0; a.play().catch(()=>{}); }
-function playWinSound(){ document.getElementById('winSound').play().catch(()=>{}); }
-function playLoseSound(){ document.getElementById('loseSound').play().catch(()=>{}); }
+function playAudio(id, volume = 1) {
+    const audio = document.getElementById(id);
+    if (!audio) return;
+
+    audio.pause();
+    audio.currentTime = 0;
+    audio.volume = volume;
+    audio.play().catch(() => {});
+}
+
+function playTickSound() {
+    playAudio("tickSound", 0.35);
+}
+
+function playWinSound() {
+    playAudio("winSound", 0.8);
+}
+
+function playLoseSound() {
+    playAudio("loseSound", 0.8);
+}
 
 function spinWheel(duration = 4500) {
     const item = getSelectedItem();
