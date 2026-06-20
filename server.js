@@ -20,9 +20,9 @@ passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((user, done) => done(null, user));
 
 passport.use(new SteamStrategy({
- returnURL: "https://cs2-upgrader-server.onrender.com/auth/steam/return",
-realm: "https://cs2-upgrader-server.onrender.com/",,
-apiKey: STEAM_API_KEY
+    returnURL: "https://cs2-upgrader-server.onrender.com/auth/steam/return",
+    realm: "https://cs2-upgrader-server.onrender.com/",
+    apiKey: STEAM_API_KEY,
 }, (identifier, profile, done) => {
     return done(null, profile);
 }));
