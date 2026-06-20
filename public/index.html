@@ -252,11 +252,101 @@ body {
     }
 }
 
+
+/* Virtual balance + buy market */
+#balanceBadge{
+    position:fixed;
+    top:20px;
+    right:235px;
+    z-index:9999;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background:rgba(20,10,35,.85);
+    border:1px solid rgba(234,179,8,.55);
+    border-radius:16px;
+    padding:10px 14px;
+    color:white;
+    font-weight:900;
+    box-shadow:0 0 20px rgba(234,179,8,.22);
+}
+
+.sell-btn, .buy-btn{
+    width:100%;
+    margin-top:10px;
+    padding:8px 10px;
+    border-radius:12px;
+    font-weight:900;
+    font-size:13px;
+    transition:.2s;
+}
+
+.sell-btn{
+    background:rgba(239,68,68,.18);
+    border:1px solid rgba(239,68,68,.45);
+    color:#fecaca;
+}
+
+.sell-btn:hover{
+    background:rgba(239,68,68,.32);
+    box-shadow:0 0 18px rgba(239,68,68,.3);
+}
+
+.buy-btn{
+    background:rgba(34,197,94,.18);
+    border:1px solid rgba(34,197,94,.45);
+    color:#bbf7d0;
+}
+
+.buy-btn:hover{
+    background:rgba(34,197,94,.32);
+    box-shadow:0 0 18px rgba(34,197,94,.28);
+}
+
+#buyMarketModal{
+    position:fixed;
+    inset:0;
+    z-index:10000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    background:rgba(5,2,12,.72);
+    backdrop-filter:blur(10px);
+}
+
+#buyMarketModal.open{
+    display:flex;
+}
+
+.market-modal-card{
+    width:min(980px,94vw);
+    max-height:86vh;
+    overflow:hidden;
+    background:linear-gradient(135deg,rgba(22,11,40,.97),rgba(38,20,58,.97));
+    border:1px solid rgba(160,32,240,.45);
+    border-radius:28px;
+    box-shadow:0 0 45px rgba(160,32,240,.35);
+}
+
+.market-modal-grid{
+    max-height:62vh;
+    overflow:auto;
+}
+
+@media (max-width:900px){
+    #balanceBadge{
+        top:78px;
+        right:20px;
+    }
+}
+
 </style>
 </head>
 <body class="text-white font-sans">
 <div id="steamProfile"><a href="/auth/steam">Sign in through Steam</a></div>
 <div id="onlineBadge"><span class="online-dot"></span><span id="onlineCount">0</span> players online</div>
+<div id="balanceBadge">💰 <span id="balanceAmount">$1000</span></div>
 <div id="liveFeed">
     <div class="feed-title">Live Upgrades</div>
     <div id="feedItems"></div>
@@ -323,7 +413,10 @@ body {
         <div class="cyber-card rounded-3xl p-5">
             <div class="flex items-center justify-between gap-3 mb-4">
                 <h2 class="text-2xl font-black text-purple-300">🎒 My Inventory <span id="inventoryCount" class="text-gray-400 text-base"></span></h2>
-                <button id="resetInventoryBtn" class="px-3 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-sm">Reset demo</button>
+                <div class="flex gap-2">
+                    <button id="openBuyMarketBtn" class="px-3 py-2 rounded-xl bg-purple-700 hover:bg-purple-600 text-sm font-bold">🛒 Market</button>
+                    <button id="resetInventoryBtn" class="px-3 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-sm">Reset demo</button>
+                </div>
             </div>
             <div id="inventoryGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
         </div>
@@ -352,10 +445,15 @@ body {
             </div>
         </div>
 
-        <div class="grid sm:grid-cols-3 gap-4 mb-8">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
             <div class="profile-stat-card">
                 <h3 class="text-purple-300 font-bold">Inventory Value</h3>
                 <div id="inventoryValue" class="text-4xl font-black mt-2">$0</div>
+            </div>
+
+            <div class="profile-stat-card">
+                <h3 class="text-purple-300 font-bold">Balance</h3>
+                <div id="profileBalance" class="text-4xl font-black mt-2">$1000</div>
             </div>
 
             <div class="profile-stat-card">
@@ -376,6 +474,23 @@ body {
     </div>
 </div>
 
+<div id="buyMarketModal">
+    <div class="market-modal-card p-6">
+        <div class="flex items-center justify-between gap-3 mb-5">
+            <div>
+                <h2 class="text-3xl font-black text-purple-300">🛒 Skin Market</h2>
+                <p class="text-gray-400 text-sm mt-1">Buy skins with your virtual balance, then upgrade them.</p>
+            </div>
+            <button id="closeBuyMarketBtn" class="px-4 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 font-bold">✕ Close</button>
+        </div>
+        <div class="flex items-center justify-between gap-3 mb-4">
+            <div class="text-xl font-black">Balance: <span id="modalBalance" class="text-yellow-300">$1000</span></div>
+            <input id="buyMarketSearch" placeholder="Search skin to buy..." class="bg-[#120d1f] border border-purple-900 rounded-xl px-3 py-2 text-sm outline-none w-56">
+        </div>
+        <div id="buyMarketGrid" class="market-modal-grid grid sm:grid-cols-2 lg:grid-cols-4 gap-3 pr-2"></div>
+    </div>
+</div>
+
 <audio id="tickSound" src="sounds/tick.mp3" preload="auto"></audio>
 <audio id="winSound" src="sounds/win.mp3" preload="auto"></audio>
 <audio id="loseSound" src="sounds/lose.mp3" preload="auto"></audio>
@@ -393,6 +508,8 @@ const inventoryGrid = document.getElementById("inventoryGrid");
 const marketGrid = document.getElementById("marketGrid");
 const inventoryCount = document.getElementById("inventoryCount");
 const skinSearch = document.getElementById("skinSearch");
+const buyMarketGrid = document.getElementById("buyMarketGrid");
+const buyMarketSearch = document.getElementById("buyMarketSearch");
 
 const yourItemImage = document.getElementById("yourItemImage");
 const yourItemName = document.getElementById("yourItemName");
@@ -420,6 +537,7 @@ let chance = 50;
 let previousSegment = -1;
 let biggestWin = loadBiggestWin();
 let currentUser = { name: "Player", avatar: "" };
+let balance = loadBalance();
 function cloneSkin(skin) {
     return { ...skin, uid: crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random()) };
 }
@@ -457,6 +575,90 @@ function loadBiggestWin() {
 
 function saveBiggestWin() {
     localStorage.setItem("cs2-upgrader-biggest-win", JSON.stringify(biggestWin));
+}
+
+function loadBalance() {
+    const saved = Number(localStorage.getItem("cs2-upgrader-balance"));
+    return Number.isFinite(saved) && saved >= 0 ? saved : 1000;
+}
+
+function saveBalance() {
+    localStorage.setItem("cs2-upgrader-balance", String(balance));
+}
+
+function updateBalanceUI() {
+    const text = "$" + balance;
+    const ids = ["balanceAmount", "profileBalance", "modalBalance"];
+    ids.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = text;
+    });
+}
+
+function sellInventoryItem(index) {
+    const skin = inventory[index];
+    if (!skin) return;
+
+    balance += skin.price;
+    inventory.splice(index, 1);
+
+    if (selectedInventoryIndex >= inventory.length) {
+        selectedInventoryIndex = Math.max(0, inventory.length - 1);
+    }
+
+    saveBalance();
+    saveInventory();
+    renderInventory();
+    updateMainCards();
+    updateStats();
+}
+
+function buySkin(skin) {
+    if (!skin) return;
+
+    if (balance < skin.price) {
+        resultEl.classList.remove("hidden");
+        resultEl.textContent = `❌ Not enough balance for ${skin.name}`;
+        resultEl.className = "result-popup mt-6 text-2xl font-black text-red-400 text-center result-loss-glow";
+        return;
+    }
+
+    balance -= skin.price;
+    inventory.push(cloneSkin(skin));
+    selectedInventoryIndex = inventory.length - 1;
+
+    saveBalance();
+    saveInventory();
+    renderBuyMarket();
+    renderInventory();
+    updateMainCards();
+    updateStats();
+
+    resultEl.classList.remove("hidden");
+    resultEl.textContent = `🛒 BOUGHT: ${skin.name}`;
+    resultEl.className = "result-popup mt-6 text-2xl font-black text-purple-300 text-center";
+}
+
+function renderBuyMarket() {
+    if (!buyMarketGrid) return;
+    const q = (buyMarketSearch?.value || "").trim().toLowerCase();
+    buyMarketGrid.innerHTML = "";
+
+    allSkins.filter(s => s.name.toLowerCase().includes(q)).forEach((skin) => {
+        const card = document.createElement("div");
+        card.className = "cyber-card rounded-2xl p-3";
+        const canBuy = balance >= skin.price;
+        card.innerHTML = `
+            <img src="${skin.image}" class="w-full h-24 object-contain rounded-xl mb-2 bg-black/20" alt="${skin.name}">
+            <div class="font-bold text-sm leading-tight">${skin.name}</div>
+            <div class="text-purple-300 font-black mt-1">$${skin.price}</div>
+            <button class="buy-btn ${canBuy ? "" : "opacity-50 cursor-not-allowed"}" ${canBuy ? "" : "disabled"}>Buy for $${skin.price}</button>
+        `;
+        card.querySelector(".buy-btn").onclick = () => buySkin(skin);
+        buyMarketGrid.appendChild(card);
+    });
+
+    updateBalanceUI();
 }
 
 function getSelectedItem() {
@@ -498,23 +700,28 @@ function renderInventory() {
     inventoryGrid.innerHTML = "";
     inventoryCount.textContent = `(${inventory.length})`;
     if (!inventory.length) {
-        inventoryGrid.innerHTML = `<div class="text-gray-400 col-span-full text-center py-10">Inventory is empty. Press Reset demo.</div>`;
+        inventoryGrid.innerHTML = `<div class="text-gray-400 col-span-full text-center py-10">Inventory is empty. Open Market or press Reset demo.</div>`;
         updateMainCards();
         return;
     }
     inventory.forEach((skin, index) => {
-        const tile = document.createElement("button");
+        const tile = document.createElement("div");
         tile.className = `skin-tile text-left cyber-card rounded-2xl p-3 ${index === selectedInventoryIndex ? "selected" : ""}`;
         tile.innerHTML = `
             <img src="${skin.image}" class="w-full h-24 object-cover rounded-xl mb-2" alt="${skin.name}">
             <div class="font-bold text-sm leading-tight">${skin.name}</div>
             <div class="text-purple-300 font-black mt-1">$${skin.price}</div>
+            <button class="sell-btn">Sell for $${skin.price}</button>
         `;
         tile.onclick = () => {
             selectedInventoryIndex = index;
             renderInventory();
             updateMainCards();
             updateStats();
+        };
+        tile.querySelector(".sell-btn").onclick = (e) => {
+            e.stopPropagation();
+            sellInventoryItem(index);
         };
         inventoryGrid.appendChild(tile);
     });
@@ -886,13 +1093,29 @@ document.querySelectorAll('.multiplierPreset').forEach((btn)=>{
 upgradeBtn.addEventListener("click", () => spinWheel(4500));
 fastUpgradeBtn.addEventListener("click", () => spinWheel(400));
 skinSearch.addEventListener("input", renderMarket);
+if (buyMarketSearch) buyMarketSearch.addEventListener("input", renderBuyMarket);
+document.getElementById("openBuyMarketBtn").onclick = () => {
+    document.getElementById("buyMarketModal").classList.add("open");
+    renderBuyMarket();
+};
+document.getElementById("closeBuyMarketBtn").onclick = () => {
+    document.getElementById("buyMarketModal").classList.remove("open");
+};
+document.getElementById("buyMarketModal").addEventListener("click", (e) => {
+    if (e.target.id === "buyMarketModal") {
+        document.getElementById("buyMarketModal").classList.remove("open");
+    }
+});
 document.getElementById("resetInventoryBtn").onclick = () => {
     inventory = defaultInventory();
     selectedInventoryIndex = 0;
     biggestWin = { name: "None", price: 0 };
+    balance = 1000;
     saveInventory();
     saveBiggestWin();
+    saveBalance();
     renderInventory();
+    renderBuyMarket();
     updateMainCards();
     updateStats();
 };
@@ -910,6 +1133,7 @@ function updateStats() {
         biggestWinEl.textContent = `${biggestWin.name} ($${biggestWin.price})`;
     }
 
+    updateBalanceUI();
     renderProfileInventory();
 }
 
@@ -924,14 +1148,16 @@ function renderProfileInventory() {
         return;
     }
 
-    inventory.forEach((skin) => {
+    inventory.forEach((skin, index) => {
         const card = document.createElement("div");
         card.className = "cyber-card rounded-2xl p-3";
         card.innerHTML = `
             <img src="${skin.image}" class="w-full h-24 object-cover rounded-xl mb-2" alt="${skin.name}">
             <div class="font-bold text-sm leading-tight">${skin.name}</div>
             <div class="text-purple-300 font-black mt-1">$${skin.price}</div>
+            <button class="sell-btn">Sell for $${skin.price}</button>
         `;
+        card.querySelector(".sell-btn").onclick = () => sellInventoryItem(index);
         grid.appendChild(card);
     });
 }
@@ -1006,6 +1232,7 @@ document.getElementById("backToUpgraderBtn").onclick = showHomePage;
 
 renderInventory();
 renderMarket();
+renderBuyMarket();
 updateMainCards();
 updateStats();
 
