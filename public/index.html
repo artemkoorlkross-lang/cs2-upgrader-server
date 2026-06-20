@@ -381,38 +381,101 @@ function drawWheel(angle) {
     ctx.restore();
 }
 
+function getAudio(id) {
+    return document.getElementById(id);
+}
+
+function prepareAudio(id, volume = 1) {
+    const audio = getAudio(id);
+    if (!audio) return;
+    audio.volume = volume;
+    audio.preload = "auto";
+    audio.load();
+}
+
 function playAudio(id, volume = 1) {
-    const audio = document.getElementById(id);
+    const audio = getAudio(id);
     if (!audio) return;
 
-    audio.pause();
-    audio.currentTime = 0;
-    audio.volume = volume;
-    audio.play().catch(() => {});
+    try {
+        audio.pause();
+        audio.currentTime = 0;
+        audio.volume = volume;
+        const promise = audio.play();
+        if (promise) promise.catch(() => {});
+    } catch {}
+}
+
+function startWheelSound() {
+    const audio = getAudio("wheelSound");
+    if (!audio) return;
+
+    try {
+        audio.pause();
+        audio.currentTime = 0;
+        audio.volume = 0.45;
+        const promise = audio.play();
+        if (promise) promise.catch(() => {});
+    } catch {}
+}
+
+function stopWheelSound() {
+    const audio = getAudio("wheelSound");
+    if (!audio) return;
+
+    try {
+        audio.pause();
+        audio.currentTime = 0;
+    } catch {}
 }
 
 function playTickSound() {
-    playAudio("tickSound", 0.35);
+    playAudio("tickSound", 0.28);
 }
 
 function playWinSound() {
-    playAudio("winSound", 0.8);
+    playAudio("winSound", 0.85);
 }
 
 function playLoseSound() {
-    playAudio("loseSound", 0.8);
+    playAudio("loseSound", 0.9);
 }
+
+function unlockSoundsOnce() {
+    ["tickSound", "winSound", "loseSound", "wheelSound"].forEach((id) => {
+        const audio = getAudio(id);
+        if (!audio) return;
+
+        audio.volume = 0;
+        audio.play()
+            .then(() => {
+                audio.pause();
+                audio.currentTime = 0;
+                audio.volume = 1;
+            })
+            .catch(() => {
+                audio.volume = 1;
+            });
+    });
+
+    document.removeEventListener("pointerdown", unlockSoundsOnce);
+    document.removeEventListener("keydown", unlockSoundsOnce);
+}
+
+prepareAudio("tickSound", 0.28);
+prepareAudio("winSound", 0.85);
+prepareAudio("loseSound", 0.9);
+prepareAudio("wheelSound", 0.45);
+document.addEventListener("pointerdown", unlockSoundsOnce);
+document.addEventListener("keydown", unlockSoundsOnce);
 
 function spinWheel(duration = 4500) {
     const item = getSelectedItem();
     if (!item) return;
     upgradeBtn.disabled = true;
     fastUpgradeBtn.disabled = true;
-    const wheelSound = document.getElementById("wheelSound");
-if (wheelSound) {
-    wheelSound.currentTime = 0;
-    wheelSound.play().catch(() => {});
-}
+    resultEl.classList.add("hidden");
+    startWheelSound();
     const randomAngle = Math.random() * Math.PI * 2;
     const extraSpins = 8 * Math.PI * 2;
     const startRotation = rotation;
@@ -433,11 +496,7 @@ if (wheelSound) {
 }
 
 function finishSpin() {
-    const wheelSound = document.getElementById("wheelSound");
-if (wheelSound) {
-    wheelSound.pause();
-    wheelSound.currentTime = 0;
-}
+    stopWheelSound();
     const TAU = Math.PI * 2;
     const normalize = angle => ((angle % TAU) + TAU) % TAU;
     const pointerAngle = -Math.PI / 2;
@@ -458,15 +517,15 @@ if (wheelSound) {
             };
             saveBiggestWin();
         }
+        playWinSound();
         resultEl.textContent = `🎉 WIN: ${targetSkin.name}`;
         resultEl.className = "result-popup mt-6 text-2xl font-black text-green-400 text-center";
-        playWinSound();
     } else {
         const lostItem = getSelectedItem();
         inventory.splice(selectedInventoryIndex, 1);
+        playLoseSound();
         resultEl.textContent = `❌ LOSS: ${lostItem.name}`;
         resultEl.className = "result-popup mt-6 text-2xl font-black text-red-400 text-center";
-        playLoseSound();
     }
 
     if (selectedInventoryIndex >= inventory.length) selectedInventoryIndex = Math.max(0, inventory.length - 1);
