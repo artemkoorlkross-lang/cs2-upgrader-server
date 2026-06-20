@@ -147,37 +147,67 @@ body {
         transform: translate(var(--x), var(--y)) scale(.25);
     }
 }
+
+/* Real live upgrade feed */
 #liveFeed{
     position:fixed;
-    top:90px;
+    top:78px;
     left:20px;
     width:220px;
-    height:700px;
+    height:calc(100vh - 100px);
     overflow:hidden;
-    z-index:999;
+    z-index:900;
+    pointer-events:none;
+}
+
+.feed-title{
+    font-size:12px;
+    font-weight:900;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:#c084fc;
+    margin-bottom:8px;
+    padding-left:4px;
+    text-shadow:0 0 12px rgba(192,132,252,.5);
 }
 
 .feed-item{
     display:flex;
     gap:10px;
     align-items:center;
-
     margin-bottom:10px;
     padding:10px;
-
-    background:rgba(20,10,35,.9);
-    border:1px solid rgba(160,32,240,.4);
-
-    border-radius:14px;
-
-    animation:feedAppear .5s ease;
+    background:linear-gradient(135deg,rgba(20,10,35,.92),rgba(42,22,64,.86));
+    border:1px solid rgba(160,32,240,.38);
+    border-radius:16px;
+    box-shadow:0 0 18px rgba(138,43,226,.18);
+    animation:feedAppear .45s ease;
 }
 
 .feed-item img{
-    width:55px;
-    height:55px;
-    object-fit:cover;
-    border-radius:8px;
+    width:58px;
+    height:48px;
+    object-fit:contain;
+    border-radius:10px;
+    background:rgba(255,255,255,.04);
+}
+
+.feed-player{
+    font-weight:900;
+    font-size:13px;
+    line-height:1.1;
+}
+
+.feed-skin{
+    font-size:12px;
+    line-height:1.15;
+    color:#e9d5ff;
+}
+
+.feed-price{
+    font-size:12px;
+    font-weight:900;
+    color:#d8b4fe;
 }
 
 .feed-win{
@@ -186,27 +216,52 @@ body {
 
 .feed-loss{
     border-left:4px solid #ef4444;
+    opacity:.82;
+}
+
+.feed-status-win{
+    color:#22c55e;
+    font-size:11px;
+    font-weight:900;
+}
+
+.feed-status-loss{
+    color:#ef4444;
+    font-size:11px;
+    font-weight:900;
 }
 
 @keyframes feedAppear{
-    from{
-        opacity:0;
-        transform:translateX(-30px);
+    from{ opacity:0; transform:translateX(-28px) scale(.97); }
+    to{ opacity:1; transform:translateX(0) scale(1); }
+}
+
+@media (min-width:1400px){
+    #homePage{
+        max-width:calc(80rem + 260px);
+        padding-left:260px;
     }
-    to{
-        opacity:1;
-        transform:translateX(0);
+    #profilePage{
+        margin-left:240px;
     }
 }
+
+@media (max-width:1399px){
+    #liveFeed{
+        display:none;
+    }
+}
+
 </style>
 </head>
 <body class="text-white font-sans">
 <div id="steamProfile"><a href="/auth/steam">Sign in through Steam</a></div>
 <div id="onlineBadge"><span class="online-dot"></span><span id="onlineCount">0</span> players online</div>
 <div id="liveFeed">
+    <div class="feed-title">Live Upgrades</div>
     <div id="feedItems"></div>
 </div>
-    <div id="screenFlash"></div>
+<div id="screenFlash"></div>
 
 <div id="homePage" class="max-w-7xl mx-auto p-6">
     <div class="text-center mb-10">
@@ -364,6 +419,7 @@ let rotation = 0;
 let chance = 50;
 let previousSegment = -1;
 let biggestWin = loadBiggestWin();
+let currentUser = { name: "Player", avatar: "" };
 function cloneSkin(skin) {
     return { ...skin, uid: crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random()) };
 }
@@ -437,68 +493,8 @@ function updateMainCards() {
     targetPriceLabel.textContent = `$${targetSkin.price}`;
     calculateChance();
 }
-const fakeNames = [
-    "GuArd",
-    "Nikita",
-    "Shadow",
-    "Player123",
-    "Dragon",
-    "S1mpleFan",
-    "Cyber",
-    "Phoenix",
-    "RustKing"
-];
 
-function addFeedItem() {
-
-    const feed = document.getElementById("feedItems");
-
-    const skin =
-        allSkins[Math.floor(Math.random() * allSkins.length)];
-
-    const win = Math.random() > 0.35;
-
-    const name =
-        fakeNames[Math.floor(Math.random() * fakeNames.length)];
-
-    const item = document.createElement("div");
-
-    item.className =
-        `feed-item ${win ? "feed-win" : "feed-loss"}`;
-
-    item.innerHTML = `
-        <img src="${skin.image}">
-        <div>
-            <div style="font-weight:bold">
-                ${name}
-            </div>
-
-            <div style="
-                font-size:12px;
-                color:${win ? "#22c55e" : "#ef4444"};
-            ">
-                ${win ? "WIN" : "LOSS"}
-            </div>
-
-            <div style="font-size:12px">
-                ${skin.name}
-            </div>
-        </div>
-    `;
-
-    feed.prepend(item);
-
-    if(feed.children.length > 12){
-        feed.removeChild(feed.lastChild);
-    }
-}
-
-setInterval(addFeedItem, 2500);
-
-for(let i=0;i<8;i++){
-    addFeedItem();
-}
-function </style>() {
+function renderInventory() {
     inventoryGrid.innerHTML = "";
     inventoryCount.textContent = `(${inventory.length})`;
     if (!inventory.length) {
@@ -516,7 +512,7 @@ function </style>() {
         `;
         tile.onclick = () => {
             selectedInventoryIndex = index;
-            </style>();
+            renderInventory();
             updateMainCards();
             updateStats();
         };
@@ -770,6 +766,7 @@ function finishSpin() {
         }
         playWinSound();
         triggerWinAnimation();
+        sendUpgradeToFeed("WIN", targetSkin);
         resultEl.textContent = `🎉 WIN: ${targetSkin.name}`;
         resultEl.className = "result-popup mt-6 text-2xl font-black text-green-400 text-center result-win-glow";
     } else {
@@ -777,18 +774,76 @@ function finishSpin() {
         inventory.splice(selectedInventoryIndex, 1);
         playLoseSound();
         triggerLossAnimation();
+        sendUpgradeToFeed("LOSS", lostItem);
         resultEl.textContent = `❌ LOSS: ${lostItem.name}`;
         resultEl.className = "result-popup mt-6 text-2xl font-black text-red-400 text-center result-loss-glow";
     }
 
     if (selectedInventoryIndex >= inventory.length) selectedInventoryIndex = Math.max(0, inventory.length - 1);
     saveInventory();
-    </style>();
+    renderInventory();
     renderMarket();
     updateMainCards();
     updateStats();
     upgradeBtn.disabled = false;
     fastUpgradeBtn.disabled = false;
+}
+
+
+function renderLiveFeed(items) {
+    const feed = document.getElementById("feedItems");
+    if (!feed) return;
+
+    feed.innerHTML = "";
+
+    if (!items || !items.length) {
+        feed.innerHTML = `<div class="feed-item"><div class="feed-skin">No upgrades yet</div></div>`;
+        return;
+    }
+
+    items.slice(0, 12).forEach((entry) => {
+        const item = document.createElement("div");
+        const isWin = entry.result === "WIN";
+        item.className = `feed-item ${isWin ? "feed-win" : "feed-loss"}`;
+
+        item.innerHTML = `
+            <img src="${entry.itemImage || ""}" alt="${entry.itemName || "skin"}">
+            <div>
+                <div class="feed-player">${entry.playerName || "Player"}</div>
+                <div class="${isWin ? "feed-status-win" : "feed-status-loss"}">${isWin ? "WIN" : "LOSS"}</div>
+                <div class="feed-skin">${entry.itemName || "Unknown skin"}</div>
+                <div class="feed-price">$${entry.itemPrice || 0}</div>
+            </div>
+        `;
+
+        feed.appendChild(item);
+    });
+}
+
+function loadLiveFeed() {
+    fetch("/api/upgrades")
+        .then(res => res.json())
+        .then(data => renderLiveFeed(data.upgrades || []))
+        .catch(() => {});
+}
+
+function sendUpgradeToFeed(result, item) {
+    fetch("/api/upgrades", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "include",
+        body: JSON.stringify({
+            result,
+            itemName: item.name,
+            itemPrice: item.price,
+            itemImage: item.image
+        })
+    })
+    .then(res => res.json())
+    .then(data => renderLiveFeed(data.upgrades || []))
+    .catch(() => {});
 }
 
 document.querySelectorAll('.chancePreset').forEach((btn)=>{
@@ -822,7 +877,7 @@ document.getElementById("resetInventoryBtn").onclick = () => {
     biggestWin = { name: "None", price: 0 };
     saveInventory();
     saveBiggestWin();
-    </style>();
+    renderInventory();
     updateMainCards();
     updateStats();
 };
@@ -905,6 +960,8 @@ function pingOnline() {
    
 pingOnline();
 setInterval(pingOnline, 15000);
+loadLiveFeed();
+setInterval(loadLiveFeed, 4000);
 
 fetch("/api/user", { credentials: "include" })
 .then(res => res.json())
@@ -912,6 +969,7 @@ fetch("/api/user", { credentials: "include" })
     const profile = document.getElementById("steamProfile");
 
     if (user.loggedIn) {
+        currentUser = { name: user.name, avatar: user.avatar };
         profile.classList.add("profile-clickable");
         profile.innerHTML = `
             <img id="topProfileAvatar" src="${user.avatar}" alt="Steam avatar">
@@ -931,7 +989,7 @@ fetch("/api/user", { credentials: "include" })
 
 document.getElementById("backToUpgraderBtn").onclick = showHomePage;
 
-</style>();
+renderInventory();
 renderMarket();
 updateMainCards();
 updateStats();
