@@ -556,17 +556,14 @@ function updateOnlineCounters(count) {
 }
 
 function pingOnline() {
-    fetch("/api/online/ping", {
-        method: "POST",
-        credentials: "include"
-    })
-    .then(res => res.json())
-    .then(data => {
-        updateOnlineCounters(data.online);
-    })
-    .catch(() => {});
+    fetch("/api/ping")
+        .then(res => res.json())
+        .then(data => {
+            updateOnlineCounters(data.online);
+        })
+        .catch(() => {});
 }
-
+   
 pingOnline();
 setInterval(pingOnline, 15000);
 
