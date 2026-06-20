@@ -30,6 +30,29 @@ body {
 #steamProfile { position:fixed; top:20px; right:20px; z-index:9999; display:flex; align-items:center; gap:10px; background:rgba(20,10,35,.85); border:1px solid rgba(160,32,240,.5); border-radius:16px; padding:10px 14px; color:white; font-weight:bold; box-shadow:0 0 20px rgba(160,32,240,.35); }
 #steamProfile a { color:white; text-decoration:none; }
 #steamProfile img { width:36px; height:36px; border-radius:50%; }
+#onlineBadge {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(20,10,35,.85);
+    border: 1px solid rgba(34,197,94,.45);
+    border-radius: 16px;
+    padding: 10px 14px;
+    color: white;
+    font-weight: 800;
+    box-shadow: 0 0 20px rgba(34,197,94,.25);
+}
+.online-dot {
+    width: 10px;
+    height: 10px;
+    background: #22c55e;
+    border-radius: 50%;
+    box-shadow: 0 0 12px rgba(34,197,94,.9);
+}
 @keyframes pop { from { transform:scale(.8); opacity:0; } to { transform:scale(1); opacity:1; } }
 .profile-clickable { cursor: pointer; }
 .profile-clickable:hover { transform: translateY(-1px); box-shadow: 0 0 30px rgba(160,32,240,.55); }
@@ -45,6 +68,7 @@ body {
 </head>
 <body class="text-white font-sans">
 <div id="steamProfile"><a href="/auth/steam">Sign in through Steam</a></div>
+<div id="onlineBadge"><span class="online-dot"></span><span id="onlineCount">0</span> players online</div>
 
 <div id="homePage" class="max-w-7xl mx-auto p-6">
     <div class="text-center mb-10">
@@ -135,7 +159,7 @@ body {
             </div>
         </div>
 
-        <div class="grid sm:grid-cols-2 gap-4 mb-8">
+        <div class="grid sm:grid-cols-3 gap-4 mb-8">
             <div class="profile-stat-card">
                 <h3 class="text-purple-300 font-bold">Inventory Value</h3>
                 <div id="inventoryValue" class="text-4xl font-black mt-2">$0</div>
@@ -144,6 +168,11 @@ body {
             <div class="profile-stat-card">
                 <h3 class="text-purple-300 font-bold">Biggest Win</h3>
                 <div id="biggestWin" class="text-2xl font-black mt-2">None ($0)</div>
+            </div>
+
+            <div class="profile-stat-card">
+                <h3 class="text-purple-300 font-bold">Players Online</h3>
+                <div class="text-4xl font-black mt-2"><span id="profileOnlineCount">0</span></div>
             </div>
         </div>
 
@@ -512,6 +541,35 @@ function showHomePage() {
         history.pushState("", document.title, window.location.pathname + window.location.search);
     }
 }
+
+function updateOnlineCounters(count) {
+    const onlineCountEl = document.getElementById("onlineCount");
+    const profileOnlineCountEl = document.getElementById("profileOnlineCount");
+
+    if (onlineCountEl) {
+        onlineCountEl.textContent = count;
+    }
+
+    if (profileOnlineCountEl) {
+        profileOnlineCountEl.textContent = count;
+    }
+}
+
+function pingOnline() {
+    fetch("/api/online/ping", {
+        method: "POST",
+        credentials: "include"
+    })
+    .then(res => res.json())
+    .then(data => {
+        updateOnlineCounters(data.online);
+    })
+    .catch(() => {});
+}
+
+pingOnline();
+setInterval(pingOnline, 15000);
+
 fetch("/api/user", { credentials: "include" })
 .then(res => res.json())
 .then(user => {
