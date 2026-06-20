@@ -3,7 +3,7 @@ const session = require("express-session");
 const passport = require("passport");
 const SteamStrategy = require("passport-steam").Strategy;
 
-const STEAM_API_KEY =  "BC1836EB654E870330A748FC29490806"
+const STEAM_API_KEY = "BC1836EB654E870330A748FC29490806";
 const app = express();
 app.use(express.static("public"));
 
