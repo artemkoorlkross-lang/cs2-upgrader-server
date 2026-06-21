@@ -714,6 +714,385 @@ body.spin-locked #marketGrid .skin-tile{
 }
 @media(max-width:900px){.cases-grid{grid-template-columns:1fr}}
 
+
+/* Case opening v2 */
+#casesPage{
+    max-width:1320px;
+    margin:0 auto!important;
+    padding:0 12px 36px!important;
+}
+.case-top-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:18px;
+}
+.case-back-btn{
+    min-height:44px;
+    padding:0 18px;
+    border-radius:12px;
+    background:rgba(15,10,27,.72);
+    border:1px solid rgba(168,85,247,.25);
+    color:white;
+    font-weight:1000;
+    box-shadow:0 0 24px rgba(139,44,246,.13), inset 0 0 18px rgba(255,255,255,.025);
+    transition:.22s cubic-bezier(.2,.8,.2,1);
+}
+.case-back-btn:hover{
+    transform:translateY(-2px);
+    border-color:rgba(216,180,254,.5);
+    box-shadow:0 0 28px rgba(168,85,247,.28);
+}
+.cases-grid{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:20px;
+    margin-top:24px;
+}
+.case-card{
+    min-height:390px;
+    padding:26px;
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    cursor:pointer;
+}
+.case-box{
+    height:156px;
+    display:grid;
+    place-items:center;
+    font-size:78px;
+    filter:drop-shadow(0 0 26px rgba(168,85,247,.45));
+    transition:.35s cubic-bezier(.2,.8,.2,1);
+}
+.case-card:hover .case-box{
+    transform:translateY(-9px) scale(1.09) rotate(-3deg);
+    filter:drop-shadow(0 0 38px rgba(217,70,239,.75));
+}
+.case-price{
+    color:#fde047;
+    font-size:26px;
+    font-weight:1000;
+    text-shadow:0 0 16px rgba(234,179,8,.35);
+}
+.case-subtitle{
+    color:#a99abc;
+    font-size:13px;
+    margin-top:7px;
+}
+.case-items{
+    margin:15px 0 0;
+    padding:10px;
+    border-radius:14px;
+    background:rgba(255,255,255,.035);
+    border:1px solid rgba(168,85,247,.13);
+    color:#d8b4fe;
+    font-size:12px;
+    line-height:1.45;
+}
+.case-detail{
+    max-width:1220px;
+    margin:0 auto;
+}
+.case-hero{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    padding-top:4px;
+}
+.case-title{
+    font-size:30px;
+    font-weight:1000;
+    letter-spacing:.02em;
+    text-shadow:0 0 18px rgba(168,85,247,.35);
+}
+.case-title-price{
+    margin-top:8px;
+    padding:7px 18px;
+    border-radius:10px;
+    color:#d8b4fe;
+    font-size:18px;
+    font-weight:1000;
+    background:rgba(139,44,246,.18);
+    border:1px solid rgba(168,85,247,.3);
+    box-shadow:0 0 22px rgba(168,85,247,.18);
+}
+.case-visual{
+    position:relative;
+    width:290px;
+    height:190px;
+    margin:10px auto 2px;
+    display:grid;
+    place-items:center;
+}
+.case-visual:before{
+    content:"";
+    position:absolute;
+    inset:-20px 5px;
+    border-radius:50%;
+    background:repeating-conic-gradient(from 0deg, rgba(168,85,247,.48) 0 8deg, transparent 8deg 18deg);
+    mask:radial-gradient(circle, transparent 47%, black 49%, black 58%, transparent 60%);
+    animation:slowRotate 11s linear infinite;
+    opacity:.75;
+}
+.case-visual:after{
+    content:"";
+    position:absolute;
+    width:210px;
+    height:90px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(168,85,247,.45), transparent 68%);
+    filter:blur(13px);
+    transform:translateY(28px);
+}
+.case-visual-icon{
+    position:relative;
+    z-index:2;
+    font-size:108px;
+    filter:drop-shadow(0 0 30px rgba(217,70,239,.7));
+    transform:rotate(-4deg);
+}
+.case-open-counts{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin:10px 0 14px;
+    color:#b9a9cd;
+    font-weight:800;
+}
+.case-count-btn{
+    width:44px;
+    height:44px;
+    border-radius:10px;
+    background:rgba(12,8,20,.72);
+    border:1px solid rgba(168,85,247,.18);
+    color:#ddd6fe;
+    font-weight:1000;
+    transition:.18s ease;
+}
+.case-count-btn.active,.case-count-btn:hover{
+    color:white;
+    border-color:#c084fc;
+    background:rgba(139,44,246,.24);
+    box-shadow:0 0 20px rgba(168,85,247,.24);
+}
+.case-action-row{
+    display:grid;
+    grid-template-columns:minmax(220px,320px) minmax(180px,260px);
+    gap:14px;
+    justify-content:center;
+    align-items:center;
+    margin:0 auto 22px;
+}
+.case-action-btn{
+    height:58px;
+    border-radius:13px;
+    font-size:17px;
+    font-weight:1000;
+    background:linear-gradient(180deg,#9d28ff,#6d28d9);
+    border:1px solid rgba(216,180,254,.35);
+    box-shadow:0 0 28px rgba(168,85,247,.35), inset 0 1px 0 rgba(255,255,255,.16);
+    transition:.22s cubic-bezier(.2,.8,.2,1);
+}
+.case-action-btn:hover:not(:disabled){
+    transform:translateY(-3px) scale(1.025);
+    box-shadow:0 0 36px rgba(168,85,247,.55), inset 0 1px 0 rgba(255,255,255,.18);
+}
+.case-fast-btn{
+    height:58px;
+    border-radius:13px;
+    font-size:17px;
+    font-weight:1000;
+    background:rgba(15,10,27,.72);
+    border:1px solid rgba(168,85,247,.26);
+    color:white;
+    box-shadow:0 0 20px rgba(168,85,247,.12), inset 0 0 18px rgba(255,255,255,.025);
+}
+.case-action-btn:disabled,.case-fast-btn:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+    filter:grayscale(.25);
+}
+.case-reel-panel{
+    position:relative;
+    min-height:250px;
+    padding:20px;
+    overflow:hidden;
+    border-radius:22px;
+    background:linear-gradient(180deg,rgba(15,9,26,.82),rgba(8,5,14,.82));
+    border:1px solid rgba(168,85,247,.2);
+    box-shadow:0 18px 60px rgba(0,0,0,.35), inset 0 0 24px rgba(255,255,255,.015);
+}
+.case-reel-viewport{
+    position:relative;
+    height:150px;
+    overflow:hidden;
+    border-radius:14px;
+    border:1px solid rgba(168,85,247,.35);
+    background:radial-gradient(circle at center, rgba(168,85,247,.14), rgba(9,6,16,.76));
+    box-shadow:0 0 34px rgba(168,85,247,.18), inset 0 0 22px rgba(255,255,255,.02);
+}
+.case-reel-viewport:before,
+.case-reel-viewport:after{
+    content:"";
+    position:absolute;
+    top:0;
+    bottom:0;
+    width:120px;
+    z-index:5;
+    pointer-events:none;
+}
+.case-reel-viewport:before{left:0;background:linear-gradient(90deg,rgba(8,5,14,.95),transparent)}
+.case-reel-viewport:after{right:0;background:linear-gradient(270deg,rgba(8,5,14,.95),transparent)}
+.case-reel-marker{
+    position:absolute;
+    top:-2px;
+    bottom:-2px;
+    left:50%;
+    width:2px;
+    transform:translateX(-50%);
+    z-index:8;
+    background:linear-gradient(180deg,transparent,#a855f7,transparent);
+    box-shadow:0 0 18px rgba(168,85,247,.9);
+}
+.case-reel-marker:before,.case-reel-marker:after{
+    content:"";
+    position:absolute;
+    left:50%;
+    transform:translateX(-50%);
+    width:0;
+    height:0;
+    border-left:10px solid transparent;
+    border-right:10px solid transparent;
+}
+.case-reel-marker:before{top:0;border-top:18px solid #a855f7;filter:drop-shadow(0 0 10px #a855f7)}
+.case-reel-marker:after{bottom:0;border-bottom:18px solid #a855f7;filter:drop-shadow(0 0 10px #a855f7)}
+.case-reel-track{
+    height:100%;
+    display:flex;
+    gap:8px;
+    align-items:center;
+    padding:10px;
+    transform:translateX(0);
+    will-change:transform;
+}
+.case-reel-item{
+    flex:0 0 150px;
+    height:128px;
+    padding:10px;
+    border-radius:12px;
+    background:linear-gradient(180deg,rgba(19,13,31,.92),rgba(12,8,20,.94));
+    border:1px solid rgba(239,68,68,.45);
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    box-shadow:inset 0 0 18px rgba(255,255,255,.015);
+}
+.case-reel-item.rarity-common{border-color:rgba(96,165,250,.42)}
+.case-reel-item.rarity-rare{border-color:rgba(168,85,247,.65);box-shadow:0 0 18px rgba(168,85,247,.13)}
+.case-reel-item.rarity-epic{border-color:rgba(239,68,68,.65);box-shadow:0 0 18px rgba(239,68,68,.13)}
+.case-reel-item.rarity-legendary{border-color:rgba(234,179,8,.85);box-shadow:0 0 22px rgba(234,179,8,.24)}
+.case-reel-item img{
+    width:100%;
+    height:70px;
+    object-fit:contain;
+    filter:drop-shadow(0 0 12px rgba(0,0,0,.8));
+}
+.case-reel-name{
+    font-weight:900;
+    font-size:12px;
+    line-height:1.12;
+    color:white;
+}
+.case-reel-status{
+    min-height:38px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+    margin-top:14px;
+    font-size:20px;
+    font-weight:1000;
+}
+.case-loading-dot{
+    width:28px;
+    height:28px;
+    border-radius:50%;
+    border:3px solid rgba(168,85,247,.22);
+    border-top-color:#a855f7;
+    animation:slowRotate .8s linear infinite;
+}
+.case-win-result{
+    color:#fde047;
+    text-shadow:0 0 18px rgba(234,179,8,.38);
+}
+.case-contains-title{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    margin:34px 0 16px;
+    justify-content:center;
+    color:white;
+    font-weight:1000;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+}
+.case-contains-title:before,.case-contains-title:after{
+    content:"";
+    height:1px;
+    flex:1;
+    max-width:360px;
+    background:linear-gradient(90deg,transparent,rgba(168,85,247,.35),transparent);
+}
+.case-contains-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(142px,1fr));
+    gap:12px;
+}
+.case-contain-card{
+    min-height:150px;
+    padding:10px;
+    border-radius:12px;
+    background:linear-gradient(180deg,rgba(19,13,31,.92),rgba(12,8,20,.94));
+    border:1px solid rgba(239,68,68,.45);
+    position:relative;
+    overflow:hidden;
+}
+.case-contain-card.rarity-common{border-color:rgba(96,165,250,.42)}
+.case-contain-card.rarity-rare{border-color:rgba(168,85,247,.65)}
+.case-contain-card.rarity-epic{border-color:rgba(239,68,68,.65)}
+.case-contain-card.rarity-legendary{border-color:rgba(234,179,8,.85);box-shadow:0 0 22px rgba(234,179,8,.16)}
+.case-contain-chance{
+    position:absolute;
+    right:9px;
+    top:8px;
+    font-size:11px;
+    font-weight:1000;
+    color:#e9d5ff;
+}
+.case-contain-card img{
+    width:100%;
+    height:76px;
+    object-fit:contain;
+    margin-top:12px;
+    filter:drop-shadow(0 0 14px rgba(0,0,0,.8));
+}
+.case-contain-name{
+    font-weight:900;
+    font-size:12px;
+    line-height:1.15;
+    margin-top:8px;
+}
+@media(max-width:900px){
+    .cases-grid{grid-template-columns:1fr}
+    .case-action-row{grid-template-columns:1fr}
+    .case-reel-item{flex-basis:132px}
+}
+
 </style>
 </head>
 <body class="text-white font-sans">
@@ -832,42 +1211,88 @@ body.spin-locked #marketGrid .skin-tile{
             </div>
         </div>
 
+
         <div id="casesPage" class="hidden">
-            <button id="backFromCasesBtn" class="mb-6 px-4 py-2 rounded-xl bg-purple-800 hover:bg-purple-700 font-bold">← Back to upgrader</button>
-            <div class="hero-title"><span class="chev">📦</span><h1>CASES</h1></div>
-            <div class="cases-grid">
-                <section class="cyber-card case-card">
-                    <div>
-                        <div class="case-box">📦</div>
-                        <h2 class="text-2xl font-black text-purple-300">Purple Case</h2>
-                        <div class="case-price">$5</div>
-                        <p class="case-subtitle">Basic skins for warm-up openings.</p>
-                        <div class="case-items">USP-S Cortex • AK-47 Redline • M4A4 Neo-Noir</div>
-                    </div>
-                    <button class="upgrade-btn mt-6 w-full case-open-btn" disabled>OPEN CASE SOON</button>
-                </section>
+            <div id="casesListView">
+                <div class="case-top-row">
+                    <button id="backFromCasesBtn" class="case-back-btn">← Back to upgrader</button>
+                </div>
+                <div class="hero-title"><span class="chev">📦</span><h1>CASES</h1></div>
+                <div class="cases-grid" id="casesGrid">
+                    <section class="cyber-card case-card" data-case-id="purple">
+                        <div>
+                            <div class="case-box">📦</div>
+                            <h2 class="text-2xl font-black text-purple-300">Purple Case</h2>
+                            <div class="case-price">$5</div>
+                            <p class="case-subtitle">Basic skins for warm-up openings.</p>
+                            <div class="case-items">USP-S Cortex • AK-47 Redline • M4A4 Neo-Noir</div>
+                        </div>
+                        <button class="upgrade-btn mt-6 w-full case-select-btn">OPEN CASE</button>
+                    </section>
 
-                <section class="cyber-card case-card">
-                    <div>
-                        <div class="case-box">💜</div>
-                        <h2 class="text-2xl font-black text-purple-300">Premium Case</h2>
-                        <div class="case-price">$25</div>
-                        <p class="case-subtitle">Better rewards and higher value skins.</p>
-                        <div class="case-items">AK Neon Rider • AWP Asiimov • M4A4 Emperor</div>
-                    </div>
-                    <button class="upgrade-btn mt-6 w-full case-open-btn" disabled>OPEN CASE SOON</button>
-                </section>
+                    <section class="cyber-card case-card" data-case-id="premium">
+                        <div>
+                            <div class="case-box">💜</div>
+                            <h2 class="text-2xl font-black text-purple-300">Premium Case</h2>
+                            <div class="case-price">$25</div>
+                            <p class="case-subtitle">Better rewards and higher value skins.</p>
+                            <div class="case-items">AK Neon Rider • AWP Asiimov • M4A4 Emperor</div>
+                        </div>
+                        <button class="upgrade-btn mt-6 w-full case-select-btn">OPEN CASE</button>
+                    </section>
 
-                <section class="cyber-card case-card">
-                    <div>
-                        <div class="case-box">🐉</div>
-                        <h2 class="text-2xl font-black text-purple-300">Dragon Case</h2>
-                        <div class="case-price">$100</div>
-                        <p class="case-subtitle">High tier skins for risky openings.</p>
-                        <div class="case-items">AWP Dragon Lore • Knife Fade • AWP Gungnir</div>
+                    <section class="cyber-card case-card" data-case-id="dragon">
+                        <div>
+                            <div class="case-box">🐉</div>
+                            <h2 class="text-2xl font-black text-purple-300">Dragon Case</h2>
+                            <div class="case-price">$100</div>
+                            <p class="case-subtitle">High tier skins for risky openings.</p>
+                            <div class="case-items">AWP Dragon Lore • Knife Fade • AWP Gungnir</div>
+                        </div>
+                        <button class="upgrade-btn mt-6 w-full case-select-btn">OPEN CASE</button>
+                    </section>
+                </div>
+            </div>
+
+            <div id="caseDetailView" class="case-detail hidden">
+                <div class="case-top-row">
+                    <button id="backToCasesListBtn" class="case-back-btn">← Back to cases</button>
+                </div>
+
+                <div class="case-hero">
+                    <div class="case-title" id="caseDetailTitle">DRAGON CASE</div>
+                    <div class="case-title-price" id="caseDetailPrice">$100.00</div>
+                    <div class="case-visual">
+                        <div class="case-visual-icon" id="caseDetailIcon">🐉</div>
                     </div>
-                    <button class="upgrade-btn mt-6 w-full case-open-btn" disabled>OPEN CASE SOON</button>
-                </section>
+
+                    <div class="case-open-counts">
+                        <span>Open</span>
+                        <button class="case-count-btn active" data-count="1">1</button>
+                        <button class="case-count-btn" data-count="2">2</button>
+                        <button class="case-count-btn" data-count="3">3</button>
+                        <button class="case-count-btn" data-count="4">4</button>
+                        <button class="case-count-btn" data-count="5">5</button>
+                        <button class="case-count-btn" data-count="10">10</button>
+                        <span>times</span>
+                    </div>
+
+                    <div class="case-action-row">
+                        <button id="openSelectedCaseBtn" class="case-action-btn">📦 OPEN CASE</button>
+                        <button id="openSelectedCaseFastBtn" class="case-fast-btn">⚡ OPEN FAST</button>
+                    </div>
+                </div>
+
+                <div class="case-reel-panel">
+                    <div class="case-reel-viewport">
+                        <div class="case-reel-marker"></div>
+                        <div id="caseReelTrack" class="case-reel-track"></div>
+                    </div>
+                    <div id="caseReelStatus" class="case-reel-status">Choose a case and open it.</div>
+                </div>
+
+                <div class="case-contains-title">CASE CONTAINS</div>
+                <div id="caseContainsGrid" class="case-contains-grid"></div>
             </div>
         </div>
         <div id="profilePage" class="hidden">
@@ -2339,6 +2764,7 @@ function showCasesPage() {
     document.getElementById("homePage")?.classList.add("hidden");
     document.getElementById("profilePage")?.classList.add("hidden");
     document.getElementById("casesPage")?.classList.remove("hidden");
+    showCasesList();
     history.replaceState("", document.title, window.location.pathname + window.location.search + "#cases");
 }
 
@@ -2421,11 +2847,324 @@ fetch("/api/user", { credentials: "include" })
 })
 .catch(() => {});
 
+
+/* Case opening v2 logic */
+const DROP_CASES = {
+    purple: {
+        id: "purple",
+        title: "PURPLE CASE",
+        icon: "📦",
+        price: 5,
+        items: [
+            { skinId:"usp-cortex", chance:35, rarity:"common" },
+            { skinId:"ak-redline", chance:25, rarity:"common" },
+            { skinId:"m4a4-neo-noir", chance:18, rarity:"rare" },
+            { skinId:"deagle-print", chance:12, rarity:"rare" },
+            { skinId:"awp-fever-dream", chance:7, rarity:"epic" },
+            { skinId:"knife-navaja-fade", chance:3, rarity:"legendary" }
+        ]
+    },
+    premium: {
+        id: "premium",
+        title: "PREMIUM CASE",
+        icon: "💜",
+        price: 25,
+        items: [
+            { skinId:"ak-neon", chance:28, rarity:"common" },
+            { skinId:"awp-asiimov", chance:22, rarity:"rare" },
+            { skinId:"m4-emperor", chance:18, rarity:"rare" },
+            { skinId:"usp-printstream", chance:12, rarity:"epic" },
+            { skinId:"deagle-ocean", chance:10, rarity:"epic" },
+            { skinId:"ak-bloodsport", chance:7, rarity:"epic" },
+            { skinId:"knife-fade", chance:3, rarity:"legendary" }
+        ]
+    },
+    dragon: {
+        id: "dragon",
+        title: "DRAGON CASE",
+        icon: "🐉",
+        price: 100,
+        items: [
+            { skinId:"ak-fire-serpent", chance:30, rarity:"epic" },
+            { skinId:"m4a4-howl", chance:20, rarity:"epic" },
+            { skinId:"knife-butterfly-fade", chance:8, rarity:"legendary" },
+            { skinId:"awp-lore", chance:16, rarity:"epic" },
+            { skinId:"awp-gungnir", chance:10, rarity:"rare" },
+            { skinId:"knife-karambit-doppler", chance:6, rarity:"legendary" },
+            { skinId:"m4a1-printstream", chance:10, rarity:"epic" }
+        ]
+    }
+};
+
+let selectedCaseId = "dragon";
+let caseOpenCount = 1;
+let caseSpinning = false;
+
+function getSkinById(id) {
+    return allSkins.find(s => s.id === id) || allSkins[0];
+}
+
+function getCaseItems(caseData) {
+    return caseData.items.map(entry => ({
+        ...entry,
+        skin: getSkinById(entry.skinId)
+    }));
+}
+
+function pickWeightedCaseItem(caseData) {
+    const items = getCaseItems(caseData);
+    const total = items.reduce((sum, item) => sum + item.chance, 0);
+    let roll = Math.random() * total;
+
+    for (const item of items) {
+        roll -= item.chance;
+        if (roll <= 0) return item;
+    }
+
+    return items[items.length - 1];
+}
+
+function renderCaseContains(caseData) {
+    const grid = document.getElementById("caseContainsGrid");
+    if (!grid) return;
+
+    grid.innerHTML = getCaseItems(caseData).map(item => `
+        <div class="case-contain-card rarity-${item.rarity}">
+            <div class="case-contain-chance">${item.chance.toFixed(item.chance < 1 ? 2 : 0)}%</div>
+            <img src="${item.skin.image}" alt="${item.skin.name}">
+            <div class="case-contain-name">${item.skin.name.replace(" | ", "<br>")}</div>
+        </div>
+    `).join("");
+}
+
+function renderIdleCaseReel(caseData) {
+    const track = document.getElementById("caseReelTrack");
+    const status = document.getElementById("caseReelStatus");
+    if (!track) return;
+
+    const items = getCaseItems(caseData);
+    const reelItems = [];
+    for (let i = 0; i < 16; i++) {
+        reelItems.push(items[i % items.length]);
+    }
+
+    track.style.transition = "none";
+    track.style.transform = "translateX(0px)";
+    track.innerHTML = reelItems.map(item => `
+        <div class="case-reel-item rarity-${item.rarity}">
+            <img src="${item.skin.image}" alt="${item.skin.name}">
+            <div class="case-reel-name">${item.skin.name.replace(" | ", "<br>")}</div>
+        </div>
+    `).join("");
+
+    if (status) status.innerHTML = "Ready to open case.";
+}
+
+function showCasesList() {
+    document.getElementById("casesListView")?.classList.remove("hidden");
+    document.getElementById("caseDetailView")?.classList.add("hidden");
+}
+
+function showCaseDetail(caseId) {
+    const caseData = DROP_CASES[caseId] || DROP_CASES.dragon;
+    selectedCaseId = caseData.id;
+
+    document.getElementById("casesListView")?.classList.add("hidden");
+    document.getElementById("caseDetailView")?.classList.remove("hidden");
+
+    const title = document.getElementById("caseDetailTitle");
+    const price = document.getElementById("caseDetailPrice");
+    const icon = document.getElementById("caseDetailIcon");
+
+    if (title) title.textContent = caseData.title;
+    if (price) price.textContent = `$${caseData.price.toFixed(2)}`;
+    if (icon) icon.textContent = caseData.icon;
+
+    caseOpenCount = 1;
+    document.querySelectorAll(".case-count-btn").forEach(btn => {
+        btn.classList.toggle("active", Number(btn.dataset.count) === 1);
+    });
+
+    renderCaseContains(caseData);
+    renderIdleCaseReel(caseData);
+    updateCaseButtons();
+}
+
+function updateCaseButtons() {
+    const caseData = DROP_CASES[selectedCaseId];
+    if (!caseData) return;
+
+    const totalCost = caseData.price * caseOpenCount;
+    const openBtn = document.getElementById("openSelectedCaseBtn");
+    const fastBtn = document.getElementById("openSelectedCaseFastBtn");
+    const canOpen = balance >= totalCost && !caseSpinning;
+
+    if (openBtn) {
+        openBtn.disabled = !canOpen;
+        openBtn.textContent = canOpen ? `📦 OPEN CASE $${totalCost.toFixed(2)}` : (caseSpinning ? "OPENING..." : `Need $${totalCost.toFixed(2)}`);
+    }
+
+    if (fastBtn) {
+        fastBtn.disabled = !canOpen;
+        fastBtn.textContent = canOpen ? "⚡ OPEN FAST" : (caseSpinning ? "OPENING..." : "NOT ENOUGH BALANCE");
+    }
+}
+
+function addCaseWinToInventory(item) {
+    const wonSkin = cloneSkin(item.skin);
+    inventory.push(wonSkin);
+    selectedInventoryIndex = inventory.length - 1;
+
+    if (wonSkin.price > biggestWin.price) {
+        biggestWin = { name: wonSkin.name, price: wonSkin.price };
+        saveBiggestWin();
+    }
+
+    saveInventory();
+    renderInventory();
+    renderProfileInventory?.();
+    updateMainCards();
+    updateStats();
+}
+
+function renderCaseReelItems(caseData, winningItem, winningIndex) {
+    const track = document.getElementById("caseReelTrack");
+    if (!track) return;
+
+    const baseItems = getCaseItems(caseData);
+    const reelItems = [];
+
+    for (let i = 0; i < 58; i++) {
+        reelItems.push(baseItems[Math.floor(Math.random() * baseItems.length)]);
+    }
+
+    reelItems[winningIndex] = winningItem;
+
+    track.style.transition = "none";
+    track.style.transform = "translateX(0px)";
+    track.innerHTML = reelItems.map(item => `
+        <div class="case-reel-item rarity-${item.rarity}">
+            <img src="${item.skin.image}" alt="${item.skin.name}">
+            <div class="case-reel-name">${item.skin.name.replace(" | ", "<br>")}</div>
+        </div>
+    `).join("");
+}
+
+function animateCaseOpen(caseData, winningItem, fast = false) {
+    const track = document.getElementById("caseReelTrack");
+    const viewport = document.querySelector(".case-reel-viewport");
+    const status = document.getElementById("caseReelStatus");
+    if (!track || !viewport) return Promise.resolve();
+
+    const winningIndex = fast ? 18 : 45;
+    renderCaseReelItems(caseData, winningItem, winningIndex);
+
+    if (status) {
+        status.innerHTML = `<span class="case-loading-dot"></span><span>Opening case...</span>`;
+    }
+
+    const itemStep = 158;
+    const viewportCenter = viewport.clientWidth / 2;
+    const randomOffset = (Math.random() * 38) - 19;
+    const targetX = -(winningIndex * itemStep - viewportCenter + 75 + randomOffset);
+
+    return new Promise(resolve => {
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                track.style.transition = fast
+                    ? "transform 900ms cubic-bezier(.12,.74,.17,1)"
+                    : "transform 5200ms cubic-bezier(.08,.78,.12,1)";
+                track.style.transform = `translateX(${targetX}px)`;
+            });
+        });
+
+        setTimeout(resolve, fast ? 980 : 5350);
+    });
+}
+
+async function openSelectedCase(fast = false) {
+    if (caseSpinning) return;
+
+    const caseData = DROP_CASES[selectedCaseId];
+    if (!caseData) return;
+
+    const totalCost = caseData.price * caseOpenCount;
+    if (balance < totalCost) {
+        const status = document.getElementById("caseReelStatus");
+        if (status) status.innerHTML = `<span class="result-loss-glow text-red-300">❌ Not enough balance</span>`;
+        updateCaseButtons();
+        return;
+    }
+
+    caseSpinning = true;
+    balance -= totalCost;
+    saveBalance();
+    updateBalanceUI();
+    updateCaseButtons();
+
+    const wins = [];
+    for (let i = 0; i < caseOpenCount; i++) {
+        wins.push(pickWeightedCaseItem(caseData));
+    }
+
+    const mainWin = wins[wins.length - 1];
+    await animateCaseOpen(caseData, mainWin, fast);
+
+    wins.forEach(addCaseWinToInventory);
+    renderBuyMarket();
+    updateBalanceBoostLimits();
+    updateCaseButtons();
+
+    const status = document.getElementById("caseReelStatus");
+    const totalWon = wins.reduce((sum, item) => sum + (Number(item.skin.price) || 0), 0);
+    if (status) {
+        if (wins.length === 1) {
+            status.innerHTML = `<span class="case-win-result">YOU WON: ${mainWin.skin.name} • $${mainWin.skin.price}</span>`;
+        } else {
+            status.innerHTML = `<span class="case-win-result">YOU OPENED ${wins.length} CASES • TOTAL WON $${totalWon}</span>`;
+        }
+    }
+
+    if (mainWin.rarity === "legendary" || mainWin.skin.price >= 250) {
+        createParticles(38);
+        playWinSound();
+    } else {
+        playAudio("tickSound", 0.4);
+    }
+
+    caseSpinning = false;
+    updateCaseButtons();
+}
+
+function setupCasesOpening() {
+    document.querySelectorAll("[data-case-id]").forEach(card => {
+        card.addEventListener("click", () => showCaseDetail(card.dataset.caseId));
+    });
+
+    document.getElementById("backToCasesListBtn")?.addEventListener("click", showCasesList);
+    document.getElementById("openSelectedCaseBtn")?.addEventListener("click", () => openSelectedCase(false));
+    document.getElementById("openSelectedCaseFastBtn")?.addEventListener("click", () => openSelectedCase(true));
+
+    document.querySelectorAll(".case-count-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            if (caseSpinning) return;
+            caseOpenCount = Number(btn.dataset.count) || 1;
+            document.querySelectorAll(".case-count-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            updateCaseButtons();
+        });
+    });
+
+    showCasesList();
+}
+
+
 document.getElementById("backToUpgraderBtn").onclick = showHomePage;
 document.getElementById("backFromCasesBtn")?.addEventListener("click", showHomePage);
 document.getElementById("openCasesBtn")?.addEventListener("click", showCasesPage);
 
 setupProfileTabs();
+setupCasesOpening();
 renderProfileHistory();
 renderInventory();
 renderMarket();
