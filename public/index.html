@@ -387,7 +387,7 @@ body:after{
                 </section>
             </div>
             <div class="bottom-info">
-                <div class="info-card"><div class="ico">↗</div><div><small>Total Upgrades</small><strong>178 451 236</strong></div></div>
+                <div class="info-card"><div class="ico">↗</div><div><small>Total Upgrades</small><strong><span id="totalUpgradesCount">0</span></strong></div></div>
                 <div class="info-card"><div class="ico">☘</div><div><small>Players Online</small><strong><span id="bottomOnlineCount">0</span></strong></div></div>
                 <div class="info-card"><div class="ico">♛</div><div><small>Biggest Win</small><strong id="bottomBiggestWin">$0</strong></div></div>
                 <div class="info-card"><div class="ico">◇</div><div><small>Free Simulator</small><strong>100%</strong></div></div>
@@ -1131,9 +1131,20 @@ function updateOnlineCounters(count) {
         bottomOnlineCountEl.textContent = count;
     }
 }
+function loadSiteStats() {
+    fetch("/api/stats")
+        .then(res => res.json())
+        .then(data => {
+            const el = document.getElementById("totalUpgradesCount");
+            if (el) el.textContent = data.totalUpgrades || 0;
+        })
+        .catch(() => {});
+}
 
+loadSiteStats();
+setInterval(loadSiteStats, 5000);
 function pingOnline() {
-    fetch("/api/ping")
+     fetch("/api/ping")
         .then(res => res.json())
         .then(data => {
             updateOnlineCounters(data.online);
