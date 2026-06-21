@@ -292,6 +292,101 @@ body:after{
 #buyMarketModal{position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(5,2,12,.72);backdrop-filter:blur(10px)}#buyMarketModal.open{display:flex}.market-modal-card{width:min(980px,94vw);max-height:86vh;overflow:hidden;background:linear-gradient(135deg,rgba(22,11,40,.97),rgba(38,20,58,.97));border:1px solid rgba(160,32,240,.45);border-radius:28px;box-shadow:0 0 45px rgba(160,32,240,.35)}.market-modal-grid{max-height:62vh;overflow:auto}
 @media(max-width:1200px){.layout{grid-template-columns:1fr}.topbar{height:auto;gap:12px;flex-wrap:wrap}.top-stats{order:3;width:100%;margin:8px 0 0}.upgrade-area{grid-template-columns:1fr}.panels-grid{grid-template-columns:1fr}#liveFeed{position:relative;top:auto;height:auto;max-height:360px}.bottom-info{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:720px){.topbar{padding:12px}.brand-name{font-size:21px}.top-stats{gap:12px}.top-actions{width:100%;justify-content:space-between}.layout{padding:14px}.wheel-box{width:300px;height:300px}#wheel{width:280px;height:280px}.item-card{height:auto}.panels-grid{margin-top:18px}.bottom-info{grid-template-columns:1fr}.hero-title h1{font-size:22px}}
+/* Upgrade settings modal */
+.wheel-wrap{position:relative;}
+.settings-gear{
+    position:absolute;
+    right:8px;
+    top:18px;
+    width:44px;
+    height:44px;
+    display:grid;
+    place-items:center;
+    border-radius:14px;
+    background:linear-gradient(180deg,rgba(139,44,246,.28),rgba(24,14,38,.88));
+    border:1px solid rgba(168,85,247,.5);
+    color:#d8b4fe;
+    font-size:20px;
+    box-shadow:0 0 22px rgba(168,85,247,.26), inset 0 0 18px rgba(255,255,255,.03);
+    transition:.2s ease;
+}
+.settings-gear:hover{transform:translateY(-2px) rotate(18deg);box-shadow:0 0 28px rgba(168,85,247,.5);}
+#upgradeSettingsModal{
+    position:fixed;
+    inset:0;
+    z-index:10050;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:22px;
+    background:rgba(3,2,8,.72);
+    backdrop-filter:blur(12px);
+}
+#upgradeSettingsModal.open{display:flex;}
+.settings-card{
+    width:min(720px,94vw);
+    max-height:88vh;
+    overflow:auto;
+    border-radius:24px;
+    background:linear-gradient(180deg,rgba(17,22,34,.98),rgba(10,7,18,.98));
+    border:1px solid rgba(168,85,247,.35);
+    box-shadow:0 0 50px rgba(139,44,246,.35), inset 0 1px 0 rgba(255,255,255,.06);
+    padding:26px;
+}
+.settings-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px;}
+.settings-head h2{font-size:26px;font-weight:1000;letter-spacing:.02em;}
+.settings-close{width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.05);border:1px solid rgba(168,85,247,.25);font-weight:1000;color:white;}
+.settings-section{padding:18px 0;border-top:1px solid rgba(255,255,255,.08);}
+.settings-section:first-of-type{border-top:0;padding-top:0;}
+.settings-section h3{font-size:20px;font-weight:1000;margin-bottom:6px;}
+.settings-section p{color:#94a3b8;font-size:13px;line-height:1.35;margin-bottom:12px;}
+.settings-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
+.setting-option,.setting-chip{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px 14px;
+    border-radius:14px;
+    background:rgba(255,255,255,.035);
+    border:1px solid rgba(168,85,247,.18);
+    color:#ddd6fe;
+    font-weight:900;
+    cursor:pointer;
+    transition:.18s ease;
+}
+.setting-option:hover,.setting-chip:hover{border-color:#a855f7;background:rgba(168,85,247,.08);}
+.setting-option input{accent-color:#a855f7;}
+.setting-chip.active{border-color:#e879f9;box-shadow:0 0 18px rgba(217,70,239,.25);color:white;}
+.settings-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
+.settings-input{
+    width:120px;
+    height:42px;
+    padding:0 12px;
+    border-radius:12px;
+    background:rgba(9,6,16,.72);
+    border:1px solid rgba(168,85,247,.28);
+    color:white;
+    outline:none;
+    font-weight:900;
+}
+.settings-save{
+    width:100%;
+    margin-top:18px;
+    padding:13px 16px;
+    border-radius:14px;
+    background:linear-gradient(180deg,#8b2cf6,#6d28d9);
+    border:1px solid rgba(216,180,254,.35);
+    font-weight:1000;
+    box-shadow:0 0 24px rgba(168,85,247,.32);
+}
+.arrow-preview{font-size:28px;filter:drop-shadow(0 0 10px currentColor);}
+.arrow-purple{color:#c084fc}.arrow-pink{color:#f472b6}.arrow-green{color:#22c55e}.arrow-orange{color:#fb923c}
+body.arrow-pink .pointer{border-top-color:#f472b6;filter:drop-shadow(0 0 12px #f472b6)}
+body.arrow-green .pointer{border-top-color:#22c55e;filter:drop-shadow(0 0 12px #22c55e)}
+body.arrow-orange .pointer{border-top-color:#fb923c;filter:drop-shadow(0 0 12px #fb923c)}
+body.arrow-purple .pointer{border-top-color:#a855f7;filter:drop-shadow(0 0 12px #a855f7)}
+@media(max-width:720px){.settings-grid{grid-template-columns:1fr}.settings-gear{position:static;margin-top:10px}}
+
 </style>
 </head>
 <body class="text-white font-sans">
@@ -342,6 +437,8 @@ body:after{
                             </div>
                         </div>
                     </div>
+
+                    <button id="openSettingsBtn" class="settings-gear" title="Upgrade settings">⚙</button>
                     <button id="upgradeBtn" class="upgrade-btn mt-4 text-xl font-black tracking-wider">⌃ UPGRADE</button>
                     <button id="fastUpgradeBtn" class="upgrade-btn mt-3 text-lg font-black tracking-wider">⚡ FAST SPIN</button>
                     <div class="preset-row">
@@ -432,6 +529,85 @@ body:after{
         <div id="buyMarketGrid" class="market-modal-grid grid sm:grid-cols-2 lg:grid-cols-4 gap-3 pr-2"></div>
     </div>
 </div>
+
+<div id="upgradeSettingsModal">
+    <div class="settings-card">
+        <div class="settings-head">
+            <div>
+                <h2>Upgrade Settings</h2>
+                <p class="text-gray-400 text-sm mt-1">Customize chances, quick buttons, spin speed and sound.</p>
+            </div>
+            <button id="closeSettingsBtn" class="settings-close">✕</button>
+        </div>
+
+        <div class="settings-section">
+            <h3>Chance controls</h3>
+            <p>Set any custom chance for the selected item. The target price will be recalculated automatically.</p>
+            <div class="settings-row">
+                <input id="customChanceInput" class="settings-input" type="number" min="1" max="99" value="50">
+                <button id="applyCustomChanceBtn" class="setting-chip">Apply custom %</button>
+                <span class="text-gray-400 text-sm">Max allowed:</span>
+                <input id="maxChanceInput" class="settings-input" type="number" min="1" max="99" value="80">
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h3>Quick chance buttons</h3>
+            <p>These values will replace the purple 10%, 25%, 50%, 75% buttons.</p>
+            <div class="settings-row">
+                <input class="settings-input quick-chance-input" type="number" min="1" max="99" value="10">
+                <input class="settings-input quick-chance-input" type="number" min="1" max="99" value="25">
+                <input class="settings-input quick-chance-input" type="number" min="1" max="99" value="50">
+                <input class="settings-input quick-chance-input" type="number" min="1" max="99" value="75">
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h3>Quick multiplier buttons</h3>
+            <p>These values change the 1.5x, 2x, 5x, 10x buttons.</p>
+            <div class="settings-row">
+                <input class="settings-input quick-mult-input" type="number" min="1.01" step="0.1" value="1.5">
+                <input class="settings-input quick-mult-input" type="number" min="1.01" step="0.1" value="2">
+                <input class="settings-input quick-mult-input" type="number" min="1.01" step="0.1" value="5">
+                <input class="settings-input quick-mult-input" type="number" min="1.01" step="0.1" value="10">
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h3>Spin speed</h3>
+            <p>Choose the normal spin animation speed. Fast Spin keeps its own quick timing.</p>
+            <div class="settings-grid" id="speedOptions">
+                <label class="setting-option"><input type="radio" name="spinSpeed" value="6200"> Slow cinematic</label>
+                <label class="setting-option"><input type="radio" name="spinSpeed" value="4500"> Default</label>
+                <label class="setting-option"><input type="radio" name="spinSpeed" value="2600"> Fast</label>
+                <label class="setting-option"><input type="radio" name="spinSpeed" value="1200"> Lightning</label>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h3>Arrow style</h3>
+            <p>Only changes the visual pointer color, not your win chance.</p>
+            <div class="settings-grid" id="arrowOptions">
+                <label class="setting-option"><input type="radio" name="arrowStyle" value="purple"> <span class="arrow-preview arrow-purple">▼</span> Purple</label>
+                <label class="setting-option"><input type="radio" name="arrowStyle" value="pink"> <span class="arrow-preview arrow-pink">▼</span> Pink</label>
+                <label class="setting-option"><input type="radio" name="arrowStyle" value="green"> <span class="arrow-preview arrow-green">▼</span> Green</label>
+                <label class="setting-option"><input type="radio" name="arrowStyle" value="orange"> <span class="arrow-preview arrow-orange">▼</span> Orange</label>
+            </div>
+        </div>
+
+        <div class="settings-section">
+            <h3>Upgrade sound</h3>
+            <p>Turn all tick, wheel, win and loss sounds on or off.</p>
+            <div class="settings-grid">
+                <label class="setting-option"><input type="radio" name="soundEnabled" value="true"> Enabled</label>
+                <label class="setting-option"><input type="radio" name="soundEnabled" value="false"> Disabled</label>
+            </div>
+        </div>
+
+        <button id="saveSettingsBtn" class="settings-save">SAVE AND CLOSE</button>
+    </div>
+</div>
+
 <audio id="tickSound" src="sounds/tick.mp3" preload="auto"></audio>
 <audio id="winSound" src="sounds/win.mp3" preload="auto"></audio>
 <audio id="loseSound" src="sounds/lose.mp3" preload="auto"></audio>
@@ -464,7 +640,29 @@ const yourItemPrice = document.getElementById("yourItemPrice");
 const targetItemImage = document.getElementById("targetItemImage");
 const targetItemName = document.getElementById("targetItemName");
 
-const MAX_CHANCE = 80;
+function loadUpgradeSettings() {
+    try {
+        const saved = JSON.parse(localStorage.getItem("dropempire-upgrade-settings"));
+        return {
+            maxChance: Number(saved?.maxChance) || 80,
+            normalDuration: Number(saved?.normalDuration) || 4500,
+            fastDuration: Number(saved?.fastDuration) || 400,
+            soundEnabled: saved?.soundEnabled !== false,
+            arrowStyle: saved?.arrowStyle || "purple",
+            chancePresets: Array.isArray(saved?.chancePresets) ? saved.chancePresets : [10,25,50,75],
+            multPresets: Array.isArray(saved?.multPresets) ? saved.multPresets : [1.5,2,5,10]
+        };
+    } catch {
+        return { maxChance:80, normalDuration:4500, fastDuration:400, soundEnabled:true, arrowStyle:"purple", chancePresets:[10,25,50,75], multPresets:[1.5,2,5,10] };
+    }
+}
+
+function saveUpgradeSettings() {
+    localStorage.setItem("dropempire-upgrade-settings", JSON.stringify(appSettings));
+}
+
+let appSettings = loadUpgradeSettings();
+let MAX_CHANCE = appSettings.maxChance;
 const allSkins = [
     { id:"ak-neon", name:"AK-47 | Neon Rider", price:50, image:"ak47.neonrider.png", type:"Rifle" },
     { id:"awp-lore", name:"AWP | Dragon Lore", price:100, image:"awp.png.png", type:"AWP" },
@@ -893,6 +1091,7 @@ function prepareAudio(id, volume = 1) {
 }
 
 function playAudio(id, volume = 1) {
+    if (!appSettings.soundEnabled) return;
     const audio = getAudio(id);
     if (!audio) return;
 
@@ -906,6 +1105,7 @@ function playAudio(id, volume = 1) {
 }
 
 function startWheelSound() {
+    if (!appSettings.soundEnabled) return;
     const audio = getAudio("wheelSound");
     if (!audio) return;
 
@@ -1166,6 +1366,89 @@ function sendUpgradeToFeed(result, item) {
     .catch(() => {});
 }
 
+
+function clampNumber(value, min, max, fallback) {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return fallback;
+    return Math.min(max, Math.max(min, n));
+}
+
+function applyPresetButtons() {
+    document.querySelectorAll('.chancePreset').forEach((btn, index) => {
+        const value = clampNumber(appSettings.chancePresets[index], 1, 99, [10,25,50,75][index]);
+        btn.dataset.chance = value;
+        btn.textContent = value + "%";
+    });
+
+    document.querySelectorAll('.multiplierPreset').forEach((btn, index) => {
+        const value = clampNumber(appSettings.multPresets[index], 1.01, 100, [1.5,2,5,10][index]);
+        btn.dataset.mult = value;
+        btn.textContent = value + "x";
+    });
+}
+
+function applyArrowStyle() {
+    document.body.classList.remove("arrow-purple", "arrow-pink", "arrow-green", "arrow-orange");
+    document.body.classList.add("arrow-" + (appSettings.arrowStyle || "purple"));
+}
+
+function applyCustomChance(value) {
+    const item = getSelectedItem();
+    if (!item) return;
+    const wantedChance = clampNumber(value, 1, 99, 50);
+    targetSkin = { ...targetSkin, price: Math.max(1, Math.round(item.price / (wantedChance / 100))) };
+    renderMarket();
+    updateMainCards();
+}
+
+function openSettingsModal() {
+    document.getElementById("upgradeSettingsModal")?.classList.add("open");
+    document.getElementById("customChanceInput").value = Math.round(chance || 50);
+    document.getElementById("maxChanceInput").value = appSettings.maxChance;
+
+    document.querySelectorAll('.quick-chance-input').forEach((input, index) => input.value = appSettings.chancePresets[index]);
+    document.querySelectorAll('.quick-mult-input').forEach((input, index) => input.value = appSettings.multPresets[index]);
+
+    const speed = document.querySelector(`input[name="spinSpeed"][value="${appSettings.normalDuration}"]`) || document.querySelector('input[name="spinSpeed"][value="4500"]');
+    if (speed) speed.checked = true;
+
+    const arrow = document.querySelector(`input[name="arrowStyle"][value="${appSettings.arrowStyle}"]`) || document.querySelector('input[name="arrowStyle"][value="purple"]');
+    if (arrow) arrow.checked = true;
+
+    const sound = document.querySelector(`input[name="soundEnabled"][value="${appSettings.soundEnabled}"]`);
+    if (sound) sound.checked = true;
+}
+
+function closeSettingsModal() {
+    document.getElementById("upgradeSettingsModal")?.classList.remove("open");
+}
+
+function saveSettingsFromModal() {
+    appSettings.maxChance = clampNumber(document.getElementById("maxChanceInput")?.value, 1, 99, 80);
+    MAX_CHANCE = appSettings.maxChance;
+
+    appSettings.chancePresets = [...document.querySelectorAll('.quick-chance-input')].map((input, index) => clampNumber(input.value, 1, 99, [10,25,50,75][index]));
+    appSettings.multPresets = [...document.querySelectorAll('.quick-mult-input')].map((input, index) => clampNumber(input.value, 1.01, 100, [1.5,2,5,10][index]));
+
+    const speed = document.querySelector('input[name="spinSpeed"]:checked');
+    appSettings.normalDuration = Number(speed?.value || 4500);
+
+    const arrow = document.querySelector('input[name="arrowStyle"]:checked');
+    appSettings.arrowStyle = arrow?.value || "purple";
+
+    const sound = document.querySelector('input[name="soundEnabled"]:checked');
+    appSettings.soundEnabled = sound?.value !== "false";
+
+    saveUpgradeSettings();
+    applyPresetButtons();
+    applyArrowStyle();
+    updateMainCards();
+    closeSettingsModal();
+}
+
+applyPresetButtons();
+applyArrowStyle();
+
 document.querySelectorAll('.chancePreset').forEach((btn)=>{
     btn.onclick = () => {
         const item = getSelectedItem();
@@ -1188,8 +1471,14 @@ document.querySelectorAll('.multiplierPreset').forEach((btn)=>{
     };
 });
 
-upgradeBtn.addEventListener("click", () => spinWheel(4500));
-fastUpgradeBtn.addEventListener("click", () => spinWheel(400));
+upgradeBtn.addEventListener("click", () => spinWheel(appSettings.normalDuration));
+fastUpgradeBtn.addEventListener("click", () => spinWheel(appSettings.fastDuration));
+document.getElementById("openSettingsBtn")?.addEventListener("click", openSettingsModal);
+document.getElementById("closeSettingsBtn")?.addEventListener("click", closeSettingsModal);
+document.getElementById("saveSettingsBtn")?.addEventListener("click", saveSettingsFromModal);
+document.getElementById("applyCustomChanceBtn")?.addEventListener("click", () => applyCustomChance(document.getElementById("customChanceInput")?.value));
+document.getElementById("upgradeSettingsModal")?.addEventListener("click", (e) => { if (e.target.id === "upgradeSettingsModal") closeSettingsModal(); });
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeSettingsModal(); });
 skinSearch.addEventListener("input", renderMarket);
 [skinTypeFilter, skinPriceFilter, skinSort].forEach((el) => {
     if (el) el.addEventListener("change", renderMarket);
