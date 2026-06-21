@@ -8,493 +8,416 @@
 <meta name="keywords" content="CS2, Upgrader, CS2 Skins, Drop Empire, Skin Upgrade, CSGO">
 <meta name="theme-color" content="#8a2be2">
 <link rel="icon" type="image/png" href="/Dropempiree.png">
-    <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.tailwindcss.com"></script>
 <style>
-body {
+:root{
+    --bg:#06040c;
+    --panel:#0f0b18;
+    --panel2:#161023;
+    --stroke:rgba(160,32,240,.28);
+    --stroke2:rgba(168,85,247,.45);
+    --violet:#8b2cf6;
+    --purple:#a855f7;
+    --pink:#e879f9;
+    --green:#22c55e;
+    --red:#ef4444;
+    --text:#f7f2ff;
+    --muted:#a99abc;
+}
+*{box-sizing:border-box}
+body{
+    min-height:100vh;
+    margin:0;
+    overflow-x:hidden;
+    color:var(--text);
     background:
-        radial-gradient(circle at top, rgba(138,43,226,0.25), transparent 40%),
-        linear-gradient(135deg,#0d0b14,#181326);
-    min-height: 100vh;
-    overflow-x: hidden;
+        radial-gradient(circle at 53% 24%, rgba(139,44,246,.22), transparent 30%),
+        radial-gradient(circle at 100% 5%, rgba(217,70,239,.14), transparent 28%),
+        radial-gradient(circle at 0% 85%, rgba(109,40,217,.12), transparent 30%),
+        linear-gradient(180deg,#06040c 0%,#0a0612 45%,#10091d 100%);
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
-.cyber-card {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(160,32,240,.3);
-    backdrop-filter: blur(10px);
-    box-shadow: 0 0 20px rgba(138,43,226,.15), inset 0 0 20px rgba(138,43,226,.05);
-}
-.glow { box-shadow: 0 0 15px rgba(160,32,240,.6), 0 0 40px rgba(160,32,240,.35); }
-.upgrade-btn { transition: all .25s ease; }
-.upgrade-btn:hover { transform: scale(1.05); box-shadow: 0 0 25px rgba(160,32,240,.8), 0 0 60px rgba(160,32,240,.5); }
-.pointer { width:0; height:0; border-left:18px solid transparent; border-right:18px solid transparent; border-top:32px solid #a020f0; filter: drop-shadow(0 0 10px #a020f0); }
-.result-popup { animation: pop .35s ease; }
-.skin-tile { cursor:pointer; transition:.2s; }
-.skin-tile:hover { transform: translateY(-3px); border-color: rgba(216,70,239,.8); box-shadow: 0 0 22px rgba(160,32,240,.35); }
-.skin-tile.selected { outline: 2px solid #d946ef; box-shadow: 0 0 25px rgba(217,70,239,.65); }
-#steamProfile { position:fixed; top:20px; right:20px; z-index:9999; display:flex; align-items:center; gap:10px; background:rgba(20,10,35,.85); border:1px solid rgba(160,32,240,.5); border-radius:16px; padding:10px 14px; color:white; font-weight:bold; box-shadow:0 0 20px rgba(160,32,240,.35); }
-#steamProfile a { color:white; text-decoration:none; }
-#steamProfile img { width:36px; height:36px; border-radius:50%; }
-#onlineBadge {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(20,10,35,.85);
-    border: 1px solid rgba(34,197,94,.45);
-    border-radius: 16px;
-    padding: 10px 14px;
-    color: white;
-    font-weight: 800;
-    box-shadow: 0 0 20px rgba(34,197,94,.25);
-}
-.online-dot {
-    width: 10px;
-    height: 10px;
-    background: #22c55e;
-    border-radius: 50%;
-    box-shadow: 0 0 12px rgba(34,197,94,.9);
-}
-@keyframes pop { from { transform:scale(.8); opacity:0; } to { transform:scale(1); opacity:1; } }
-.profile-clickable { cursor: pointer; }
-.profile-clickable:hover { transform: translateY(-1px); box-shadow: 0 0 30px rgba(160,32,240,.55); }
-.profile-stat-card {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(160,32,240,.35);
-    border-radius: 24px;
-    padding: 18px;
-    box-shadow: 0 0 20px rgba(138,43,226,.18);
-}
-
-/* Upgrade result animations */
-#screenFlash {
-    position: fixed;
-    inset: 0;
-    z-index: 9998;
-    pointer-events: none;
-    opacity: 0;
-    background: radial-gradient(circle at center, rgba(34,197,94,.45), rgba(168,85,247,.18), transparent 65%);
-}
-
-#screenFlash.win-active {
-    animation: winFlash .75s ease-out;
-}
-
-#screenFlash.loss-active {
-    background: radial-gradient(circle at center, rgba(239,68,68,.35), rgba(168,85,247,.12), transparent 65%);
-    animation: lossFlash .45s ease-out;
-}
-
-@keyframes winFlash {
-    0% { opacity: 0; transform: scale(.95); }
-    25% { opacity: 1; transform: scale(1); }
-    100% { opacity: 0; transform: scale(1.15); }
-}
-
-@keyframes lossFlash {
-    0% { opacity: 0; }
-    25% { opacity: .9; }
-    100% { opacity: 0; }
-}
-
-.win-item-pulse {
-    animation: winItemPulse 1.05s ease-out;
-}
-
-@keyframes winItemPulse {
-    0% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(34,197,94,0)); }
-    35% { transform: scale(1.08); filter: drop-shadow(0 0 30px rgba(34,197,94,.9)); }
-    100% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(34,197,94,0)); }
-}
-
-.loss-shake {
-    animation: lossShake .42s ease-in-out;
-}
-
-@keyframes lossShake {
-    0%,100% { transform: translateX(0); }
-    20% { transform: translateX(-10px); }
-    40% { transform: translateX(10px); }
-    60% { transform: translateX(-7px); }
-    80% { transform: translateX(7px); }
-}
-
-.result-win-glow {
-    text-shadow: 0 0 12px rgba(34,197,94,.95), 0 0 34px rgba(34,197,94,.65);
-}
-
-.result-loss-glow {
-    text-shadow: 0 0 12px rgba(239,68,68,.95), 0 0 34px rgba(239,68,68,.55);
-}
-
-.particle {
-    position: fixed;
-    width: 8px;
-    height: 8px;
-    border-radius: 999px;
-    pointer-events: none;
-    z-index: 9999;
-    background: #d946ef;
-    box-shadow: 0 0 14px rgba(217,70,239,.9);
-    animation: particleFly .85s ease-out forwards;
-}
-
-@keyframes particleFly {
-    0% {
-        opacity: 1;
-        transform: translate(0,0) scale(1);
-    }
-    100% {
-        opacity: 0;
-        transform: translate(var(--x), var(--y)) scale(.25);
-    }
-}
-
-/* Real live upgrade feed */
-#liveFeed{
+body:before{
+    content:"";
     position:fixed;
-    top:78px;
-    left:20px;
-    width:220px;
-    height:calc(100vh - 100px);
-    overflow:hidden;
-    z-index:900;
+    inset:0;
     pointer-events:none;
+    background:
+        linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),
+        linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+    background-size:56px 56px;
+    mask-image:radial-gradient(circle at center,black,transparent 75%);
+    opacity:.35;
+    z-index:-2;
 }
-
-.feed-title{
-    font-size:12px;
-    font-weight:900;
-    letter-spacing:.08em;
-    text-transform:uppercase;
-    color:#c084fc;
-    margin-bottom:8px;
-    padding-left:4px;
-    text-shadow:0 0 12px rgba(192,132,252,.5);
-}
-
-.feed-item{
-    display:flex;
-    gap:10px;
-    align-items:center;
-    margin-bottom:10px;
-    padding:10px;
-    background:linear-gradient(135deg,rgba(20,10,35,.92),rgba(42,22,64,.86));
-    border:1px solid rgba(160,32,240,.38);
-    border-radius:16px;
-    box-shadow:0 0 18px rgba(138,43,226,.18);
-    animation:feedAppear .45s ease;
-}
-
-.feed-item img{
-    width:58px;
-    height:48px;
-    object-fit:contain;
-    border-radius:10px;
-    background:rgba(255,255,255,.04);
-}
-
-.feed-player{
-    font-weight:900;
-    font-size:13px;
-    line-height:1.1;
-}
-
-.feed-skin{
-    font-size:12px;
-    line-height:1.15;
-    color:#e9d5ff;
-}
-
-.feed-price{
-    font-size:12px;
-    font-weight:900;
-    color:#d8b4fe;
-}
-
-.feed-win{
-    border-left:4px solid #22c55e;
-}
-
-.feed-loss{
-    border-left:4px solid #ef4444;
-    opacity:.82;
-}
-
-.feed-status-win{
-    color:#22c55e;
-    font-size:11px;
-    font-weight:900;
-}
-
-.feed-status-loss{
-    color:#ef4444;
-    font-size:11px;
-    font-weight:900;
-}
-
-@keyframes feedAppear{
-    from{ opacity:0; transform:translateX(-28px) scale(.97); }
-    to{ opacity:1; transform:translateX(0) scale(1); }
-}
-
-@media (min-width:1400px){
-    #homePage{
-        max-width:calc(80rem + 260px);
-        padding-left:260px;
-    }
-    #profilePage{
-        margin-left:240px;
-    }
-}
-
-@media (max-width:1399px){
-    #liveFeed{
-        display:none;
-    }
-}
-
-
-/* Virtual balance + buy market */
-#balanceBadge{
+body:after{
+    content:"";
     position:fixed;
-    top:20px;
-    right:235px;
-    z-index:9999;
+    inset:0;
+    pointer-events:none;
+    background:linear-gradient(90deg,rgba(139,44,246,.06),transparent 14%,transparent 86%,rgba(139,44,246,.06));
+    z-index:-1;
+}
+.topbar{
+    position:sticky;
+    top:0;
+    z-index:9990;
+    height:82px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 26px;
+    border-bottom:1px solid rgba(168,85,247,.14);
+    background:rgba(6,4,12,.72);
+    backdrop-filter:blur(18px);
+}
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    min-width:210px;
+}
+.brand img{width:48px;height:48px;object-fit:contain;filter:drop-shadow(0 0 16px rgba(168,85,247,.75));}
+.brand-name{font-size:26px;line-height:.88;font-weight:1000;letter-spacing:.02em;}
+.brand-name span{display:block;color:#b768ff;text-shadow:0 0 18px rgba(168,85,247,.65)}
+.top-stats{display:flex;align-items:center;gap:24px;margin-right:auto;margin-left:34px;}
+.top-stat{display:flex;gap:9px;align-items:center;color:#ddd3ef;font-size:12px;text-transform:uppercase;letter-spacing:.05em;}
+.top-stat strong{display:block;color:white;font-size:17px;letter-spacing:.02em;margin-top:2px;}
+.stat-dot{width:9px;height:9px;border-radius:50%;background:#22c55e;box-shadow:0 0 16px rgba(34,197,94,.9)}
+.stat-icon{width:18px;height:18px;display:grid;place-items:center;border-radius:7px;background:rgba(168,85,247,.16);color:#c084fc;box-shadow:0 0 18px rgba(168,85,247,.22)}
+.top-actions{display:flex;align-items:center;gap:12px;}
+#steamProfile,#balanceBadge,#onlineBadge{
+    position:static !important;
+    z-index:auto;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-height:46px;
+    padding:9px 14px;
+    border-radius:14px;
+    background:rgba(15,10,27,.72);
+    border:1px solid rgba(168,85,247,.25);
+    color:white;
+    font-weight:900;
+    box-shadow:0 0 24px rgba(139,44,246,.13), inset 0 0 18px rgba(255,255,255,.025);
+}
+#balanceBadge{border-color:rgba(168,85,247,.35);}
+#steamProfile a{color:white;text-decoration:none;}
+#steamProfile img{width:38px;height:38px;border-radius:50%;object-fit:cover;box-shadow:0 0 16px rgba(217,70,239,.45)}
+#onlineBadge{display:none;}
+.online-dot{width:10px;height:10px;border-radius:50%;background:#22c55e;box-shadow:0 0 12px rgba(34,197,94,.9)}
+.layout{
+    display:grid;
+    grid-template-columns:270px minmax(0,1fr);
+    gap:24px;
+    padding:24px 28px 28px;
+}
+#liveFeed{
+    position:sticky;
+    top:106px;
+    left:auto;
+    width:auto;
+    height:calc(100vh - 128px);
+    overflow:hidden;
+    z-index:5;
+    pointer-events:auto;
+    padding-right:2px;
+}
+.feed-title{
     display:flex;
     align-items:center;
     gap:8px;
-    background:rgba(20,10,35,.85);
-    border:1px solid rgba(234,179,8,.55);
-    border-radius:16px;
-    padding:10px 14px;
+    margin:0 0 12px;
+    padding:0;
+    color:white;
+    font-size:14px;
+    letter-spacing:.04em;
+    font-weight:1000;
+    text-transform:uppercase;
+    text-shadow:0 0 16px rgba(168,85,247,.5);
+}
+.feed-title:after{content:"";width:7px;height:7px;border-radius:50%;background:#a855f7;box-shadow:0 0 14px #a855f7;}
+.feed-item{
+    min-height:78px;
+    display:grid;
+    grid-template-columns:66px 1fr;
+    align-items:center;
+    gap:10px;
+    margin-bottom:10px;
+    padding:10px;
+    border-radius:13px;
+    background:linear-gradient(135deg,rgba(16,11,28,.92),rgba(24,14,38,.82));
+    border:1px solid rgba(168,85,247,.16);
+    box-shadow:0 0 20px rgba(0,0,0,.22), inset 0 0 16px rgba(255,255,255,.02);
+    animation:feedAppear .45s ease;
+}
+.feed-item img{width:66px;height:52px;object-fit:contain;border-radius:10px;background:rgba(255,255,255,.035)}
+.feed-player{font-weight:1000;font-size:13px;line-height:1.05;color:white;}
+.feed-skin{font-size:12px;line-height:1.16;color:#e9d5ff;margin-top:1px;}
+.feed-price{font-size:12px;font-weight:1000;color:#86efac;margin-top:2px;}
+.feed-win{border-left:3px solid #22c55e;box-shadow:inset 0 0 20px rgba(34,197,94,.04)}
+.feed-loss{border-left:3px solid #ef4444;opacity:.9;}
+.feed-status-win,.feed-status-loss{font-size:11px;font-weight:1000;line-height:1.05;text-transform:uppercase;}
+.feed-status-win{color:#86efac}.feed-status-loss{color:#ff7b7b}
+@keyframes feedAppear{from{opacity:0;transform:translateX(-18px) scale(.98)}to{opacity:1;transform:translateX(0) scale(1)}}
+.main-shell{min-width:0;}
+#homePage{max-width:1520px;margin:0 auto;padding:0 !important;}
+.hero-title{display:flex;align-items:center;justify-content:center;gap:12px;margin:0 0 18px;}
+.hero-title .chev{color:#a855f7;font-size:31px;line-height:1;text-shadow:0 0 16px rgba(168,85,247,.7)}
+.hero-title h1{font-size:28px;font-weight:1000;letter-spacing:.02em;}
+.upgrade-area{
+    display:grid;
+    grid-template-columns:minmax(280px,1fr) 360px minmax(280px,1fr);
+    gap:34px;
+    align-items:center;
+    margin-top:12px;
+}
+.cyber-card{
+    position:relative;
+    overflow:hidden;
+    background:linear-gradient(180deg,rgba(19,13,31,.88),rgba(14,10,22,.88));
+    border:1px solid rgba(168,85,247,.2);
+    border-radius:18px;
+    backdrop-filter:blur(14px);
+    box-shadow:0 18px 60px rgba(0,0,0,.32),0 0 28px rgba(139,44,246,.10), inset 0 1px 0 rgba(255,255,255,.05);
+}
+.cyber-card:before{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(circle at 50% 30%,rgba(168,85,247,.13),transparent 45%);
+}
+.item-card{height:332px;padding:22px;display:flex;flex-direction:column;justify-content:space-between;}
+.item-card h2,.section-title{font-size:16px;font-weight:1000;letter-spacing:.02em;color:white;text-transform:uppercase;}
+.item-subtitle{font-size:12px;color:#998cab;margin-top:4px;}
+.item-visual{position:relative;height:190px;display:grid;place-items:center;margin-top:6px;}
+.item-visual:before{content:"";position:absolute;width:74%;height:74%;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.28),transparent 64%);filter:blur(6px)}
+.item-visual:after{content:"❯❯";position:absolute;font-size:62px;font-weight:1000;letter-spacing:-18px;color:#8b2cf6;transform:rotate(90deg);filter:drop-shadow(0 0 18px rgba(168,85,247,.75));opacity:.85;}
+.item-visual img{position:relative;z-index:2;width:86%;height:165px;object-fit:contain;filter:drop-shadow(0 0 18px rgba(0,0,0,.85));opacity:.92;}
+.item-info{border-top:1px solid rgba(255,255,255,.06);padding-top:14px;}
+.value-row{display:flex;justify-content:space-between;gap:14px;align-items:end;}
+.value-row .name{font-weight:1000;font-size:16px;line-height:1.2;}
+.value-row .price{font-size:20px;font-weight:1000;color:#d8b4fe;text-shadow:0 0 14px rgba(168,85,247,.45)}
+.value-bar{height:9px;margin-top:12px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden;border:1px solid rgba(168,85,247,.13)}
+.value-bar span{display:block;width:34%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#7c3aed,#e879f9);box-shadow:0 0 16px rgba(168,85,247,.65)}
+.wheel-wrap{display:flex;flex-direction:column;align-items:center;}
+.pointer{width:0;height:0;border-left:16px solid transparent;border-right:16px solid transparent;border-top:28px solid #d946ef;filter:drop-shadow(0 0 12px #a855f7);margin-bottom:-4px;z-index:2;}
+.wheel-box{position:relative;width:360px;height:360px;display:grid;place-items:center;}
+.wheel-box:before{content:"";position:absolute;inset:-18px;border-radius:50%;background:repeating-conic-gradient(from 0deg,rgba(168,85,247,.25) 0 1deg,transparent 1deg 5deg);mask:radial-gradient(circle,transparent 58%,black 59%,black 69%,transparent 70%);opacity:.75;animation:slowRotate 18s linear infinite;}
+@keyframes slowRotate{to{transform:rotate(360deg)}}
+#wheel{width:330px;height:330px;border-radius:50%;filter:drop-shadow(0 0 32px rgba(168,85,247,.35));}
+.glow{box-shadow:none;}
+#chanceText{font-size:54px;font-weight:1000;color:#c084fc;text-shadow:0 0 18px rgba(168,85,247,.6);}
+.chance-label{font-size:13px;color:#d8d1e2;text-transform:uppercase;font-weight:800;letter-spacing:.04em;}
+.preset-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:14px;}
+.chancePreset,.multiplierPreset{
+    min-width:58px;
+    height:44px;
+    padding:0 16px !important;
+    border-radius:10px !important;
+    background:rgba(16,12,27,.72) !important;
+    border:1px solid rgba(168,85,247,.22);
     color:white;
     font-weight:900;
-    box-shadow:0 0 20px rgba(234,179,8,.22);
-}
-
-.sell-btn, .buy-btn{
-    width:100%;
-    margin-top:10px;
-    padding:8px 10px;
-    border-radius:12px;
-    font-weight:900;
-    font-size:13px;
     transition:.2s;
 }
-
-.sell-btn{
-    background:rgba(239,68,68,.18);
-    border:1px solid rgba(239,68,68,.45);
-    color:#fecaca;
+.chancePreset:hover,.multiplierPreset:hover{border-color:#a855f7;box-shadow:0 0 18px rgba(168,85,247,.25);transform:translateY(-2px)}
+.multiplierPreset[data-mult="10"]{border-color:rgba(168,85,247,.72);color:#d8b4fe;}
+.upgrade-btn{
+    width:min(320px,100%);
+    height:58px;
+    border-radius:13px !important;
+    background:linear-gradient(180deg,#8b2cf6,#6d28d9) !important;
+    color:white;
+    border:1px solid rgba(216,180,254,.28);
+    box-shadow:0 0 26px rgba(139,44,246,.35),inset 0 1px 0 rgba(255,255,255,.18);
+    transition:.22s ease;
 }
-
-.sell-btn:hover{
-    background:rgba(239,68,68,.32);
-    box-shadow:0 0 18px rgba(239,68,68,.3);
+.upgrade-btn:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 0 34px rgba(168,85,247,.55)}
+#fastUpgradeBtn{height:44px;width:220px;margin-top:10px !important;background:linear-gradient(180deg,#b91bd1,#8614ba)!important;font-size:15px!important;}
+.result-popup{animation:pop .35s ease;}
+@keyframes pop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
+.panels-grid{display:grid;grid-template-columns:minmax(420px,.95fr) minmax(520px,1.05fr);gap:18px;margin-top:24px;}
+.panel{padding:18px;}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:14px;}
+.panel-title{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:1000;text-transform:uppercase;letter-spacing:.02em;}
+.panel-icon{width:28px;height:28px;border-radius:9px;display:grid;place-items:center;background:rgba(168,85,247,.16);color:#c084fc;box-shadow:0 0 16px rgba(168,85,247,.18)}
+.panel-value{font-weight:1000;color:white;}
+#inventoryGrid,#marketGrid,#buyMarketGrid,#profileInventoryGrid{gap:10px!important;}
+#inventoryGrid{grid-template-columns:repeat(auto-fill,minmax(118px,1fr))!important;}
+#marketGrid{grid-template-columns:repeat(auto-fill,minmax(116px,1fr))!important;max-height:448px!important;}
+.skin-tile,.market-modal-card .cyber-card,#profileInventoryGrid .cyber-card{
+    position:relative;
+    min-height:145px;
+    padding:9px!important;
+    border-radius:10px!important;
+    background:linear-gradient(180deg,rgba(19,13,31,.9),rgba(12,8,20,.94));
+    border:1px solid rgba(234,88,12,.32);
+    transition:.18s ease;
 }
-
-.buy-btn{
-    background:rgba(34,197,94,.18);
-    border:1px solid rgba(34,197,94,.45);
-    color:#bbf7d0;
+.skin-tile:nth-child(3n),.market-modal-card .cyber-card:nth-child(3n){border-color:rgba(217,70,239,.35)}
+.skin-tile:hover{transform:translateY(-3px);border-color:#c084fc;box-shadow:0 0 22px rgba(168,85,247,.28)}
+.skin-tile.selected{outline:none;border-color:#d946ef!important;box-shadow:0 0 20px rgba(217,70,239,.38),inset 0 0 20px rgba(168,85,247,.06)}
+.skin-tile img,#profileInventoryGrid img,.market-modal-card img{height:62px!important;object-fit:contain!important;background:transparent!important;margin-bottom:7px!important;filter:drop-shadow(0 0 12px rgba(0,0,0,.85));}
+.skin-tile .font-bold,.market-modal-card .font-bold,#profileInventoryGrid .font-bold{font-size:12px!important;line-height:1.12!important;min-height:28px;}
+.skin-tile .text-purple-300,.market-modal-card .text-purple-300,#profileInventoryGrid .text-purple-300{font-size:13px!important;color:#fde047!important;text-shadow:0 0 10px rgba(234,179,8,.35)}
+.sell-btn,.buy-btn{padding:6px 8px!important;border-radius:8px!important;font-size:11px!important;margin-top:7px!important;}
+.search-wrap{display:flex;align-items:center;gap:10px;}
+.select-mini,.search-input,#skinSearch,#buyMarketSearch{
+    height:38px;
+    border-radius:10px!important;
+    background:rgba(9,6,16,.72)!important;
+    border:1px solid rgba(168,85,247,.18)!important;
+    color:white;
+    outline:none;
 }
-
-.buy-btn:hover{
-    background:rgba(34,197,94,.32);
-    box-shadow:0 0 18px rgba(34,197,94,.28);
-}
-
-#buyMarketModal{
-    position:fixed;
-    inset:0;
-    z-index:10000;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    padding:24px;
-    background:rgba(5,2,12,.72);
-    backdrop-filter:blur(10px);
-}
-
-#buyMarketModal.open{
-    display:flex;
-}
-
-.market-modal-card{
-    width:min(980px,94vw);
-    max-height:86vh;
-    overflow:hidden;
-    background:linear-gradient(135deg,rgba(22,11,40,.97),rgba(38,20,58,.97));
-    border:1px solid rgba(160,32,240,.45);
-    border-radius:28px;
-    box-shadow:0 0 45px rgba(160,32,240,.35);
-}
-
-.market-modal-grid{
-    max-height:62vh;
-    overflow:auto;
-}
-
-@media (max-width:900px){
-    #balanceBadge{
-        top:78px;
-        right:20px;
-    }
-}
-
+#skinSearch,#buyMarketSearch{padding:0 12px!important;}
+.select-mini{padding:0 13px;color:#ddd3ef;font-size:13px;font-weight:800;}
+.pager{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:14px;}
+.pager span{min-width:34px;height:34px;border-radius:8px;display:grid;place-items:center;background:rgba(255,255,255,.035);border:1px solid rgba(168,85,247,.14);color:#bfb4ce;font-weight:900;}
+.pager span.active{background:linear-gradient(180deg,#8b2cf6,#6d28d9);color:white;box-shadow:0 0 18px rgba(168,85,247,.36)}
+.bottom-info{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:18px;}
+.info-card{min-height:78px;padding:16px;border-radius:14px;background:rgba(15,10,27,.55);border:1px solid rgba(168,85,247,.14);display:flex;gap:12px;align-items:center;}
+.info-card .ico{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:rgba(168,85,247,.14);color:#c084fc;font-size:22px;box-shadow:0 0 16px rgba(168,85,247,.17)}
+.info-card small{display:block;color:#a995bc;font-size:11px;text-transform:uppercase;font-weight:900;letter-spacing:.05em}.info-card strong{font-size:20px;}
+#profilePage{max-width:1040px;margin:0 auto!important;padding-top:32px!important;}
+.profile-stat-card{background:rgba(255,255,255,.035);border:1px solid rgba(168,85,247,.24);border-radius:18px;padding:18px;box-shadow:0 0 20px rgba(139,44,246,.12)}
+#screenFlash{position:fixed;inset:0;z-index:9998;pointer-events:none;opacity:0;background:radial-gradient(circle at center,rgba(34,197,94,.45),rgba(168,85,247,.18),transparent 65%)}
+#screenFlash.win-active{animation:winFlash .75s ease-out}#screenFlash.loss-active{background:radial-gradient(circle at center,rgba(239,68,68,.35),rgba(168,85,247,.12),transparent 65%);animation:lossFlash .45s ease-out}
+@keyframes winFlash{0%{opacity:0;transform:scale(.95)}25%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.15)}}
+@keyframes lossFlash{0%{opacity:0}25%{opacity:.9}100%{opacity:0}}
+.win-item-pulse{animation:winItemPulse 1.05s ease-out}@keyframes winItemPulse{0%{transform:scale(1);filter:drop-shadow(0 0 0 rgba(34,197,94,0))}35%{transform:scale(1.08);filter:drop-shadow(0 0 30px rgba(34,197,94,.9))}100%{transform:scale(1);filter:drop-shadow(0 0 0 rgba(34,197,94,0))}}
+.loss-shake{animation:lossShake .42s ease-in-out}@keyframes lossShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-10px)}40%{transform:translateX(10px)}60%{transform:translateX(-7px)}80%{transform:translateX(7px)}}
+.result-win-glow{text-shadow:0 0 12px rgba(34,197,94,.95),0 0 34px rgba(34,197,94,.65)}.result-loss-glow{text-shadow:0 0 12px rgba(239,68,68,.95),0 0 34px rgba(239,68,68,.55)}
+.particle{position:fixed;width:8px;height:8px;border-radius:999px;pointer-events:none;z-index:9999;background:#d946ef;box-shadow:0 0 14px rgba(217,70,239,.9);animation:particleFly .85s ease-out forwards}@keyframes particleFly{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--x),var(--y)) scale(.25)}}
+#buyMarketModal{position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(5,2,12,.72);backdrop-filter:blur(10px)}#buyMarketModal.open{display:flex}.market-modal-card{width:min(980px,94vw);max-height:86vh;overflow:hidden;background:linear-gradient(135deg,rgba(22,11,40,.97),rgba(38,20,58,.97));border:1px solid rgba(160,32,240,.45);border-radius:28px;box-shadow:0 0 45px rgba(160,32,240,.35)}.market-modal-grid{max-height:62vh;overflow:auto}
+@media(max-width:1200px){.layout{grid-template-columns:1fr}.topbar{height:auto;gap:12px;flex-wrap:wrap}.top-stats{order:3;width:100%;margin:8px 0 0}.upgrade-area{grid-template-columns:1fr}.panels-grid{grid-template-columns:1fr}#liveFeed{position:relative;top:auto;height:auto;max-height:360px}.bottom-info{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:720px){.topbar{padding:12px}.brand-name{font-size:21px}.top-stats{gap:12px}.top-actions{width:100%;justify-content:space-between}.layout{padding:14px}.wheel-box{width:300px;height:300px}#wheel{width:280px;height:280px}.item-card{height:auto}.panels-grid{margin-top:18px}.bottom-info{grid-template-columns:1fr}.hero-title h1{font-size:22px}}
 </style>
 </head>
 <body class="text-white font-sans">
-<div id="steamProfile"><a href="/auth/steam">Sign in through Steam</a></div>
-<div id="onlineBadge"><span class="online-dot"></span><span id="onlineCount">0</span> players online</div>
-<div id="balanceBadge">💰 <span id="balanceAmount">$1000</span></div>
-<div id="liveFeed">
-    <div class="feed-title">Live Upgrades</div>
-    <div id="feedItems"></div>
-</div>
-<div id="screenFlash"></div>
-
-<div id="homePage" class="max-w-7xl mx-auto p-6">
-    <div class="text-center mb-10">
-        <h1 class="text-5xl font-black tracking-wider">CS2 <span class="text-purple-400">UPGRADER</span></h1>
-        <p class="text-gray-400 mt-2">Upgrade your skins with a chance-based wheel.</p>
+<div class="topbar">
+    <div class="brand">
+        <img src="/Dropempiree.png" alt="Drop Empire logo">
+        <div class="brand-name">DROP<span>EMPIRE</span></div>
     </div>
-
-    <div class="grid lg:grid-cols-3 gap-8 items-center">
-        <div class="cyber-card rounded-3xl p-6">
-            <h2 class="text-xl font-bold mb-4 text-purple-300">Your Item</h2>
-            <img id="yourItemImage" src="ak47.png.png" class="rounded-xl w-full h-48 object-cover" alt="Your item">
-            <div class="mt-4">
-                <div id="yourItemName" class="font-bold text-lg">AK-47 | Neon Rider</div>
-                <div id="yourItemPrice" class="text-purple-300 text-xl font-black mt-1">$50</div>
-            </div>
-            <p class="text-xs text-gray-500 mt-3">Choose from inventory below.</p>
-        </div>
-
-        <div class="flex flex-col items-center">
-            <div class="pointer mb-2"></div>
-            <div class="relative">
-                <canvas id="wheel" width="420" height="420" class="glow rounded-full"></canvas>
-                <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <div class="text-center">
-                        <div id="chanceText" class="text-6xl font-black text-purple-300">50%</div>
-                        <div class="text-gray-400">Success Chance</div>
+    <div class="top-stats">
+        <div class="top-stat"><i class="stat-dot"></i><div>Online<strong><span id="onlineCount">0</span></strong></div></div>
+        <div class="top-stat"><i class="stat-icon">♛</i><div>Upgrades<strong>178 451 236</strong></div></div>
+    </div>
+    <div class="top-actions">
+        <div id="balanceBadge">💎 <span id="balanceAmount">$1000</span></div>
+        <div id="steamProfile"><a href="/auth/steam">Sign in through Steam</a></div>
+    </div>
+</div>
+<div id="onlineBadge"><span class="online-dot"></span><span>0</span> players online</div>
+<div class="layout">
+    <aside id="liveFeed">
+        <div class="feed-title">Live Upgrades</div>
+        <div id="feedItems"></div>
+    </aside>
+    <main class="main-shell">
+        <div id="screenFlash"></div>
+        <div id="homePage">
+            <div class="hero-title"><span class="chev">⌃</span><h1>UPGRADER</h1></div>
+            <div class="upgrade-area">
+                <section class="cyber-card item-card">
+                    <div>
+                        <h2>Select skin or balance</h2>
+                        <p class="item-subtitle">Choose one item from your inventory</p>
                     </div>
+                    <div class="item-visual"><img id="yourItemImage" src="ak47.png.png" alt="Your item"></div>
+                    <div class="item-info">
+                        <div class="value-row"><div><div id="yourItemName" class="name">AK-47 | Neon Rider</div><div class="item-subtitle">Selected item</div></div><div id="yourItemPrice" class="price">$50</div></div>
+                        <div class="value-bar"><span></span></div>
+                    </div>
+                </section>
+                <section class="wheel-wrap">
+                    <div class="pointer"></div>
+                    <div class="wheel-box">
+                        <canvas id="wheel" width="420" height="420"></canvas>
+                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            <div class="text-center">
+                                <div id="chanceText">50%</div>
+                                <div class="chance-label">Average chance</div>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="upgradeBtn" class="upgrade-btn mt-4 text-xl font-black tracking-wider">⌃ UPGRADE</button>
+                    <button id="fastUpgradeBtn" class="upgrade-btn mt-3 text-lg font-black tracking-wider">⚡ FAST SPIN</button>
+                    <div class="preset-row">
+                        <button class="multiplierPreset" data-mult="1.5">1.5x</button>
+                        <button class="multiplierPreset" data-mult="2">2x</button>
+                        <button class="multiplierPreset" data-mult="5">5x</button>
+                        <button class="multiplierPreset" data-mult="10">10x</button>
+                    </div>
+                    <div class="preset-row">
+                        <button class="chancePreset" data-chance="10">10%</button>
+                        <button class="chancePreset" data-chance="25">25%</button>
+                        <button class="chancePreset" data-chance="50">50%</button>
+                        <button class="chancePreset" data-chance="75">75%</button>
+                    </div>
+                    <div id="result" class="hidden result-popup mt-5 text-3xl font-black"></div>
+                </section>
+                <section class="cyber-card item-card">
+                    <div>
+                        <h2>Select skin for upgrade</h2>
+                        <p class="item-subtitle">Choose the item you want to receive</p>
+                    </div>
+                    <div class="item-visual"><img id="targetItemImage" src="awp.png.png" alt="Target item"></div>
+                    <div class="item-info">
+                        <div class="value-row"><div><div id="targetItemName" class="name">AWP | Dragon Lore</div><div class="item-subtitle">Target item</div></div><div id="targetPriceLabel" class="price">$100</div></div>
+                        <div class="value-bar"><span style="width:68%"></span></div>
+                    </div>
+                </section>
+            </div>
+            <div class="panels-grid">
+                <section class="cyber-card panel">
+                    <div class="panel-head">
+                        <div class="panel-title"><span class="panel-icon">▣</span> My Inventory <span id="inventoryCount" class="text-gray-400 text-sm"></span></div>
+                        <div class="flex items-center gap-2"><span class="panel-value" id="inventoryMiniValue">$0</span><button id="openBuyMarketBtn" class="select-mini">Market</button><button id="resetInventoryBtn" class="select-mini">Reset</button></div>
+                    </div>
+                    <div id="inventoryGrid" class="grid"></div>
+                </section>
+                <section class="cyber-card panel">
+                    <div class="panel-head">
+                        <div class="panel-title"><span class="panel-icon">▤</span> Select skin <span class="text-gray-400">⌄</span></div>
+                        <div class="search-wrap"><button class="select-mini">Price ↕</button><input id="skinSearch" class="search-input" placeholder="Search skin..."></div>
+                    </div>
+                    <div id="marketGrid" class="grid"></div>
+                    <div class="pager"><span class="active">1</span><span>2</span><span>3</span><span>...</span><span>42</span><span>›</span></div>
+                </section>
+            </div>
+            <div class="bottom-info">
+                <div class="info-card"><div class="ico">↗</div><div><small>Total Upgrades</small><strong>178 451 236</strong></div></div>
+                <div class="info-card"><div class="ico">☘</div><div><small>Players Online</small><strong><span id="bottomOnlineCount">0</span></strong></div></div>
+                <div class="info-card"><div class="ico">♛</div><div><small>Biggest Win</small><strong id="bottomBiggestWin">$0</strong></div></div>
+                <div class="info-card"><div class="ico">◇</div><div><small>Free Simulator</small><strong>100%</strong></div></div>
+            </div>
+        </div>
+        <div id="profilePage" class="hidden">
+            <button id="backToUpgraderBtn" class="mb-6 px-4 py-2 rounded-xl bg-purple-800 hover:bg-purple-700 font-bold">← Back to upgrader</button>
+            <div class="cyber-card rounded-3xl p-8">
+                <div class="flex flex-col sm:flex-row items-center gap-6 mb-8">
+                    <img id="profileAvatar" src="" alt="Steam avatar" class="w-24 h-24 rounded-full border border-purple-500 glow">
+                    <div class="text-center sm:text-left"><h2 id="profileName" class="text-4xl font-black text-purple-300">Steam Profile</h2><p id="profileSteamId" class="text-gray-400 mt-2">SteamID: unknown</p></div>
                 </div>
-            </div>
-            <div class="flex gap-2 justify-center mt-5 flex-wrap">
-                <button class="chancePreset px-4 py-2 rounded-xl bg-purple-700" data-chance="10">10%</button>
-                <button class="chancePreset px-4 py-2 rounded-xl bg-purple-700" data-chance="25">25%</button>
-                <button class="chancePreset px-4 py-2 rounded-xl bg-purple-700" data-chance="50">50%</button>
-                <button class="chancePreset px-4 py-2 rounded-xl bg-purple-700" data-chance="75">75%</button>
-            </div>
-            <div class="flex gap-2 justify-center mt-3 flex-wrap">
-                <button class="multiplierPreset px-4 py-2 rounded-xl bg-fuchsia-700" data-mult="1.5">1.5x</button>
-                <button class="multiplierPreset px-4 py-2 rounded-xl bg-fuchsia-700" data-mult="2">2x</button>
-                <button class="multiplierPreset px-4 py-2 rounded-xl bg-fuchsia-700" data-mult="5">5x</button>
-                <button class="multiplierPreset px-4 py-2 rounded-xl bg-fuchsia-700" data-mult="10">10x</button>
-            </div>
-            <button id="upgradeBtn" class="upgrade-btn mt-8 px-10 py-4 rounded-2xl bg-purple-700 text-xl font-black tracking-wider glow">UPGRADE</button>
-            <button id="fastUpgradeBtn" class="upgrade-btn mt-3 px-8 py-3 rounded-2xl bg-fuchsia-700 text-lg font-black tracking-wider glow">⚡ FAST SPIN</button>
-            <div id="result" class="hidden result-popup mt-6 text-3xl font-black"></div>
-        </div>
-
-        <div class="cyber-card rounded-3xl p-6">
-            <h2 class="text-xl font-bold mb-4 text-purple-300">Target Item</h2>
-            <img id="targetItemImage" src="awp.png.png" class="rounded-xl w-full h-48 object-cover" alt="Target item">
-            <div class="mt-4">
-                <div id="targetItemName" class="font-bold text-lg">AWP | Dragon Lore</div>
-                <div id="targetPriceLabel" class="text-purple-300 text-xl font-black mt-1">$100</div>
-            </div>
-            <p class="text-xs text-gray-500 mt-3">Choose target from market below.</p>
-        </div>
-    </div>
-
-    <div class="grid lg:grid-cols-2 gap-6 mt-10">
-        <div class="cyber-card rounded-3xl p-5">
-            <div class="flex items-center justify-between gap-3 mb-4">
-                <h2 class="text-2xl font-black text-purple-300">🎒 My Inventory <span id="inventoryCount" class="text-gray-400 text-base"></span></h2>
-                <div class="flex gap-2">
-                    <button id="openBuyMarketBtn" class="px-3 py-2 rounded-xl bg-purple-700 hover:bg-purple-600 text-sm font-bold">🛒 Market</button>
-                    <button id="resetInventoryBtn" class="px-3 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 text-sm">Reset demo</button>
+                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                    <div class="profile-stat-card"><h3 class="text-purple-300 font-bold">Inventory Value</h3><div id="inventoryValue" class="text-4xl font-black mt-2">$0</div></div>
+                    <div class="profile-stat-card"><h3 class="text-purple-300 font-bold">Balance</h3><div id="profileBalance" class="text-4xl font-black mt-2">$1000</div></div>
+                    <div class="profile-stat-card"><h3 class="text-purple-300 font-bold">Biggest Win</h3><div id="biggestWin" class="text-2xl font-black mt-2">None ($0)</div></div>
+                    <div class="profile-stat-card"><h3 class="text-purple-300 font-bold">Players Online</h3><div class="text-4xl font-black mt-2"><span id="profileOnlineCount">0</span></div></div>
                 </div>
+                <div class="profile-stat-card"><h3 class="text-purple-300 font-bold mb-4">Inventory Preview</h3><div id="profileInventoryGrid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3"></div></div>
             </div>
-            <div id="inventoryGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
         </div>
-
-        <div class="cyber-card rounded-3xl p-5">
-            <div class="flex items-center justify-between gap-3 mb-4">
-                <h2 class="text-2xl font-black text-purple-300">🎯 Choose Target</h2>
-                <input id="skinSearch" placeholder="Search skin..." class="bg-[#120d1f] border border-purple-900 rounded-xl px-3 py-2 text-sm outline-none w-44">
-            </div>
-            <div id="marketGrid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[420px] overflow-y-auto pr-1"></div>
-        </div>
-    </div>
+    </main>
 </div>
-
-<div id="profilePage" class="hidden max-w-5xl mx-auto p-6 pt-24">
-    <button id="backToUpgraderBtn" class="mb-6 px-4 py-2 rounded-xl bg-purple-800 hover:bg-purple-700 font-bold">
-        ← Back to upgrader
-    </button>
-
-    <div class="cyber-card rounded-3xl p-8">
-        <div class="flex flex-col sm:flex-row items-center gap-6 mb-8">
-            <img id="profileAvatar" src="" alt="Steam avatar" class="w-24 h-24 rounded-full border border-purple-500 glow">
-            <div class="text-center sm:text-left">
-                <h2 id="profileName" class="text-4xl font-black text-purple-300">Steam Profile</h2>
-                <p id="profileSteamId" class="text-gray-400 mt-2">SteamID: unknown</p>
-            </div>
-        </div>
-
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-            <div class="profile-stat-card">
-                <h3 class="text-purple-300 font-bold">Inventory Value</h3>
-                <div id="inventoryValue" class="text-4xl font-black mt-2">$0</div>
-            </div>
-
-            <div class="profile-stat-card">
-                <h3 class="text-purple-300 font-bold">Balance</h3>
-                <div id="profileBalance" class="text-4xl font-black mt-2">$1000</div>
-            </div>
-
-            <div class="profile-stat-card">
-                <h3 class="text-purple-300 font-bold">Biggest Win</h3>
-                <div id="biggestWin" class="text-2xl font-black mt-2">None ($0)</div>
-            </div>
-
-            <div class="profile-stat-card">
-                <h3 class="text-purple-300 font-bold">Players Online</h3>
-                <div class="text-4xl font-black mt-2"><span id="profileOnlineCount">0</span></div>
-            </div>
-        </div>
-
-        <div class="profile-stat-card">
-            <h3 class="text-purple-300 font-bold mb-4">Inventory Preview</h3>
-            <div id="profileInventoryGrid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
-        </div>
-    </div>
-</div>
-
 <div id="buyMarketModal">
     <div class="market-modal-card p-6">
-        <div class="flex items-center justify-between gap-3 mb-5">
-            <div>
-                <h2 class="text-3xl font-black text-purple-300">🛒 Skin Market</h2>
-                <p class="text-gray-400 text-sm mt-1">Buy skins with your virtual balance, then upgrade them.</p>
-            </div>
-            <button id="closeBuyMarketBtn" class="px-4 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 font-bold">✕ Close</button>
-        </div>
-        <div class="flex items-center justify-between gap-3 mb-4">
-            <div class="text-xl font-black">Balance: <span id="modalBalance" class="text-yellow-300">$1000</span></div>
-            <input id="buyMarketSearch" placeholder="Search skin to buy..." class="bg-[#120d1f] border border-purple-900 rounded-xl px-3 py-2 text-sm outline-none w-56">
-        </div>
+        <div class="flex items-center justify-between gap-3 mb-5"><div><h2 class="text-3xl font-black text-purple-300">🛒 Skin Market</h2><p class="text-gray-400 text-sm mt-1">Buy skins with your virtual balance, then upgrade them.</p></div><button id="closeBuyMarketBtn" class="px-4 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 font-bold">✕ Close</button></div>
+        <div class="flex items-center justify-between gap-3 mb-4"><div class="text-xl font-black">Balance: <span id="modalBalance" class="text-yellow-300">$1000</span></div><input id="buyMarketSearch" placeholder="Search skin to buy..." class="bg-[#120d1f] border border-purple-900 rounded-xl px-3 py-2 text-sm outline-none w-56"></div>
         <div id="buyMarketGrid" class="market-modal-grid grid sm:grid-cols-2 lg:grid-cols-4 gap-3 pr-2"></div>
     </div>
 </div>
-
 <audio id="tickSound" src="sounds/tick.mp3" preload="auto"></audio>
 <audio id="winSound" src="sounds/win.mp3" preload="auto"></audio>
 <audio id="loseSound" src="sounds/lose.mp3" preload="auto"></audio>
@@ -1128,13 +1051,23 @@ function updateStats() {
 
     const inventoryValueEl = document.getElementById("inventoryValue");
     const biggestWinEl = document.getElementById("biggestWin");
+    const inventoryMiniValueEl = document.getElementById("inventoryMiniValue");
+    const bottomBiggestWinEl = document.getElementById("bottomBiggestWin");
 
     if (inventoryValueEl) {
         inventoryValueEl.textContent = "$" + total;
     }
 
+    if (inventoryMiniValueEl) {
+        inventoryMiniValueEl.textContent = "$" + total;
+    }
+
     if (biggestWinEl) {
         biggestWinEl.textContent = `${biggestWin.name} ($${biggestWin.price})`;
+    }
+
+    if (bottomBiggestWinEl) {
+        bottomBiggestWinEl.textContent = "$" + biggestWin.price;
     }
 
     updateBalanceUI();
@@ -1184,6 +1117,7 @@ function showHomePage() {
 function updateOnlineCounters(count) {
     const onlineCountEl = document.getElementById("onlineCount");
     const profileOnlineCountEl = document.getElementById("profileOnlineCount");
+    const bottomOnlineCountEl = document.getElementById("bottomOnlineCount");
 
     if (onlineCountEl) {
         onlineCountEl.textContent = count;
@@ -1191,6 +1125,10 @@ function updateOnlineCounters(count) {
 
     if (profileOnlineCountEl) {
         profileOnlineCountEl.textContent = count;
+    }
+
+    if (bottomOnlineCountEl) {
+        bottomOnlineCountEl.textContent = count;
     }
 }
 
