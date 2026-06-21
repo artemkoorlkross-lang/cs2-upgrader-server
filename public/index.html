@@ -806,7 +806,7 @@ function loadUpgradeSettings() {
         const saved = JSON.parse(localStorage.getItem("dropempire-upgrade-settings"));
         return {
             maxChance: Math.min(80, Math.max(0.01, Number(saved?.maxChance) || 80)),
-            normalDuration: Number(saved?.normalDuration) || 4500,
+            normalDuration: Number(saved?.normalDuration) || 7200,
             fastDuration: Number(saved?.fastDuration) || 400,
             soundEnabled: saved?.soundEnabled !== false,
             arrowStyle: saved?.arrowStyle || "purple",
@@ -1615,7 +1615,7 @@ function spinWheel(duration = 4500) {
     const winArc = (lockedChance / 100) * TAU;
     const landingDistance = pickLandingDistance(won, winArc);
     const targetMod = normalize(-landingDistance);
-    const extraSpins = 8 * TAU;
+    const extraSpins = 11 * TAU;
     const startRotation = rotation;
     const baseRotation = rotation + extraSpins;
     const offset = normalize(targetMod - normalize(baseRotation));
@@ -1625,7 +1625,9 @@ function spinWheel(duration = 4500) {
     function animate(now){
         const elapsed = now - start;
         let progress = Math.min(elapsed / duration, 1);
-        const eased = 1 - Math.pow(1-progress, 4);
+       const eased = progress < 0.82
+    ? 1 - Math.pow(1 - progress, 3.2)
+    : 1 - Math.pow(1 - progress, 5.8);
         rotation = startRotation + (targetRotation - startRotation) * eased;
         drawWheel(rotation);
         const segmentSize=(Math.PI*2)/100;
@@ -1817,15 +1819,10 @@ function openSettingsModal() {
     document.querySelectorAll('.quick-chance-input').forEach((input, index) => input.value = appSettings.chancePresets[index]);
     document.querySelectorAll('.quick-mult-input').forEach((input, index) => input.value = appSettings.multPresets[index]);
 
-    const speed = document.querySelector(`input[name="spinSpeed"][value="${appSettings.normalDuration}"]`) || document.querySelector('input[name="spinSpeed"][value="4500"]');
-    if (speed) speed.checked = true;
-
-    const arrow = document.querySelector(`input[name="arrowStyle"][value="${appSettings.arrowStyle}"]`) || document.querySelector('input[name="arrowStyle"][value="purple"]');
-    if (arrow) arrow.checked = true;
-
-    const sound = document.querySelector(`input[name="soundEnabled"][value="${appSettings.soundEnabled}"]`);
-    if (sound) sound.checked = true;
-}
+  <label class="setting-option"><input type="radio" name="spinSpeed" value="9000"> Slow cinematic</label>
+<label class="setting-option"><input type="radio" name="spinSpeed" value="7200"> Default smooth</label>
+<label class="setting-option"><input type="radio" name="spinSpeed" value="5200"> Fast smooth</label>
+<label class="setting-option"><input type="radio" name="spinSpeed" value="3200"> Lightning</label>
 
 function closeSettingsModal() {
     document.getElementById("upgradeSettingsModal")?.classList.remove("open");
