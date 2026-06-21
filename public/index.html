@@ -296,14 +296,22 @@ body:after{
 @media(max-width:720px){.topbar{padding:12px}.brand-name{font-size:21px}.top-stats{gap:12px}.top-actions{width:100%;justify-content:space-between}.layout{padding:14px}.wheel-box{width:300px;height:300px}#wheel{width:280px;height:280px}.item-card{height:auto}.panels-grid{margin-top:18px}.bottom-info{grid-template-columns:1fr}.hero-title h1{font-size:22px}}
 /* Upgrade settings modal */
 .wheel-wrap{position:relative;}
+.upgrade-area > .item-card:first-child{
+    padding-top:88px;
+    min-height:360px;
+}
 .wheel-tools{
-    position:relative;
+    position:absolute;
+    left:22px;
+    top:18px;
     z-index:50;
     display:flex;
     align-items:center;
     gap:10px;
-    margin:-4px 0 16px 0;
+    margin:0;
 }
+.item-visual.no-item img{display:none;}
+.item-visual.no-item:before{opacity:.45;}
 .settings-gear,.fast-spin-icon{
     width:44px;
     height:44px;
@@ -406,7 +414,7 @@ body.arrow-pink .pointer{border-top-color:#f472b6;filter:drop-shadow(0 0 12px #f
 body.arrow-green .pointer{border-top-color:#22c55e;filter:drop-shadow(0 0 12px #22c55e)}
 body.arrow-orange .pointer{border-top-color:#fb923c;filter:drop-shadow(0 0 12px #fb923c)}
 body.arrow-purple .pointer{border-top-color:#a855f7;filter:drop-shadow(0 0 12px #a855f7)}
-@media(max-width:720px){.settings-grid{grid-template-columns:1fr}.wheel-tools{position:static;margin-top:10px;justify-content:center}}
+@media(max-width:720px){.settings-grid{grid-template-columns:1fr}.upgrade-area > .item-card:first-child{padding-top:82px}.wheel-tools{left:18px;top:18px;justify-content:flex-start}}
 
 </style>
 </head>
@@ -808,6 +816,34 @@ let currentUser = { name: "Player", avatar: "" };
 let balance = loadBalance();
 let pendingUpgrade = null;
 let fastSpinEnabled = false;
+const PENDING_FEED_KEY = "dropempire-pending-feed";
+
+function savePendingFeed(result, item) {
+    try {
+        localStorage.setItem(PENDING_FEED_KEY, JSON.stringify({
+            result,
+            item: { name: item.name, price: item.price, image: item.image },
+            createdAt: Date.now()
+        }));
+    } catch {}
+}
+
+function clearPendingFeed() {
+    try { localStorage.removeItem(PENDING_FEED_KEY); } catch {}
+}
+
+function flushPendingFeedAfterRefresh() {
+    try {
+        const raw = localStorage.getItem(PENDING_FEED_KEY);
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        clearPendingFeed();
+        if (!data?.result || !data?.item) return;
+        sendUpgradeToFeed(data.result, data.item);
+    } catch {
+        clearPendingFeed();
+    }
+}
 function cloneSkin(skin) {
     return { ...skin, uid: crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random()) };
 }
@@ -988,12 +1024,17 @@ function calculateChance() {
 
 function updateMainCards() {
     const item = getSelectedItem();
+    const yourVisual = yourItemImage?.closest(".item-visual");
     if (item) {
         yourItemImage.src = item.image;
+        yourItemImage.style.display = "block";
+        if (yourVisual) yourVisual.classList.remove("no-item");
         yourItemName.textContent = item.name;
         yourItemPrice.textContent = `$${item.price}`;
     } else {
-        yourItemImage.src = "";
+        yourItemImage.removeAttribute("src");
+        yourItemImage.style.display = "none";
+        if (yourVisual) yourVisual.classList.add("no-item");
         yourItemName.textContent = "No item selected";
         yourItemPrice.textContent = "$0";
     }
@@ -1283,6 +1324,8 @@ function spinWheel(duration = 4500) {
         won
     };
 
+    savePendingFeed(won ? "WIN" : "LOSS", won ? lockedTarget : lockedItem);
+
     // Result is saved immediately to block refresh exploit.
     // Win -> old skin becomes target. Loss -> old skin is removed.
     inventory.splice(lockedIndex, 1);
@@ -1361,6 +1404,7 @@ function finishSpin() {
         sendUpgradeToFeed("LOSS", lockedItem);
     }
 
+    clearPendingFeed();
     pendingUpgrade = null;
     if (selectedInventoryIndex >= inventory.length) selectedInventoryIndex = Math.max(0, inventory.length - 1);
     saveInventory();
@@ -1749,6 +1793,8 @@ renderMarket();
 renderBuyMarket();
 updateMainCards();
 updateStats();
+showHomePage();
+flushPendingFeedAfterRefresh();
 
 if (window.location.hash === "#profile") {
     history.replaceState("", document.title, window.location.pathname + window.location.search);
