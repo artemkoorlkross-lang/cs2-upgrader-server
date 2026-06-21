@@ -450,6 +450,77 @@ body.arrow-orange .pointer{border-top-color:#fb923c;filter:drop-shadow(0 0 12px 
 body.arrow-purple .pointer{border-top-color:#a855f7;filter:drop-shadow(0 0 12px #a855f7)}
 @media(max-width:720px){.settings-grid{grid-template-columns:1fr}.wheel-tools{position:relative;left:auto;top:auto;margin:0 0 12px 0;justify-content:flex-start}}
 
+/* Profile history upgrades */
+.profile-tabs{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin:0 0 16px;
+    padding:10px;
+    border-radius:16px;
+    background:rgba(255,255,255,.035);
+    border:1px solid rgba(168,85,247,.16);
+}
+.profile-tab{
+    min-height:42px;
+    padding:0 18px;
+    border-radius:12px;
+    background:rgba(9,6,16,.68);
+    border:1px solid rgba(168,85,247,.16);
+    color:#bba6d8;
+    font-weight:1000;
+    transition:.18s ease;
+}
+.profile-tab:hover{border-color:#a855f7;color:white;transform:translateY(-1px)}
+.profile-tab.active{
+    background:linear-gradient(180deg,#8b2cf6,#6d28d9);
+    color:white;
+    box-shadow:0 0 22px rgba(168,85,247,.35);
+}
+.profile-tab-content.hidden{display:none!important;}
+.history-list{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+.history-row{
+    display:grid;
+    grid-template-columns:70px 1fr auto;
+    align-items:center;
+    gap:14px;
+    padding:12px;
+    border-radius:15px;
+    background:linear-gradient(135deg,rgba(16,11,28,.92),rgba(24,14,38,.82));
+    border:1px solid rgba(168,85,247,.16);
+    box-shadow:inset 0 0 18px rgba(255,255,255,.015);
+}
+.history-row.win{border-left:3px solid #22c55e;}
+.history-row.loss{border-left:3px solid #ef4444;}
+.history-row img{
+    width:70px;
+    height:54px;
+    object-fit:contain;
+    border-radius:11px;
+    background:rgba(255,255,255,.035);
+}
+.history-status{
+    font-size:12px;
+    font-weight:1000;
+    text-transform:uppercase;
+    line-height:1;
+}
+.history-row.win .history-status{color:#86efac;}
+.history-row.loss .history-status{color:#ff7b7b;}
+.history-main{min-width:0;}
+.history-name{font-weight:1000;color:white;line-height:1.15;}
+.history-meta{font-size:12px;color:#9b8bad;margin-top:4px;}
+.history-price{font-weight:1000;color:#fde047;white-space:nowrap;text-shadow:0 0 10px rgba(234,179,8,.28);}
+@media(max-width:720px){
+    .history-row{grid-template-columns:58px 1fr;gap:10px}
+    .history-row img{width:58px;height:46px}
+    .history-price{grid-column:2}
+}
+
 </style>
 </head>
 <body class="text-white font-sans">
@@ -579,7 +650,22 @@ body.arrow-purple .pointer{border-top-color:#a855f7;filter:drop-shadow(0 0 12px 
                     <div class="profile-stat-card"><h3 class="text-purple-300 font-bold">Biggest Win</h3><div id="biggestWin" class="text-2xl font-black mt-2">None ($0)</div></div>
                     <div class="profile-stat-card"><h3 class="text-purple-300 font-bold">Players Online</h3><div class="text-4xl font-black mt-2"><span id="profileOnlineCount">0</span></div></div>
                 </div>
-                <div class="profile-stat-card"><h3 class="text-purple-300 font-bold mb-4">Inventory Preview</h3><div id="profileInventoryGrid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3"></div></div>
+                <div class="profile-stat-card">
+                    <div class="profile-tabs">
+                        <button class="profile-tab active" data-profile-tab="inventory">▣ Inventory</button>
+                        <button class="profile-tab" data-profile-tab="history">⌃ Upgrade History</button>
+                    </div>
+
+                    <div id="profileInventoryTab" class="profile-tab-content">
+                        <h3 class="text-purple-300 font-bold mb-4">Inventory Preview</h3>
+                        <div id="profileInventoryGrid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
+                    </div>
+
+                    <div id="profileHistoryTab" class="profile-tab-content hidden">
+                        <h3 class="text-purple-300 font-bold mb-4">Latest Upgrades</h3>
+                        <div id="profileUpgradeHistory" class="history-list"></div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -889,6 +975,83 @@ function flushPendingFeedAfterRefresh() {
         clearPendingFeed();
     }
 }
+
+const UPGRADE_HISTORY_KEY = "dropempire-upgrade-history";
+
+function loadUpgradeHistory() {
+    try {
+        return JSON.parse(localStorage.getItem(UPGRADE_HISTORY_KEY)) || [];
+    } catch {
+        return [];
+    }
+}
+
+function saveUpgradeHistory(history) {
+    localStorage.setItem(UPGRADE_HISTORY_KEY, JSON.stringify(history.slice(0, 50)));
+}
+
+function addUpgradeHistory(entry) {
+    const history = loadUpgradeHistory();
+    history.unshift({
+        id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random()),
+        result: entry.result,
+        itemName: entry.itemName,
+        itemPrice: entry.itemPrice,
+        itemImage: entry.itemImage,
+        fromName: entry.fromName || "",
+        boost: entry.boost || 0,
+        chance: entry.chance || 0,
+        createdAt: Date.now()
+    });
+    saveUpgradeHistory(history);
+    renderProfileHistory();
+}
+
+function renderProfileHistory() {
+    const box = document.getElementById("profileUpgradeHistory");
+    if (!box) return;
+
+    const history = loadUpgradeHistory();
+    box.innerHTML = "";
+
+    if (!history.length) {
+        box.innerHTML = `<div class="text-gray-400 text-center py-10">Upgrade history is empty. Make your first spin.</div>`;
+        return;
+    }
+
+    history.slice(0, 20).forEach((entry) => {
+        const isWin = entry.result === "WIN";
+        const row = document.createElement("div");
+        row.className = `history-row ${isWin ? "win" : "loss"}`;
+
+        const date = entry.createdAt ? new Date(entry.createdAt).toLocaleString([], { month:"short", day:"2-digit", hour:"2-digit", minute:"2-digit" }) : "";
+
+        row.innerHTML = `
+            <img src="${entry.itemImage || ""}" alt="${entry.itemName || "skin"}">
+            <div class="history-main">
+                <div class="history-status">${isWin ? "WIN" : "LOSS"}</div>
+                <div class="history-name">${entry.itemName || "Unknown skin"}</div>
+                <div class="history-meta">${date} • Chance ${formatPercent(entry.chance || 0)}${entry.boost ? ` • +$${entry.boost} boost` : ""}</div>
+            </div>
+            <div class="history-price">$${entry.itemPrice || 0}</div>
+        `;
+        box.appendChild(row);
+    });
+}
+
+function setupProfileTabs() {
+    document.querySelectorAll(".profile-tab").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const tab = btn.dataset.profileTab;
+            document.querySelectorAll(".profile-tab").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+
+            document.getElementById("profileInventoryTab")?.classList.toggle("hidden", tab !== "inventory");
+            document.getElementById("profileHistoryTab")?.classList.toggle("hidden", tab !== "history");
+        });
+    });
+}
+
 function cloneSkin(skin) {
     return { ...skin, uid: crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random()) };
 }
@@ -1414,6 +1577,7 @@ function spinWheel(duration = 4500) {
         target: lockedTarget,
         index: lockedIndex,
         boost: lockedBoost,
+        chance: lockedChance,
         won
     };
 
@@ -1493,12 +1657,30 @@ function finishSpin() {
         resultEl.textContent = `🎉 WIN: ${lockedTarget.name}`;
         resultEl.className = "result-popup mt-6 text-2xl font-black text-green-400 text-center result-win-glow";
         sendUpgradeToFeed("WIN", lockedTarget);
+        addUpgradeHistory({
+            result: "WIN",
+            itemName: lockedTarget.name,
+            itemPrice: lockedTarget.price,
+            itemImage: lockedTarget.image,
+            fromName: lockedItem.name,
+            boost: pendingUpgrade.boost,
+            chance: pendingUpgrade.chance
+        });
     } else {
         playLoseSound();
         triggerLossAnimation();
         resultEl.textContent = `❌ LOSS: ${lockedItem.name}`;
         resultEl.className = "result-popup mt-6 text-2xl font-black text-red-400 text-center result-loss-glow";
         sendUpgradeToFeed("LOSS", lockedItem);
+        addUpgradeHistory({
+            result: "LOSS",
+            itemName: lockedItem.name,
+            itemPrice: lockedItem.price,
+            itemImage: lockedItem.image,
+            fromName: lockedItem.name,
+            boost: pendingUpgrade.boost,
+            chance: pendingUpgrade.chance
+        });
     }
 
     clearPendingFeed();
@@ -1749,6 +1931,7 @@ document.getElementById("resetInventoryBtn").onclick = () => {
     biggestWin = { name: "None", price: 0 };
     balance = 1000;
     balanceBoost = 0;
+    localStorage.removeItem(UPGRADE_HISTORY_KEY);
     saveInventory();
     saveBiggestWin();
     saveBalance();
@@ -1783,6 +1966,7 @@ function updateStats() {
 
     updateBalanceUI();
     renderProfileInventory();
+    renderProfileHistory();
 }
 
 function renderProfileInventory() {
@@ -1896,6 +2080,8 @@ fetch("/api/user", { credentials: "include" })
 
 document.getElementById("backToUpgraderBtn").onclick = showHomePage;
 
+setupProfileTabs();
+renderProfileHistory();
 renderInventory();
 renderMarket();
 renderBuyMarket();
