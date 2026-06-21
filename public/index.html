@@ -187,7 +187,7 @@ body:after{
     content:"";position:absolute;inset:0;pointer-events:none;
     background:radial-gradient(circle at 50% 30%,rgba(168,85,247,.13),transparent 45%);
 }
-.item-card{height:390px;padding:22px;display:flex;flex-direction:column;justify-content:space-between;}
+.item-card{height:360px;padding:22px;display:flex;flex-direction:column;justify-content:space-between;}
 .item-card h2,.section-title{font-size:16px;font-weight:1000;letter-spacing:.02em;color:white;text-transform:uppercase;}
 .item-subtitle{font-size:12px;color:#998cab;margin-top:4px;}
 .item-visual{position:relative;height:190px;display:grid;place-items:center;margin-top:6px;}
@@ -200,6 +200,12 @@ body:after{
 .value-row .price{font-size:20px;font-weight:1000;color:#d8b4fe;text-shadow:0 0 14px rgba(168,85,247,.45)}
 .value-bar{height:9px;margin-top:12px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden;border:1px solid rgba(168,85,247,.13)}
 .value-bar span{display:block;width:34%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#7c3aed,#e879f9);box-shadow:0 0 16px rgba(168,85,247,.65)}
+.balance-boost{margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.055)}
+.balance-boost-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;font-size:12px;color:#c4b5fd;font-weight:900;text-transform:uppercase;letter-spacing:.04em}
+#balanceBoostAmount{color:#fde047;text-shadow:0 0 12px rgba(234,179,8,.35);font-size:14px}
+.balance-boost-range{width:100%;accent-color:#a855f7;cursor:pointer}
+.balance-boost-foot{display:flex;justify-content:space-between;gap:10px;margin-top:5px;font-size:11px;color:#8f82a2}
+.balance-boost-foot strong{color:#d8b4fe}
 .wheel-wrap{display:flex;flex-direction:column;align-items:center;}
 .pointer{width:0;height:0;border-left:16px solid transparent;border-right:16px solid transparent;border-top:28px solid #d946ef;filter:drop-shadow(0 0 12px #a855f7);margin-bottom:-4px;z-index:2;}
 .wheel-box{position:relative;width:360px;height:360px;display:grid;place-items:center;}
@@ -297,18 +303,15 @@ body:after{
 /* Upgrade settings modal */
 .wheel-wrap{position:relative;}
 .upgrade-area > .item-card:first-child{
-    height:390px;
-    padding-top:94px;
+    min-height:360px;
 }
 .wheel-tools{
-    position:absolute;
-    left:22px;
-    top:22px;
+    position:relative;
     z-index:50;
     display:flex;
     align-items:center;
     gap:10px;
-    margin:0;
+    margin:0 0 26px 0;
 }
 .item-visual.no-item img{display:none;}
 .item-visual.no-item:before{opacity:.45;}
@@ -414,7 +417,7 @@ body.arrow-pink .pointer{border-top-color:#f472b6;filter:drop-shadow(0 0 12px #f
 body.arrow-green .pointer{border-top-color:#22c55e;filter:drop-shadow(0 0 12px #22c55e)}
 body.arrow-orange .pointer{border-top-color:#fb923c;filter:drop-shadow(0 0 12px #fb923c)}
 body.arrow-purple .pointer{border-top-color:#a855f7;filter:drop-shadow(0 0 12px #a855f7)}
-@media(max-width:720px){.settings-grid{grid-template-columns:1fr}.upgrade-area > .item-card:first-child{height:auto;min-height:390px;padding-top:92px}.wheel-tools{position:absolute;left:18px;top:18px;margin:0;justify-content:flex-start}}
+@media(max-width:720px){.settings-grid{grid-template-columns:1fr}.wheel-tools{position:relative;margin:0 0 20px 0;justify-content:flex-start}}
 
 </style>
 </head>
@@ -456,7 +459,12 @@ body.arrow-purple .pointer{border-top-color:#a855f7;filter:drop-shadow(0 0 12px 
                     <div class="item-visual"><img id="yourItemImage" src="ak47.png.png" alt="Your item"></div>
                     <div class="item-info">
                         <div class="value-row"><div><div id="yourItemName" class="name">AK-47 | Neon Rider</div><div class="item-subtitle">Selected item</div></div><div id="yourItemPrice" class="price">$50</div></div>
-                        <div class="value-bar"><span></span></div>
+                        <div class="value-bar"><span id="yourValueBar"></span></div>
+                        <div class="balance-boost">
+                            <div class="balance-boost-head"><span>Add balance</span><strong id="balanceBoostAmount">$0</strong></div>
+                            <input id="balanceBoostSlider" class="balance-boost-range" type="range" min="0" max="0" value="0" step="1">
+                            <div class="balance-boost-foot"><span>Available: <strong id="boostBalanceAvailable">$0</strong></span><span>Chance: <strong id="boostChancePreview">0%</strong></span></div>
+                        </div>
                     </div>
                 </section>
                 <section class="wheel-wrap">
@@ -670,6 +678,11 @@ const yourItemName = document.getElementById("yourItemName");
 const yourItemPrice = document.getElementById("yourItemPrice");
 const targetItemImage = document.getElementById("targetItemImage");
 const targetItemName = document.getElementById("targetItemName");
+const balanceBoostSlider = document.getElementById("balanceBoostSlider");
+const balanceBoostAmount = document.getElementById("balanceBoostAmount");
+const boostBalanceAvailable = document.getElementById("boostBalanceAvailable");
+const boostChancePreview = document.getElementById("boostChancePreview");
+const yourValueBar = document.getElementById("yourValueBar");
 
 function loadUpgradeSettings() {
     try {
@@ -814,6 +827,7 @@ let previousSegment = -1;
 let biggestWin = loadBiggestWin();
 let currentUser = { name: "Player", avatar: "" };
 let balance = loadBalance();
+let balanceBoost = 0;
 let pendingUpgrade = null;
 let fastSpinEnabled = false;
 const PENDING_FEED_KEY = "dropempire-pending-feed";
@@ -1010,15 +1024,55 @@ function getSelectedItem() {
     return inventory[selectedInventoryIndex];
 }
 
+function getMaxBalanceBoost() {
+    const item = getSelectedItem();
+    if (!item || !targetSkin) return 0;
+
+    const maxValueForChance = targetSkin.price * (MAX_CHANCE / 100);
+    const maxNeeded = Math.floor(maxValueForChance - item.price);
+
+    return Math.max(0, Math.min(balance, maxNeeded));
+}
+
+function updateBalanceBoostLimits() {
+    const item = getSelectedItem();
+    const maxBoost = getMaxBalanceBoost();
+
+    balanceBoost = Math.min(Math.max(0, Math.floor(Number(balanceBoost) || 0)), maxBoost);
+
+    if (balanceBoostSlider) {
+        balanceBoostSlider.max = String(maxBoost);
+        balanceBoostSlider.value = String(balanceBoost);
+        balanceBoostSlider.disabled = !item || maxBoost <= 0;
+    }
+
+    if (balanceBoostAmount) balanceBoostAmount.textContent = `$${balanceBoost}`;
+    if (boostBalanceAvailable) boostBalanceAvailable.textContent = `$${balance}`;
+}
+
+function getEffectiveUpgradeValue() {
+    const item = getSelectedItem();
+    if (!item) return 0;
+    return item.price + balanceBoost;
+}
+
 function calculateChance() {
     const item = getSelectedItem();
     if (!item || !targetSkin) {
         chanceText.textContent = "0%";
+        if (boostChancePreview) boostChancePreview.textContent = "0%";
+        if (yourValueBar) yourValueBar.style.width = "0%";
         drawWheel(rotation);
         return;
     }
-    chance = Math.min(MAX_CHANCE, Math.max(0.01, (item.price / targetSkin.price) * 100));
+
+    const effectiveValue = getEffectiveUpgradeValue();
+    chance = Math.min(MAX_CHANCE, Math.max(0.01, (effectiveValue / targetSkin.price) * 100));
     chanceText.textContent = formatPercent(chance);
+
+    if (boostChancePreview) boostChancePreview.textContent = formatPercent(chance);
+    if (yourValueBar) yourValueBar.style.width = `${Math.min(100, chance)}%`;
+
     drawWheel(rotation);
 }
 
@@ -1041,6 +1095,7 @@ function updateMainCards() {
     targetItemImage.src = targetSkin.image;
     targetItemName.textContent = targetSkin.name;
     targetPriceLabel.textContent = `$${targetSkin.price}`;
+    updateBalanceBoostLimits();
     calculateChance();
 }
 
@@ -1309,7 +1364,11 @@ function spinWheel(duration = 4500) {
     const item = getSelectedItem();
     if (!item) return;
 
+    updateBalanceBoostLimits();
     calculateChance();
+
+    const lockedBoost = Math.min(balanceBoost, getMaxBalanceBoost());
+    if (lockedBoost > balance) return;
 
     const lockedIndex = selectedInventoryIndex;
     const lockedItem = { ...item };
@@ -1321,6 +1380,7 @@ function spinWheel(duration = 4500) {
         item: lockedItem,
         target: lockedTarget,
         index: lockedIndex,
+        boost: lockedBoost,
         won
     };
 
@@ -1342,6 +1402,10 @@ function spinWheel(duration = 4500) {
         selectedInventoryIndex = Math.max(0, inventory.length - 1);
     }
 
+    balance -= lockedBoost;
+    balanceBoost = 0;
+    saveBalance();
+    updateBalanceUI();
     saveInventory();
 
     upgradeBtn.disabled = true;
@@ -1410,6 +1474,7 @@ function finishSpin() {
     saveInventory();
     renderInventory();
     renderMarket();
+    updateBalanceBoostLimits();
     updateMainCards();
     updateStats();
     upgradeBtn.disabled = false;
@@ -1599,6 +1664,15 @@ document.querySelectorAll('.multiplierPreset').forEach((btn)=>{
     };
 });
 
+
+if (balanceBoostSlider) {
+    balanceBoostSlider.addEventListener("input", () => {
+        balanceBoost = Math.floor(Number(balanceBoostSlider.value) || 0);
+        updateBalanceBoostLimits();
+        calculateChance();
+    });
+}
+
 upgradeBtn.addEventListener("click", () => {
     const duration = fastSpinEnabled ? appSettings.fastDuration : appSettings.normalDuration;
     spinWheel(duration);
@@ -1641,6 +1715,7 @@ document.getElementById("resetInventoryBtn").onclick = () => {
     selectedInventoryIndex = 0;
     biggestWin = { name: "None", price: 0 };
     balance = 1000;
+    balanceBoost = 0;
     saveInventory();
     saveBiggestWin();
     saveBalance();
