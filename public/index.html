@@ -1093,6 +1093,91 @@ body.spin-locked #marketGrid .skin-tile{
     .case-reel-item{flex-basis:132px}
 }
 
+
+
+/* Premium top navigation */
+.topbar{
+    justify-content:flex-start;
+    gap:22px;
+}
+.brand{
+    flex:0 0 auto;
+}
+.main-nav{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-left:8px;
+    padding:6px;
+    border-radius:18px;
+    background:linear-gradient(180deg,rgba(18,11,30,.72),rgba(8,5,14,.72));
+    border:1px solid rgba(168,85,247,.18);
+    box-shadow:0 0 26px rgba(139,44,246,.11), inset 0 0 18px rgba(255,255,255,.018);
+}
+.main-nav-btn{
+    position:relative;
+    min-height:46px;
+    min-width:138px;
+    padding:0 22px;
+    border-radius:13px;
+    color:#bca9d4;
+    font-size:14px;
+    font-weight:1000;
+    letter-spacing:.045em;
+    text-transform:uppercase;
+    background:rgba(255,255,255,.018);
+    border:1px solid transparent;
+    transition:transform .22s cubic-bezier(.2,.8,.2,1), color .22s ease, border-color .22s ease, background .22s ease, box-shadow .22s ease;
+}
+.main-nav-btn:hover{
+    transform:translateY(-2px);
+    color:white;
+    border-color:rgba(216,180,254,.28);
+    background:rgba(168,85,247,.07);
+    box-shadow:0 0 20px rgba(168,85,247,.16);
+}
+.main-nav-btn.active{
+    color:white;
+    background:linear-gradient(180deg,rgba(139,44,246,.26),rgba(16,10,28,.86));
+    border-color:rgba(216,180,254,.36);
+    box-shadow:0 0 26px rgba(168,85,247,.34), inset 0 0 18px rgba(255,255,255,.035);
+}
+.main-nav-btn.active:after{
+    content:"";
+    position:absolute;
+    left:18px;
+    right:18px;
+    bottom:-8px;
+    height:3px;
+    border-radius:999px;
+    background:linear-gradient(90deg,transparent,#a855f7,#e879f9,#a855f7,transparent);
+    box-shadow:0 0 16px rgba(168,85,247,.95);
+}
+.main-nav-icon{
+    display:inline-block;
+    margin-right:8px;
+    filter:drop-shadow(0 0 9px rgba(168,85,247,.8));
+}
+.top-stats{
+    margin-left:18px;
+    margin-right:auto;
+}
+#openCasesBtn{display:none!important;}
+.case-back-btn,#backToUpgraderBtn{display:none!important;}
+.case-top-row{display:none!important;}
+@media(max-width:1200px){
+    .main-nav{order:2;margin-left:0;}
+    .top-stats{order:3;width:auto;margin-left:auto;margin-right:0;}
+    .top-actions{order:4;margin-left:auto;}
+}
+@media(max-width:820px){
+    .topbar{gap:12px;}
+    .main-nav{width:100%;order:3;justify-content:center;}
+    .main-nav-btn{min-width:0;flex:1;padding:0 12px;}
+    .top-stats{order:4;width:100%;margin:4px 0 0;justify-content:center;}
+    .top-actions{order:5;width:100%;justify-content:center;}
+}
+
 </style>
 </head>
 <body class="text-white font-sans">
@@ -1101,6 +1186,10 @@ body.spin-locked #marketGrid .skin-tile{
         <img src="/Dropempiree.png" alt="Drop Empire logo">
         <div class="brand-name">DROP<span>EMPIRE</span></div>
     </div>
+    <nav class="main-nav" aria-label="Main navigation">
+        <button id="navUpgraderBtn" class="main-nav-btn active" type="button"><span class="main-nav-icon">↗</span>Upgrader</button>
+        <button id="navCasesBtn" class="main-nav-btn" type="button"><span class="main-nav-icon">📦</span>Cases</button>
+    </nav>
     <div class="top-stats">
         <div class="top-stat"><i class="stat-dot"></i><div>Online<strong><span id="onlineCount">0</span></strong></div></div>
         <div class="top-stat"><i class="stat-icon">♛</i><div>Upgrades<strong><span id="totalUpgradesCount">0</span></strong></div></div>
@@ -2753,10 +2842,16 @@ function renderProfileInventory() {
     });
 }
 
+function updateMainNav(activePage = "upgrader") {
+    document.getElementById("navUpgraderBtn")?.classList.toggle("active", activePage === "upgrader");
+    document.getElementById("navCasesBtn")?.classList.toggle("active", activePage === "cases");
+}
+
 function showProfilePage() {
     document.getElementById("homePage")?.classList.add("hidden");
     document.getElementById("casesPage")?.classList.add("hidden");
     document.getElementById("profilePage")?.classList.remove("hidden");
+    updateMainNav("profile");
     updateStats();
 }
 
@@ -2765,6 +2860,7 @@ function showCasesPage() {
     document.getElementById("profilePage")?.classList.add("hidden");
     document.getElementById("casesPage")?.classList.remove("hidden");
     showCasesList();
+    updateMainNav("cases");
     history.replaceState("", document.title, window.location.pathname + window.location.search + "#cases");
 }
 
@@ -2772,6 +2868,7 @@ function showHomePage() {
     document.getElementById("profilePage")?.classList.add("hidden");
     document.getElementById("casesPage")?.classList.add("hidden");
     document.getElementById("homePage")?.classList.remove("hidden");
+    updateMainNav("upgrader");
     history.replaceState("", document.title, window.location.pathname + window.location.search);
 }
 
@@ -3159,9 +3256,11 @@ function setupCasesOpening() {
 }
 
 
-document.getElementById("backToUpgraderBtn").onclick = showHomePage;
+document.getElementById("backToUpgraderBtn") && (document.getElementById("backToUpgraderBtn").onclick = showHomePage);
 document.getElementById("backFromCasesBtn")?.addEventListener("click", showHomePage);
 document.getElementById("openCasesBtn")?.addEventListener("click", showCasesPage);
+document.getElementById("navUpgraderBtn")?.addEventListener("click", showHomePage);
+document.getElementById("navCasesBtn")?.addEventListener("click", showCasesPage);
 
 setupProfileTabs();
 setupCasesOpening();
