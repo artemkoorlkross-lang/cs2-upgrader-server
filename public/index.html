@@ -171,6 +171,7 @@ body:after{
     gap:34px;
     align-items:center;
     margin-top:12px;
+    position:relative;
 }
 .cyber-card{
     position:relative;
@@ -293,13 +294,12 @@ body:after{
 @media(max-width:1200px){.layout{grid-template-columns:1fr}.topbar{height:auto;gap:12px;flex-wrap:wrap}.top-stats{order:3;width:100%;margin:8px 0 0}.upgrade-area{grid-template-columns:1fr}.panels-grid{grid-template-columns:1fr}#liveFeed{position:relative;top:auto;height:auto;max-height:360px}.bottom-info{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:720px){.topbar{padding:12px}.brand-name{font-size:21px}.top-stats{gap:12px}.top-actions{width:100%;justify-content:space-between}.layout{padding:14px}.wheel-box{width:300px;height:300px}#wheel{width:280px;height:280px}.item-card{height:auto}.panels-grid{margin-top:18px}.bottom-info{grid-template-columns:1fr}.hero-title h1{font-size:22px}}
 /* Upgrade settings modal */
-.wheel-wrap{position:relative;}
-.left-upgrade-column{position:relative;}
-.left-upgrade-column .wheel-tools{
+.wheel-wrap{position:static;}
+.wheel-tools{
     position:absolute;
-    left:18px;
-    top:-58px;
-    z-index:80;
+    left:10px;
+    top:42px;
+    z-index:50;
     display:flex;
     align-items:center;
     gap:10px;
@@ -310,32 +310,28 @@ body:after{
     display:grid;
     place-items:center;
     border-radius:14px;
-    background:linear-gradient(180deg,rgba(139,44,246,.24),rgba(24,14,38,.88));
-    border:1px solid rgba(168,85,247,.48);
+    background:linear-gradient(180deg,rgba(139,44,246,.28),rgba(24,14,38,.88));
+    border:1px solid rgba(168,85,247,.5);
     color:#d8b4fe;
     font-size:20px;
-    box-shadow:0 0 22px rgba(168,85,247,.24), inset 0 0 18px rgba(255,255,255,.03);
+    box-shadow:0 0 22px rgba(168,85,247,.26), inset 0 0 18px rgba(255,255,255,.03);
     transition:.2s ease;
 }
 .settings-gear:hover{transform:translateY(-2px) rotate(18deg);box-shadow:0 0 28px rgba(168,85,247,.5);}
 .fast-spin-icon{
-    margin:0!important;
-    padding:0!important;
-    background:linear-gradient(180deg,rgba(156,163,175,.12),rgba(24,14,38,.88))!important;
-    border-color:rgba(156,163,175,.36);
     color:#9ca3af;
-    font-size:22px!important;
+    border-color:rgba(156,163,175,.35);
+    background:linear-gradient(180deg,rgba(156,163,175,.12),rgba(24,14,38,.88))!important;
 }
 .fast-spin-icon:hover{transform:translateY(-2px) scale(1.08);box-shadow:0 0 24px rgba(156,163,175,.22);}
 .fast-spin-icon.active{
     color:#fbbf24;
-    border-color:rgba(251,191,36,.75);
-    background:linear-gradient(180deg,rgba(251,191,36,.22),rgba(70,38,10,.88))!important;
-    box-shadow:0 0 22px rgba(251,191,36,.65),0 0 44px rgba(251,191,36,.25),inset 0 0 18px rgba(255,255,255,.04);
+    border-color:#fbbf24;
+    background:linear-gradient(180deg,rgba(251,191,36,.24),rgba(24,14,38,.88))!important;
+    box-shadow:0 0 24px rgba(251,191,36,.55),0 0 48px rgba(251,191,36,.22);
 }
 .fast-spin-icon.active:hover{box-shadow:0 0 30px rgba(251,191,36,.7),0 0 55px rgba(251,191,36,.28);}
 .fast-spin-icon:active{transform:scale(.96);}
-@media(max-width:1200px){.left-upgrade-column .wheel-tools{position:static;margin-bottom:12px;justify-content:center;}}
 #upgradeSettingsModal{
     position:fixed;
     inset:0;
@@ -410,7 +406,7 @@ body.arrow-pink .pointer{border-top-color:#f472b6;filter:drop-shadow(0 0 12px #f
 body.arrow-green .pointer{border-top-color:#22c55e;filter:drop-shadow(0 0 12px #22c55e)}
 body.arrow-orange .pointer{border-top-color:#fb923c;filter:drop-shadow(0 0 12px #fb923c)}
 body.arrow-purple .pointer{border-top-color:#a855f7;filter:drop-shadow(0 0 12px #a855f7)}
-@media(max-width:720px){.settings-grid{grid-template-columns:1fr}}
+@media(max-width:720px){.settings-grid{grid-template-columns:1fr}.wheel-wrap{position:relative}.wheel-tools{position:static;margin-top:10px;justify-content:center}}
 
 </style>
 </head>
@@ -440,12 +436,7 @@ body.arrow-purple .pointer{border-top-color:#a855f7;filter:drop-shadow(0 0 12px 
         <div id="homePage">
             <div class="hero-title"><span class="chev">⌃</span><h1>UPGRADER</h1></div>
             <div class="upgrade-area">
-                <div class="left-upgrade-column">
-                    <div class="wheel-tools">
-                        <button id="openSettingsBtn" class="settings-gear" title="Upgrade settings">⚙</button>
-                        <button id="fastUpgradeBtn" class="fast-spin-icon" title="Fast spin">⚡</button>
-                    </div>
-                    <section class="cyber-card item-card">
+                <section class="cyber-card item-card">
                     <div>
                         <h2>Select skin or balance</h2>
                         <p class="item-subtitle">Choose one item from your inventory</p>
@@ -455,8 +446,7 @@ body.arrow-purple .pointer{border-top-color:#a855f7;filter:drop-shadow(0 0 12px 
                         <div class="value-row"><div><div id="yourItemName" class="name">AK-47 | Neon Rider</div><div class="item-subtitle">Selected item</div></div><div id="yourItemPrice" class="price">$50</div></div>
                         <div class="value-bar"><span></span></div>
                     </div>
-                    </section>
-                </div>
+                </section>
                 <section class="wheel-wrap">
                     <div class="pointer"></div>
                     <div class="wheel-box">
@@ -469,6 +459,10 @@ body.arrow-purple .pointer{border-top-color:#a855f7;filter:drop-shadow(0 0 12px 
                         </div>
                     </div>
 
+                    <div class="wheel-tools">
+                        <button id="openSettingsBtn" class="settings-gear" title="Upgrade settings">⚙</button>
+                        <button id="fastUpgradeBtn" class="fast-spin-icon" title="Fast spin">⚡</button>
+                    </div>
                     <button id="upgradeBtn" class="upgrade-btn mt-4 text-xl font-black tracking-wider">⌃ UPGRADE</button>
                     <div class="preset-row">
                         <button class="multiplierPreset" data-mult="1.5">1.5x</button>
@@ -812,6 +806,7 @@ let previousSegment = -1;
 let biggestWin = loadBiggestWin();
 let currentUser = { name: "Player", avatar: "" };
 let balance = loadBalance();
+let pendingUpgrade = null;
 let fastSpinEnabled = false;
 function cloneSkin(skin) {
     return { ...skin, uid: crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random()) };
@@ -1252,17 +1247,42 @@ function triggerLossAnimation() {
 }
 
 function spinWheel(duration = 4500) {
+    if (pendingUpgrade) return;
+
     const item = getSelectedItem();
     if (!item) return;
+
+    const lockedIndex = selectedInventoryIndex;
+    const lockedItem = { ...item };
+    const lockedTarget = { ...targetSkin };
+
+    pendingUpgrade = {
+        item: lockedItem,
+        target: lockedTarget,
+        index: lockedIndex
+    };
+
+    // IMPORTANT: remove the item immediately, before the animation finishes.
+    // This prevents the refresh exploit where a player reloads during a bad spin
+    // and keeps the skin after seeing that it will lose.
+    inventory.splice(lockedIndex, 1);
+    if (selectedInventoryIndex >= inventory.length) {
+        selectedInventoryIndex = Math.max(0, inventory.length - 1);
+    }
+    saveInventory();
+    renderInventory();
+    updateStats();
+
     upgradeBtn.disabled = true;
-    fastUpgradeBtn.disabled = true;
     resultEl.classList.add("hidden");
     startWheelSound();
+
     const randomAngle = Math.random() * Math.PI * 2;
     const extraSpins = 8 * Math.PI * 2;
     const startRotation = rotation;
     const targetRotation = rotation + extraSpins + randomAngle;
     const start = performance.now();
+
     function animate(now){
         const elapsed = now - start;
         let progress = Math.min(elapsed / duration, 1);
@@ -1279,6 +1299,15 @@ function spinWheel(duration = 4500) {
 
 function finishSpin() {
     stopWheelSound();
+
+    if (!pendingUpgrade) {
+        upgradeBtn.disabled = false;
+        return;
+    }
+
+    const lockedItem = pendingUpgrade.item;
+    const lockedTarget = pendingUpgrade.target;
+
     const TAU = Math.PI * 2;
     const normalize = angle => ((angle % TAU) + TAU) % TAU;
     const pointerAngle = -Math.PI / 2;
@@ -1290,30 +1319,30 @@ function finishSpin() {
     resultEl.classList.remove("hidden");
 
     if (won) {
-        const oldName = getSelectedItem().name;
-        inventory.splice(selectedInventoryIndex, 1, cloneSkin(targetSkin));
-        if (targetSkin.price > biggestWin.price) {
+        inventory.push(cloneSkin(lockedTarget));
+        selectedInventoryIndex = inventory.length - 1;
+
+        if (lockedTarget.price > biggestWin.price) {
             biggestWin = {
-                name: targetSkin.name,
-                price: targetSkin.price
+                name: lockedTarget.name,
+                price: lockedTarget.price
             };
             saveBiggestWin();
         }
         playWinSound();
         triggerWinAnimation();
-        sendUpgradeToFeed("WIN", targetSkin);
-        resultEl.textContent = `🎉 WIN: ${targetSkin.name}`;
+        sendUpgradeToFeed("WIN", lockedTarget);
+        resultEl.textContent = `🎉 WIN: ${lockedTarget.name}`;
         resultEl.className = "result-popup mt-6 text-2xl font-black text-green-400 text-center result-win-glow";
     } else {
-        const lostItem = getSelectedItem();
-        inventory.splice(selectedInventoryIndex, 1);
         playLoseSound();
         triggerLossAnimation();
-        sendUpgradeToFeed("LOSS", lostItem);
-        resultEl.textContent = `❌ LOSS: ${lostItem.name}`;
+        sendUpgradeToFeed("LOSS", lockedItem);
+        resultEl.textContent = `❌ LOSS: ${lockedItem.name}`;
         resultEl.className = "result-popup mt-6 text-2xl font-black text-red-400 text-center result-loss-glow";
     }
 
+    pendingUpgrade = null;
     if (selectedInventoryIndex >= inventory.length) selectedInventoryIndex = Math.max(0, inventory.length - 1);
     saveInventory();
     renderInventory();
@@ -1321,7 +1350,6 @@ function finishSpin() {
     updateMainCards();
     updateStats();
     upgradeBtn.disabled = false;
-    fastUpgradeBtn.disabled = false;
 }
 
 
@@ -1512,7 +1540,7 @@ upgradeBtn.addEventListener("click", () => {
     spinWheel(fastSpinEnabled ? appSettings.fastDuration : appSettings.normalDuration);
 });
 fastUpgradeBtn.addEventListener("click", () => {
-    if (upgradeBtn.disabled) return;
+    if (upgradeBtn.disabled || pendingUpgrade) return;
     fastSpinEnabled = !fastSpinEnabled;
     fastUpgradeBtn.classList.toggle("active", fastSpinEnabled);
     fastUpgradeBtn.title = fastSpinEnabled ? "Fast mode ON" : "Fast mode OFF";
@@ -1690,8 +1718,17 @@ fetch("/api/user", { credentials: "include" })
         document.getElementById("profileName").textContent = user.name;
         document.getElementById("profileSteamId").textContent = "SteamID: " + user.steamId;
 
-        document.getElementById("topProfileAvatar").onclick = showProfilePage;
-        document.getElementById("topProfileName").onclick = showProfilePage;
+        function toggleProfileFromHeader() {
+            const profilePage = document.getElementById("profilePage");
+            if (profilePage && !profilePage.classList.contains("hidden")) {
+                showHomePage();
+            } else {
+                showProfilePage();
+            }
+        }
+
+        document.getElementById("topProfileAvatar").onclick = toggleProfileFromHeader;
+        document.getElementById("topProfileName").onclick = toggleProfileFromHeader;
     }
 })
 .catch(() => {});
