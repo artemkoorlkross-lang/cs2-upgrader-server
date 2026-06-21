@@ -521,6 +521,66 @@ body.arrow-purple .pointer{border-top-color:#a855f7;filter:drop-shadow(0 0 12px 
     .history-price{grid-column:2}
 }
 
+
+/* Premium motion polish */
+.cyber-card,.skin-tile,.profile-stat-card,.info-card,.feed-item,.upgrade-btn,.select-mini,.settings-gear,.fast-spin-icon{
+    will-change: transform, box-shadow, border-color, filter;
+}
+.cyber-card,.profile-stat-card,.info-card{
+    transition: transform .28s cubic-bezier(.2,.8,.2,1), box-shadow .28s ease, border-color .28s ease, background .28s ease;
+}
+.cyber-card:hover,.profile-stat-card:hover,.info-card:hover{
+    transform: translateY(-3px);
+    border-color: rgba(216,180,254,.42);
+    box-shadow: 0 22px 70px rgba(0,0,0,.38), 0 0 36px rgba(168,85,247,.18), inset 0 1px 0 rgba(255,255,255,.07);
+}
+.item-card:hover .item-visual img{
+    transform: translateY(-4px) scale(1.045);
+    filter: drop-shadow(0 0 24px rgba(168,85,247,.42)) drop-shadow(0 0 18px rgba(0,0,0,.9));
+}
+.item-visual img{
+    transition: transform .35s cubic-bezier(.2,.8,.2,1), filter .35s ease, opacity .25s ease;
+}
+.skin-tile{
+    transition: transform .24s cubic-bezier(.2,.8,.2,1), box-shadow .24s ease, border-color .24s ease, filter .24s ease;
+}
+.skin-tile:hover{
+    transform: translateY(-6px) scale(1.025);
+    filter: saturate(1.12);
+}
+.skin-tile:hover img,.market-modal-card .cyber-card:hover img,#profileInventoryGrid .cyber-card:hover img{
+    transform: translateY(-3px) scale(1.06);
+}
+.skin-tile img,.market-modal-card img,#profileInventoryGrid img{
+    transition: transform .28s cubic-bezier(.2,.8,.2,1), filter .28s ease;
+}
+.upgrade-btn{
+    transition: transform .22s cubic-bezier(.2,.8,.2,1), box-shadow .22s ease, filter .22s ease, opacity .22s ease;
+}
+.upgrade-btn:hover:not(:disabled){
+    transform: translateY(-4px) scale(1.035);
+    filter: saturate(1.12) brightness(1.06);
+}
+.upgrade-btn:disabled{
+    opacity:.52;
+    cursor:not-allowed;
+    filter:grayscale(.15);
+}
+.wheel-box{
+    transition: transform .32s cubic-bezier(.2,.8,.2,1), filter .32s ease;
+}
+.wheel-wrap:hover .wheel-box{
+    transform: scale(1.018);
+    filter: drop-shadow(0 0 26px rgba(168,85,247,.18));
+}
+.feed-item:hover,.history-row:hover{
+    transform: translateX(4px) scale(1.01);
+    border-color: rgba(216,180,254,.34);
+}
+.feed-item,.history-row{
+    transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+}
+
 </style>
 </head>
 <body class="text-white font-sans">
@@ -733,10 +793,10 @@ body.arrow-purple .pointer{border-top-color:#a855f7;filter:drop-shadow(0 0 12px 
             <h3>Spin speed</h3>
             <p>Choose the normal spin animation speed. Fast Spin keeps its own quick timing.</p>
             <div class="settings-grid" id="speedOptions">
-                <label class="setting-option"><input type="radio" name="spinSpeed" value="6200"> Slow cinematic</label>
-                <label class="setting-option"><input type="radio" name="spinSpeed" value="4500"> Default</label>
-                <label class="setting-option"><input type="radio" name="spinSpeed" value="2600"> Fast</label>
-                <label class="setting-option"><input type="radio" name="spinSpeed" value="1200"> Lightning</label>
+                <label class="setting-option"><input type="radio" name="spinSpeed" value="9000"> Slow cinematic</label>
+                <label class="setting-option"><input type="radio" name="spinSpeed" value="7200"> Default smooth</label>
+                <label class="setting-option"><input type="radio" name="spinSpeed" value="5200"> Fast smooth</label>
+                <label class="setting-option"><input type="radio" name="spinSpeed" value="3200"> Lightning</label>
             </div>
         </div>
 
@@ -814,7 +874,7 @@ function loadUpgradeSettings() {
             multPresets: Array.isArray(saved?.multPresets) ? saved.multPresets : [1.5,2,5,10]
         };
     } catch {
-        return { maxChance:80, normalDuration:4500, fastDuration:400, soundEnabled:true, arrowStyle:"purple", chancePresets:[10,25,50,75], multPresets:[1.5,2,5,10] };
+        return { maxChance:80, normalDuration:7200, fastDuration:400, soundEnabled:true, arrowStyle:"purple", chancePresets:[10,25,50,75], multPresets:[1.5,2,5,10] };
     }
 }
 
@@ -1252,6 +1312,20 @@ function getEffectiveUpgradeValue() {
     return item.price + balanceBoost;
 }
 
+function isValidUpgradeTarget() {
+    const item = getSelectedItem();
+    if (!item || !targetSkin) return false;
+    return Number(targetSkin.price) > getEffectiveUpgradeValue();
+}
+
+function getUpgradeTargetWarning() {
+    const item = getSelectedItem();
+    if (!item) return "Select item";
+    if (!targetSkin) return "Select target";
+    if (!isValidUpgradeTarget()) return "TARGET MUST BE HIGHER VALUE";
+    return "⌃ UPGRADE";
+}
+
 function calculateChance() {
     const item = getSelectedItem();
     if (!item || !targetSkin) {
@@ -1263,6 +1337,16 @@ function calculateChance() {
     }
 
     const effectiveValue = getEffectiveUpgradeValue();
+
+    if (!isValidUpgradeTarget()) {
+        chance = 0;
+        chanceText.textContent = "0%";
+        if (boostChancePreview) boostChancePreview.textContent = "Invalid";
+        if (yourValueBar) yourValueBar.style.width = "100%";
+        drawWheel(rotation);
+        return;
+    }
+
     chance = Math.min(MAX_CHANCE, Math.max(0.01, (effectiveValue / targetSkin.price) * 100));
     chanceText.textContent = formatPercent(chance);
 
@@ -1293,6 +1377,12 @@ function updateMainCards() {
     targetPriceLabel.textContent = `$${targetSkin.price}`;
     updateBalanceBoostLimits();
     calculateChance();
+
+    if (upgradeBtn) {
+        const valid = isValidUpgradeTarget();
+        upgradeBtn.disabled = pendingUpgrade || !valid;
+        upgradeBtn.textContent = valid ? "⌃ UPGRADE" : getUpgradeTargetWarning();
+    }
 }
 
 function renderInventory() {
@@ -1560,8 +1650,24 @@ function spinWheel(duration = 4500) {
     const item = getSelectedItem();
     if (!item) return;
 
+    if (!isValidUpgradeTarget()) {
+        resultEl.classList.remove("hidden", "text-green-400", "text-red-400", "result-win-glow", "result-loss-glow");
+        resultEl.classList.add("text-red-400", "result-loss-glow");
+        resultEl.textContent = "Target skin must cost more than your input";
+        updateMainCards();
+        return;
+    }
+
     updateBalanceBoostLimits();
     calculateChance();
+
+    if (!isValidUpgradeTarget()) {
+        resultEl.classList.remove("hidden", "text-green-400", "text-red-400", "result-win-glow", "result-loss-glow");
+        resultEl.classList.add("text-red-400", "result-loss-glow");
+        resultEl.textContent = "Target skin must cost more than your input";
+        updateMainCards();
+        return;
+    }
 
     const lockedBoost = Math.min(balanceBoost, getMaxBalanceBoost());
     if (lockedBoost > balance) return;
@@ -1625,9 +1731,9 @@ function spinWheel(duration = 4500) {
     function animate(now){
         const elapsed = now - start;
         let progress = Math.min(elapsed / duration, 1);
-       const eased = progress < 0.82
-    ? 1 - Math.pow(1 - progress, 3.2)
-    : 1 - Math.pow(1 - progress, 5.8);
+        const eased = progress < 0.82
+            ? 1 - Math.pow(1 - progress, 3.2)
+            : 1 - Math.pow(1 - progress, 5.8);
         rotation = startRotation + (targetRotation - startRotation) * eased;
         drawWheel(rotation);
         const segmentSize=(Math.PI*2)/100;
@@ -1642,7 +1748,7 @@ function finishSpin() {
     stopWheelSound();
 
     if (!pendingUpgrade) {
-        upgradeBtn.disabled = false;
+        updateMainCards();
         if (fastUpgradeBtn) fastUpgradeBtn.disabled = false;
         return;
     }
@@ -1694,7 +1800,6 @@ function finishSpin() {
     updateBalanceBoostLimits();
     updateMainCards();
     updateStats();
-    upgradeBtn.disabled = false;
     if (fastUpgradeBtn) fastUpgradeBtn.disabled = false;
 }
 
@@ -1819,10 +1924,15 @@ function openSettingsModal() {
     document.querySelectorAll('.quick-chance-input').forEach((input, index) => input.value = appSettings.chancePresets[index]);
     document.querySelectorAll('.quick-mult-input').forEach((input, index) => input.value = appSettings.multPresets[index]);
 
-  <label class="setting-option"><input type="radio" name="spinSpeed" value="9000"> Slow cinematic</label>
-<label class="setting-option"><input type="radio" name="spinSpeed" value="7200"> Default smooth</label>
-<label class="setting-option"><input type="radio" name="spinSpeed" value="5200"> Fast smooth</label>
-<label class="setting-option"><input type="radio" name="spinSpeed" value="3200"> Lightning</label>
+    const speed = document.querySelector(`input[name="spinSpeed"][value="${appSettings.normalDuration}"]`) || document.querySelector('input[name="spinSpeed"][value="7200"]');
+    if (speed) speed.checked = true;
+
+    const arrow = document.querySelector(`input[name="arrowStyle"][value="${appSettings.arrowStyle}"]`) || document.querySelector('input[name="arrowStyle"][value="purple"]');
+    if (arrow) arrow.checked = true;
+
+    const sound = document.querySelector(`input[name="soundEnabled"][value="${appSettings.soundEnabled}"]`);
+    if (sound) sound.checked = true;
+}
 
 function closeSettingsModal() {
     document.getElementById("upgradeSettingsModal")?.classList.remove("open");
@@ -1836,7 +1946,7 @@ function saveSettingsFromModal() {
     appSettings.multPresets = [...document.querySelectorAll('.quick-mult-input')].map((input, index) => clampNumber(input.value, 1.01, 100, [1.5,2,5,10][index]));
 
     const speed = document.querySelector('input[name="spinSpeed"]:checked');
-    appSettings.normalDuration = Number(speed?.value || 4500);
+    appSettings.normalDuration = Number(speed?.value || 7200);
 
     const arrow = document.querySelector('input[name="arrowStyle"]:checked');
     appSettings.arrowStyle = arrow?.value || "purple";
