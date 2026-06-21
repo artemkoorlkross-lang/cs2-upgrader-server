@@ -187,25 +187,54 @@ body:after{
     content:"";position:absolute;inset:0;pointer-events:none;
     background:radial-gradient(circle at 50% 30%,rgba(168,85,247,.13),transparent 45%);
 }
-.item-card{height:360px;padding:22px;display:flex;flex-direction:column;justify-content:space-between;}
+.item-card{height:430px;padding:22px;display:flex;flex-direction:column;justify-content:space-between;}
+.item-card > div:first-child{flex:0 0 auto;}
+.item-info{flex:0 0 auto;}
 .item-card h2,.section-title{font-size:16px;font-weight:1000;letter-spacing:.02em;color:white;text-transform:uppercase;}
 .item-subtitle{font-size:12px;color:#998cab;margin-top:4px;}
-.item-visual{position:relative;height:190px;display:grid;place-items:center;margin-top:6px;}
+.item-visual{position:relative;height:165px;display:grid;place-items:center;margin-top:6px;}
 .item-visual:before{content:"";position:absolute;width:74%;height:74%;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.28),transparent 64%);filter:blur(6px)}
 .item-visual:after{content:"❯❯";position:absolute;font-size:62px;font-weight:1000;letter-spacing:-18px;color:#8b2cf6;transform:rotate(90deg);filter:drop-shadow(0 0 18px rgba(168,85,247,.75));opacity:.85;}
-.item-visual img{position:relative;z-index:2;width:86%;height:165px;object-fit:contain;filter:drop-shadow(0 0 18px rgba(0,0,0,.85));opacity:.92;}
+.item-visual img{position:relative;z-index:2;width:86%;height:145px;object-fit:contain;filter:drop-shadow(0 0 18px rgba(0,0,0,.85));opacity:.92;}
 .item-info{border-top:1px solid rgba(255,255,255,.06);padding-top:14px;}
 .value-row{display:flex;justify-content:space-between;gap:14px;align-items:end;}
 .value-row .name{font-weight:1000;font-size:16px;line-height:1.2;}
 .value-row .price{font-size:20px;font-weight:1000;color:#d8b4fe;text-shadow:0 0 14px rgba(168,85,247,.45)}
 .value-bar{height:9px;margin-top:12px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden;border:1px solid rgba(168,85,247,.13)}
 .value-bar span{display:block;width:34%;height:100%;border-radius:inherit;background:linear-gradient(90deg,#7c3aed,#e879f9);box-shadow:0 0 16px rgba(168,85,247,.65)}
-.balance-boost{margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.055)}
+.balance-boost{margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.055);display:block;}
 .balance-boost-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;font-size:12px;color:#c4b5fd;font-weight:900;text-transform:uppercase;letter-spacing:.04em}
 #balanceBoostAmount{color:#fde047;text-shadow:0 0 12px rgba(234,179,8,.35);font-size:14px}
-.balance-boost-range{width:100%;accent-color:#a855f7;cursor:pointer}
+.balance-boost-range{width:100%;accent-color:#a855f7;cursor:pointer;height:18px;}
 .balance-boost-foot{display:flex;justify-content:space-between;gap:10px;margin-top:5px;font-size:11px;color:#8f82a2}
 .balance-boost-foot strong{color:#d8b4fe}
+
+/* Balance boost layout fix */
+.upgrade-area > .item-card:first-child{
+    height:430px;
+    min-height:430px;
+    padding-top:22px;
+}
+.upgrade-area > .item-card:first-child .item-visual{
+    height:150px;
+    margin-top:2px;
+}
+.upgrade-area > .item-card:first-child .item-visual img{
+    height:140px;
+}
+.upgrade-area > .item-card:first-child .item-info{
+    padding-top:12px;
+}
+.balance-boost{
+    margin-top:9px;
+    padding-top:9px;
+}
+.balance-boost-range{
+    height:14px;
+}
+.balance-boost-foot{
+    margin-top:3px;
+}
 .wheel-wrap{display:flex;flex-direction:column;align-items:center;}
 .pointer{width:0;height:0;border-left:16px solid transparent;border-right:16px solid transparent;border-top:28px solid #d946ef;filter:drop-shadow(0 0 12px #a855f7);margin-bottom:-4px;z-index:2;}
 .wheel-box{position:relative;width:360px;height:360px;display:grid;place-items:center;}
@@ -299,19 +328,21 @@ body:after{
 .particle{position:fixed;width:8px;height:8px;border-radius:999px;pointer-events:none;z-index:9999;background:#d946ef;box-shadow:0 0 14px rgba(217,70,239,.9);animation:particleFly .85s ease-out forwards}@keyframes particleFly{0%{opacity:1;transform:translate(0,0) scale(1)}100%{opacity:0;transform:translate(var(--x),var(--y)) scale(.25)}}
 #buyMarketModal{position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;padding:24px;background:rgba(5,2,12,.72);backdrop-filter:blur(10px)}#buyMarketModal.open{display:flex}.market-modal-card{width:min(980px,94vw);max-height:86vh;overflow:hidden;background:linear-gradient(135deg,rgba(22,11,40,.97),rgba(38,20,58,.97));border:1px solid rgba(160,32,240,.45);border-radius:28px;box-shadow:0 0 45px rgba(160,32,240,.35)}.market-modal-grid{max-height:62vh;overflow:auto}
 @media(max-width:1200px){.layout{grid-template-columns:1fr}.topbar{height:auto;gap:12px;flex-wrap:wrap}.top-stats{order:3;width:100%;margin:8px 0 0}.upgrade-area{grid-template-columns:1fr}.panels-grid{grid-template-columns:1fr}#liveFeed{position:relative;top:auto;height:auto;max-height:360px}.bottom-info{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:720px){.topbar{padding:12px}.brand-name{font-size:21px}.top-stats{gap:12px}.top-actions{width:100%;justify-content:space-between}.layout{padding:14px}.wheel-box{width:300px;height:300px}#wheel{width:280px;height:280px}.item-card{height:auto}.panels-grid{margin-top:18px}.bottom-info{grid-template-columns:1fr}.hero-title h1{font-size:22px}}
+@media(max-width:720px){.topbar{padding:12px}.brand-name{font-size:21px}.top-stats{gap:12px}.top-actions{width:100%;justify-content:space-between}.layout{padding:14px}.wheel-box{width:300px;height:300px}#wheel{width:280px;height:280px}.item-card{height:auto;min-height:430px}.panels-grid{margin-top:18px}.bottom-info{grid-template-columns:1fr}.hero-title h1{font-size:22px}}
 /* Upgrade settings modal */
 .wheel-wrap{position:relative;}
 .upgrade-area > .item-card:first-child{
     min-height:360px;
 }
 .wheel-tools{
-    position:relative;
+    position:absolute;
+    left:8px;
+    top:-62px;
     z-index:50;
     display:flex;
     align-items:center;
     gap:10px;
-    margin:0 0 26px 0;
+    margin:0;
 }
 .item-visual.no-item img{display:none;}
 .item-visual.no-item:before{opacity:.45;}
@@ -417,7 +448,7 @@ body.arrow-pink .pointer{border-top-color:#f472b6;filter:drop-shadow(0 0 12px #f
 body.arrow-green .pointer{border-top-color:#22c55e;filter:drop-shadow(0 0 12px #22c55e)}
 body.arrow-orange .pointer{border-top-color:#fb923c;filter:drop-shadow(0 0 12px #fb923c)}
 body.arrow-purple .pointer{border-top-color:#a855f7;filter:drop-shadow(0 0 12px #a855f7)}
-@media(max-width:720px){.settings-grid{grid-template-columns:1fr}.wheel-tools{position:relative;margin:0 0 20px 0;justify-content:flex-start}}
+@media(max-width:720px){.settings-grid{grid-template-columns:1fr}.wheel-tools{position:relative;left:auto;top:auto;margin:0 0 12px 0;justify-content:flex-start}}
 
 </style>
 </head>
@@ -447,12 +478,12 @@ body.arrow-purple .pointer{border-top-color:#a855f7;filter:drop-shadow(0 0 12px 
         <div id="homePage">
             <div class="hero-title"><span class="chev">⌃</span><h1>UPGRADER</h1></div>
             <div class="upgrade-area">
+                <div class="wheel-tools">
+                    <button id="openSettingsBtn" class="settings-gear" title="Upgrade settings">⚙</button>
+                    <button id="fastUpgradeBtn" class="fast-spin-icon" title="Fast mode disabled">⚡</button>
+                </div>
                 <section class="cyber-card item-card">
                     <div>
-                        <div class="wheel-tools">
-                            <button id="openSettingsBtn" class="settings-gear" title="Upgrade settings">⚙</button>
-                            <button id="fastUpgradeBtn" class="fast-spin-icon" title="Fast mode disabled">⚡</button>
-                        </div>
                         <h2>Select skin or balance</h2>
                         <p class="item-subtitle">Choose one item from your inventory</p>
                     </div>
@@ -1041,6 +1072,7 @@ function updateBalanceBoostLimits() {
     balanceBoost = Math.min(Math.max(0, Math.floor(Number(balanceBoost) || 0)), maxBoost);
 
     if (balanceBoostSlider) {
+        balanceBoostSlider.min = "0";
         balanceBoostSlider.max = String(maxBoost);
         balanceBoostSlider.value = String(balanceBoost);
         balanceBoostSlider.disabled = !item || maxBoost <= 0;
@@ -1048,6 +1080,7 @@ function updateBalanceBoostLimits() {
 
     if (balanceBoostAmount) balanceBoostAmount.textContent = `$${balanceBoost}`;
     if (boostBalanceAvailable) boostBalanceAvailable.textContent = `$${balance}`;
+    if (boostChancePreview && (!item || !targetSkin)) boostChancePreview.textContent = "0%";
 }
 
 function getEffectiveUpgradeValue() {
