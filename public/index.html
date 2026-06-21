@@ -1731,9 +1731,7 @@ function spinWheel(duration = 4500) {
     function animate(now){
         const elapsed = now - start;
         let progress = Math.min(elapsed / duration, 1);
-        const eased = progress < 0.82
-            ? 1 - Math.pow(1 - progress, 3.2)
-            : 1 - Math.pow(1 - progress, 5.8);
+        const eased = 1 - Math.pow(1 - progress, 2.6);
         rotation = startRotation + (targetRotation - startRotation) * eased;
         drawWheel(rotation);
         const segmentSize=(Math.PI*2)/100;
