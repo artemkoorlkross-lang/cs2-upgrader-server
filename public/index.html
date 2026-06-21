@@ -270,6 +270,7 @@ body:after{
     outline:none;
 }
 #skinSearch,#buyMarketSearch{padding:0 12px!important;}
+#skinTypeFilter,#skinPriceFilter,#skinSort,#buyTypeFilter,#buyPriceFilter,#buySort{min-width:105px;}
 .select-mini{padding:0 13px;color:#ddd3ef;font-size:13px;font-weight:800;}
 .pager{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:14px;}
 .pager span{min-width:34px;height:34px;border-radius:8px;display:grid;place-items:center;background:rgba(255,255,255,.035);border:1px solid rgba(168,85,247,.14);color:#bfb4ce;font-weight:900;}
@@ -380,14 +381,19 @@ body:after{
                 <section class="cyber-card panel">
                     <div class="panel-head">
                         <div class="panel-title"><span class="panel-icon">▤</span> Select skin <span class="text-gray-400">⌄</span></div>
-                        <div class="search-wrap"><button class="select-mini">Price ↕</button><input id="skinSearch" class="search-input" placeholder="Search skin..."></div>
+                        <div class="search-wrap">
+                            <select id="skinTypeFilter" class="select-mini"><option value="all">All</option><option value="Rifle">Rifles</option><option value="AWP">AWP</option><option value="Pistol">Pistols</option><option value="SMG">SMG</option><option value="Knife">Knives</option><option value="Gloves">Gloves</option></select>
+                            <select id="skinPriceFilter" class="select-mini"><option value="all">Any price</option><option value="0-50">$0-50</option><option value="50-150">$50-150</option><option value="150-500">$150-500</option><option value="500-999999">$500+</option></select>
+                            <select id="skinSort" class="select-mini"><option value="priceAsc">Price ↑</option><option value="priceDesc">Price ↓</option><option value="nameAsc">Name A-Z</option></select>
+                            <input id="skinSearch" class="search-input" placeholder="Search skin...">
+                        </div>
                     </div>
                     <div id="marketGrid" class="grid"></div>
                     <div class="pager"><span class="active">1</span><span>2</span><span>3</span><span>...</span><span>42</span><span>›</span></div>
                 </section>
             </div>
             <div class="bottom-info">
-                <div class="info-card"><div class="ico">↗</div><div><small>Total Upgrades</small><strong><span id="totalUpgradesCount">0</span></strong></div></div>
+                <div class="info-card"><div class="ico">↗</div><div><small>Total Upgrades</small><strong><span id="bottomTotalUpgradesCount">0</span></strong></div></div>
                 <div class="info-card"><div class="ico">☘</div><div><small>Players Online</small><strong><span id="bottomOnlineCount">0</span></strong></div></div>
                 <div class="info-card"><div class="ico">♛</div><div><small>Biggest Win</small><strong id="bottomBiggestWin">$0</strong></div></div>
                 <div class="info-card"><div class="ico">◇</div><div><small>Free Simulator</small><strong>100%</strong></div></div>
@@ -414,7 +420,15 @@ body:after{
 <div id="buyMarketModal">
     <div class="market-modal-card p-6">
         <div class="flex items-center justify-between gap-3 mb-5"><div><h2 class="text-3xl font-black text-purple-300">🛒 Skin Market</h2><p class="text-gray-400 text-sm mt-1">Buy skins with your virtual balance, then upgrade them.</p></div><button id="closeBuyMarketBtn" class="px-4 py-2 rounded-xl bg-gray-800 hover:bg-gray-700 font-bold">✕ Close</button></div>
-        <div class="flex items-center justify-between gap-3 mb-4"><div class="text-xl font-black">Balance: <span id="modalBalance" class="text-yellow-300">$1000</span></div><input id="buyMarketSearch" placeholder="Search skin to buy..." class="bg-[#120d1f] border border-purple-900 rounded-xl px-3 py-2 text-sm outline-none w-56"></div>
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+            <div class="text-xl font-black">Balance: <span id="modalBalance" class="text-yellow-300">$1000</span></div>
+            <div class="flex flex-wrap gap-2 justify-end">
+                <select id="buyTypeFilter" class="select-mini"><option value="all">All</option><option value="Rifle">Rifles</option><option value="AWP">AWP</option><option value="Pistol">Pistols</option><option value="SMG">SMG</option><option value="Knife">Knives</option><option value="Gloves">Gloves</option></select>
+                <select id="buyPriceFilter" class="select-mini"><option value="all">Any price</option><option value="0-50">$0-50</option><option value="50-150">$50-150</option><option value="150-500">$150-500</option><option value="500-999999">$500+</option></select>
+                <select id="buySort" class="select-mini"><option value="priceAsc">Price ↑</option><option value="priceDesc">Price ↓</option><option value="nameAsc">Name A-Z</option></select>
+                <input id="buyMarketSearch" placeholder="Search skin to buy..." class="bg-[#120d1f] border border-purple-900 rounded-xl px-3 py-2 text-sm outline-none w-56">
+            </div>
+        </div>
         <div id="buyMarketGrid" class="market-modal-grid grid sm:grid-cols-2 lg:grid-cols-4 gap-3 pr-2"></div>
     </div>
 </div>
@@ -437,6 +451,12 @@ const inventoryCount = document.getElementById("inventoryCount");
 const skinSearch = document.getElementById("skinSearch");
 const buyMarketGrid = document.getElementById("buyMarketGrid");
 const buyMarketSearch = document.getElementById("buyMarketSearch");
+const skinTypeFilter = document.getElementById("skinTypeFilter");
+const skinPriceFilter = document.getElementById("skinPriceFilter");
+const skinSort = document.getElementById("skinSort");
+const buyTypeFilter = document.getElementById("buyTypeFilter");
+const buyPriceFilter = document.getElementById("buyPriceFilter");
+const buySort = document.getElementById("buySort");
 
 const yourItemImage = document.getElementById("yourItemImage");
 const yourItemName = document.getElementById("yourItemName");
@@ -446,14 +466,114 @@ const targetItemName = document.getElementById("targetItemName");
 
 const MAX_CHANCE = 80;
 const allSkins = [
-    { id:"ak-neon", name:"AK-47 | Neon Rider", price:50, image:"ak47.neonrider.png" },
-    { id:"awp-lore", name:"AWP | Dragon Lore", price:100, image:"awp.png.png" },
-    { id:"m4-emperor", name:"M4A4 | The Emperor", price:75, image:"m4a4.theemperor.png" },
-    { id:"usp-cortex", name:"USP-S | Cortex", price:20, image:"usp.cortex.png" },
-    { id:"deagle-print", name:"Desert Eagle | Printstream", price:65, image:"deagle.print.png" },
-    { id:"knife-fade", name:"★ Knife | Fade", price:250, image:"knife.fade.png" },
-    { id:"ak-redline", name:"AK-47 | Redline", price:35, image:"ak47.redline.png" },
-    { id:"awp-asiimov", name:"AWP | Asiimov", price:120, image:"awp.asimov.png" }
+    { id:"ak-neon", name:"AK-47 | Neon Rider", price:50, image:"ak47.neonrider.png", type:"Rifle" },
+    { id:"awp-lore", name:"AWP | Dragon Lore", price:100, image:"awp.png.png", type:"AWP" },
+    { id:"m4-emperor", name:"M4A4 | The Emperor", price:75, image:"m4a4.theemperor.png", type:"Rifle" },
+    { id:"usp-cortex", name:"USP-S | Cortex", price:20, image:"usp.cortex.png", type:"Pistol" },
+    { id:"deagle-print", name:"Desert Eagle | Printstream", price:65, image:"deagle.print.png", type:"Pistol" },
+    { id:"knife-fade", name:"★ Knife | Fade", price:250, image:"knife.fade.png", type:"Knife" },
+    { id:"ak-redline", name:"AK-47 | Redline", price:35, image:"ak47.redline.png", type:"Rifle" },
+    { id:"awp-asiimov", name:"AWP | Asiimov", price:120, image:"awp.asimov.png", type:"AWP" },
+    { id:"ak-vulcan", name:"AK-47 | Vulcan", price:135, image:"ak47.neonrider.png", type:"Rifle" },
+    { id:"ak-fire-serpent", name:"AK-47 | Fire Serpent", price:560, image:"ak47.redline.png", type:"Rifle" },
+    { id:"ak-bloodsport", name:"AK-47 | Bloodsport", price:180, image:"ak47.neonrider.png", type:"Rifle" },
+    { id:"ak-fuel-injector", name:"AK-47 | Fuel Injector", price:315, image:"ak47.redline.png", type:"Rifle" },
+    { id:"ak-asiimov", name:"AK-47 | Asiimov", price:95, image:"ak47.neonrider.png", type:"Rifle" },
+    { id:"ak-wild-lotus", name:"AK-47 | Wild Lotus", price:1250, image:"ak47.neonrider.png", type:"Rifle" },
+    { id:"ak-case-hardened", name:"AK-47 | Case Hardened", price:420, image:"ak47.redline.png", type:"Rifle" },
+    { id:"ak-point-disarray", name:"AK-47 | Point Disarray", price:45, image:"ak47.neonrider.png", type:"Rifle" },
+    { id:"ak-slate", name:"AK-47 | Slate", price:18, image:"ak47.redline.png", type:"Rifle" },
+    { id:"ak-ice-coaled", name:"AK-47 | Ice Coaled", price:22, image:"ak47.neonrider.png", type:"Rifle" },
+    { id:"m4a4-howl", name:"M4A4 | Howl", price:900, image:"m4a4.theemperor.png", type:"Rifle" },
+    { id:"m4a4-desolate", name:"M4A4 | Desolate Space", price:85, image:"m4a4.theemperor.png", type:"Rifle" },
+    { id:"m4a4-neo-noir", name:"M4A4 | Neo-Noir", price:48, image:"m4a4.theemperor.png", type:"Rifle" },
+    { id:"m4a4-bullet-rain", name:"M4A4 | Bullet Rain", price:70, image:"m4a4.theemperor.png", type:"Rifle" },
+    { id:"m4a4-in-living-color", name:"M4A4 | In Living Color", price:55, image:"m4a4.theemperor.png", type:"Rifle" },
+    { id:"m4a4-royal-paladin", name:"M4A4 | Royal Paladin", price:115, image:"m4a4.theemperor.png", type:"Rifle" },
+    { id:"m4a4-temukau", name:"M4A4 | Temukau", price:140, image:"m4a4.theemperor.png", type:"Rifle" },
+    { id:"m4a1-printstream", name:"M4A1-S | Printstream", price:155, image:"m4a4.theemperor.png", type:"Rifle" },
+    { id:"m4a1-hyper-beast", name:"M4A1-S | Hyper Beast", price:78, image:"m4a4.theemperor.png", type:"Rifle" },
+    { id:"m4a1-golden-coil", name:"M4A1-S | Golden Coil", price:100, image:"m4a4.theemperor.png", type:"Rifle" },
+    { id:"awp-gungnir", name:"AWP | Gungnir", price:1300, image:"awp.png.png", type:"AWP" },
+    { id:"awp-medusa", name:"AWP | Medusa", price:850, image:"awp.png.png", type:"AWP" },
+    { id:"awp-prince", name:"AWP | The Prince", price:1100, image:"awp.png.png", type:"AWP" },
+    { id:"awp-containment", name:"AWP | Containment Breach", price:160, image:"awp.asimov.png", type:"AWP" },
+    { id:"awp-neo-noir", name:"AWP | Neo-Noir", price:80, image:"awp.asimov.png", type:"AWP" },
+    { id:"awp-hyper-beast", name:"AWP | Hyper Beast", price:90, image:"awp.asimov.png", type:"AWP" },
+    { id:"awp-wildfire", name:"AWP | Wildfire", price:68, image:"awp.asimov.png", type:"AWP" },
+    { id:"awp-redline", name:"AWP | Redline", price:72, image:"awp.asimov.png", type:"AWP" },
+    { id:"awp-fever-dream", name:"AWP | Fever Dream", price:25, image:"awp.asimov.png", type:"AWP" },
+    { id:"awp-chromatic", name:"AWP | Chromatic Aberration", price:34, image:"awp.asimov.png", type:"AWP" },
+    { id:"deagle-blaze", name:"Desert Eagle | Blaze", price:620, image:"deagle.print.png", type:"Pistol" },
+    { id:"deagle-fennec", name:"Desert Eagle | Fennec Fox", price:210, image:"deagle.print.png", type:"Pistol" },
+    { id:"deagle-ocean", name:"Desert Eagle | Ocean Drive", price:95, image:"deagle.print.png", type:"Pistol" },
+    { id:"deagle-kumicho", name:"Desert Eagle | Kumicho Dragon", price:42, image:"deagle.print.png", type:"Pistol" },
+    { id:"deagle-mecha", name:"Desert Eagle | Mecha Industries", price:33, image:"deagle.print.png", type:"Pistol" },
+    { id:"deagle-code-red", name:"Desert Eagle | Code Red", price:58, image:"deagle.print.png", type:"Pistol" },
+    { id:"glock-fade", name:"Glock-18 | Fade", price:280, image:"usp.cortex.png", type:"Pistol" },
+    { id:"glock-vogue", name:"Glock-18 | Vogue", price:18, image:"usp.cortex.png", type:"Pistol" },
+    { id:"glock-water", name:"Glock-18 | Water Elemental", price:28, image:"usp.cortex.png", type:"Pistol" },
+    { id:"glock-moonrise", name:"Glock-18 | Moonrise", price:10, image:"usp.cortex.png", type:"Pistol" },
+    { id:"usp-printstream", name:"USP-S | Printstream", price:110, image:"usp.cortex.png", type:"Pistol" },
+    { id:"usp-kill-confirmed", name:"USP-S | Kill Confirmed", price:95, image:"usp.cortex.png", type:"Pistol" },
+    { id:"usp-neo-noir", name:"USP-S | Neo-Noir", price:42, image:"usp.cortex.png", type:"Pistol" },
+    { id:"usp-orion", name:"USP-S | Orion", price:55, image:"usp.cortex.png", type:"Pistol" },
+    { id:"usp-monster", name:"USP-S | Monster Mashup", price:38, image:"usp.cortex.png", type:"Pistol" },
+    { id:"p250-see-ya", name:"P250 | See Ya Later", price:16, image:"usp.cortex.png", type:"Pistol" },
+    { id:"p250-asiimov", name:"P250 | Asiimov", price:24, image:"usp.cortex.png", type:"Pistol" },
+    { id:"five-hyper", name:"Five-SeveN | Hyper Beast", price:30, image:"usp.cortex.png", type:"Pistol" },
+    { id:"tec-decimator", name:"Tec-9 | Decimator", price:14, image:"usp.cortex.png", type:"Pistol" },
+    { id:"cz-xiangliu", name:"CZ75-Auto | Xiangliu", price:20, image:"usp.cortex.png", type:"Pistol" },
+    { id:"mp9-starlight", name:"MP9 | Starlight Protector", price:40, image:"usp.cortex.png", type:"SMG" },
+    { id:"mp9-mount-fuji", name:"MP9 | Mount Fuji", price:22, image:"usp.cortex.png", type:"SMG" },
+    { id:"mp9-food-chain", name:"MP9 | Food Chain", price:30, image:"usp.cortex.png", type:"SMG" },
+    { id:"mac10-neon", name:"MAC-10 | Neon Rider", price:25, image:"ak47.neonrider.png", type:"SMG" },
+    { id:"mac10-disco", name:"MAC-10 | Disco Tech", price:18, image:"ak47.neonrider.png", type:"SMG" },
+    { id:"mp7-bloodsport", name:"MP7 | Bloodsport", price:34, image:"ak47.redline.png", type:"SMG" },
+    { id:"mp7-neon-ply", name:"MP7 | Neon Ply", price:12, image:"ak47.neonrider.png", type:"SMG" },
+    { id:"p90-death", name:"P90 | Death by Kitty", price:180, image:"m4a4.theemperor.png", type:"SMG" },
+    { id:"p90-asiimov", name:"P90 | Asiimov", price:45, image:"m4a4.theemperor.png", type:"SMG" },
+    { id:"ump-primal", name:"UMP-45 | Primal Saber", price:21, image:"ak47.redline.png", type:"SMG" },
+    { id:"knife-karambit-fade", name:"★ Karambit | Fade", price:760, image:"knife.fade.png", type:"Knife" },
+    { id:"knife-karambit-doppler", name:"★ Karambit | Doppler", price:680, image:"knife.fade.png", type:"Knife" },
+    { id:"knife-butterfly-fade", name:"★ Butterfly Knife | Fade", price:980, image:"knife.fade.png", type:"Knife" },
+    { id:"knife-butterfly-doppler", name:"★ Butterfly Knife | Doppler", price:920, image:"knife.fade.png", type:"Knife" },
+    { id:"knife-m9-fade", name:"★ M9 Bayonet | Fade", price:720, image:"knife.fade.png", type:"Knife" },
+    { id:"knife-m9-doppler", name:"★ M9 Bayonet | Doppler", price:640, image:"knife.fade.png", type:"Knife" },
+    { id:"knife-bayonet-lore", name:"★ Bayonet | Lore", price:520, image:"knife.fade.png", type:"Knife" },
+    { id:"knife-talon-fade", name:"★ Talon Knife | Fade", price:610, image:"knife.fade.png", type:"Knife" },
+    { id:"knife-skeleton-fade", name:"★ Skeleton Knife | Fade", price:880, image:"knife.fade.png", type:"Knife" },
+    { id:"knife-navaja-fade", name:"★ Navaja Knife | Fade", price:210, image:"knife.fade.png", type:"Knife" },
+    { id:"gloves-pandora", name:"★ Sport Gloves | Pandora's Box", price:1450, image:"knife.fade.png", type:"Gloves" },
+    { id:"gloves-vice", name:"★ Sport Gloves | Vice", price:780, image:"knife.fade.png", type:"Gloves" },
+    { id:"gloves-superconductor", name:"★ Sport Gloves | Superconductor", price:720, image:"knife.fade.png", type:"Gloves" },
+    { id:"gloves-hedge", name:"★ Specialist Gloves | Hedge Maze", price:650, image:"knife.fade.png", type:"Gloves" },
+    { id:"gloves-crimson-kimono", name:"★ Specialist Gloves | Crimson Kimono", price:700, image:"knife.fade.png", type:"Gloves" },
+    { id:"gloves-amphibious", name:"★ Sport Gloves | Amphibious", price:520, image:"knife.fade.png", type:"Gloves" },
+    { id:"gloves-omega", name:"★ Sport Gloves | Omega", price:450, image:"knife.fade.png", type:"Gloves" },
+    { id:"gloves-slingshot", name:"★ Specialist Gloves | Slingshot", price:430, image:"knife.fade.png", type:"Gloves" },
+    { id:"gloves-turtle", name:"★ Moto Gloves | Turtle", price:320, image:"knife.fade.png", type:"Gloves" },
+    { id:"gloves-polygon", name:"★ Moto Gloves | Polygon", price:290, image:"knife.fade.png", type:"Gloves" },
+    { id:"aug-akihabara", name:"AUG | Akihabara Accept", price:360, image:"m4a4.theemperor.png", type:"Rifle" },
+    { id:"aug-chameleon", name:"AUG | Chameleon", price:25, image:"m4a4.theemperor.png", type:"Rifle" },
+    { id:"sg-integrale", name:"SG 553 | Integrale", price:140, image:"ak47.redline.png", type:"Rifle" },
+    { id:"sg-cyrex", name:"SG 553 | Cyrex", price:28, image:"ak47.redline.png", type:"Rifle" },
+    { id:"galil-chatterbox", name:"Galil AR | Chatterbox", price:32, image:"ak47.redline.png", type:"Rifle" },
+    { id:"galil-eco", name:"Galil AR | Eco", price:18, image:"ak47.neonrider.png", type:"Rifle" },
+    { id:"famas-comme", name:"FAMAS | Commemoration", price:26, image:"ak47.neonrider.png", type:"Rifle" },
+    { id:"famas-eye", name:"FAMAS | Eye of Athena", price:20, image:"ak47.neonrider.png", type:"Rifle" },
+    { id:"scar-cyrex", name:"SCAR-20 | Cyrex", price:16, image:"awp.asimov.png", type:"AWP" },
+    { id:"ssg-dragonfire", name:"SSG 08 | Dragonfire", price:24, image:"awp.asimov.png", type:"AWP" },
+    { id:"dual-melondrama", name:"Dual Berettas | Melondrama", price:12, image:"usp.cortex.png", type:"Pistol" },
+    { id:"dual-cobra", name:"Dual Berettas | Cobra Strike", price:18, image:"usp.cortex.png", type:"Pistol" },
+    { id:"r8-fade", name:"R8 Revolver | Fade", price:30, image:"deagle.print.png", type:"Pistol" },
+    { id:"r8-lama", name:"R8 Revolver | Llama Cannon", price:14, image:"deagle.print.png", type:"Pistol" },
+    { id:"nova-hyper", name:"Nova | Hyper Beast", price:15, image:"m4a4.theemperor.png", type:"Rifle" },
+    { id:"xm-seasons", name:"XM1014 | Seasons", price:8, image:"m4a4.theemperor.png", type:"Rifle" },
+    { id:"mag-justice", name:"MAG-7 | Justice", price:12, image:"m4a4.theemperor.png", type:"Rifle" },
+    { id:"sawed-kisslove", name:"Sawed-Off | Kiss♥Love", price:10, image:"m4a4.theemperor.png", type:"Rifle" },
+    { id:"negev-mjolnir", name:"Negev | Mjölnir", price:500, image:"ak47.redline.png", type:"Rifle" },
+    { id:"m249-warbird", name:"M249 | Warbird", price:6, image:"ak47.redline.png", type:"Rifle" }
 ];
 
 let inventory = loadInventory();
@@ -566,12 +686,49 @@ function buySkin(skin) {
     resultEl.className = "result-popup mt-6 text-2xl font-black text-purple-300 text-center";
 }
 
+
+function parsePriceRange(value) {
+    if (!value || value === "all") return null;
+    const [min, max] = value.split("-").map(Number);
+    return { min, max };
+}
+
+function getFilteredSkins(query = "", type = "all", priceRange = "all", sort = "priceAsc") {
+    const q = query.trim().toLowerCase();
+    const range = parsePriceRange(priceRange);
+
+    const result = allSkins.filter((skin) => {
+        const matchesSearch = !q || skin.name.toLowerCase().includes(q) || skin.type.toLowerCase().includes(q);
+        const matchesType = type === "all" || skin.type === type;
+        const matchesPrice = !range || (skin.price >= range.min && skin.price <= range.max);
+        return matchesSearch && matchesType && matchesPrice;
+    });
+
+    result.sort((a, b) => {
+        if (sort === "priceDesc") return b.price - a.price;
+        if (sort === "nameAsc") return a.name.localeCompare(b.name);
+        return a.price - b.price;
+    });
+
+    return result;
+}
+
+function updateSkinCounters(marketCount = allSkins.length) {
+    const pager = document.querySelector(".pager");
+    if (pager) {
+        pager.innerHTML = `<span class="active">${marketCount}</span><span>skins</span><span>${allSkins.length}</span><span>total</span>`;
+    }
+}
+
 function renderBuyMarket() {
     if (!buyMarketGrid) return;
-    const q = (buyMarketSearch?.value || "").trim().toLowerCase();
+    const q = buyMarketSearch?.value || "";
+    const type = buyTypeFilter?.value || "all";
+    const price = buyPriceFilter?.value || "all";
+    const sort = buySort?.value || "priceAsc";
     buyMarketGrid.innerHTML = "";
 
-    allSkins.filter(s => s.name.toLowerCase().includes(q)).forEach((skin) => {
+    getFilteredSkins(q, type, price, sort).forEach((skin) => {
         const card = document.createElement("div");
         card.className = "cyber-card rounded-2xl p-3";
         const canBuy = balance >= skin.price;
@@ -655,15 +812,27 @@ function renderInventory() {
 }
 
 function renderMarket() {
-    const q = skinSearch.value.trim().toLowerCase();
+    const q = skinSearch.value || "";
+    const type = skinTypeFilter?.value || "all";
+    const price = skinPriceFilter?.value || "all";
+    const sort = skinSort?.value || "priceAsc";
+    const skins = getFilteredSkins(q, type, price, sort);
     marketGrid.innerHTML = "";
-    allSkins.filter(s => s.name.toLowerCase().includes(q)).forEach((skin) => {
+
+    if (!skins.length) {
+        marketGrid.innerHTML = `<div class="text-gray-400 col-span-full text-center py-10">No skins found. Try another filter.</div>`;
+        updateSkinCounters(0);
+        return;
+    }
+
+    skins.forEach((skin) => {
         const tile = document.createElement("button");
         tile.className = `skin-tile text-left cyber-card rounded-2xl p-3 ${skin.id === targetSkin.id ? "selected" : ""}`;
         tile.innerHTML = `
             <img src="${skin.image}" class="w-full h-24 object-cover rounded-xl mb-2" alt="${skin.name}">
             <div class="font-bold text-sm leading-tight">${skin.name}</div>
             <div class="text-purple-300 font-black mt-1">$${skin.price}</div>
+            <div class="text-[10px] text-gray-500 mt-1">${skin.type}</div>
         `;
         tile.onclick = () => {
             targetSkin = skin;
@@ -672,6 +841,8 @@ function renderMarket() {
         };
         marketGrid.appendChild(tile);
     });
+
+    updateSkinCounters(skins.length);
 }
 
 function drawWheel(angle) {
@@ -1020,7 +1191,13 @@ document.querySelectorAll('.multiplierPreset').forEach((btn)=>{
 upgradeBtn.addEventListener("click", () => spinWheel(4500));
 fastUpgradeBtn.addEventListener("click", () => spinWheel(400));
 skinSearch.addEventListener("input", renderMarket);
+[skinTypeFilter, skinPriceFilter, skinSort].forEach((el) => {
+    if (el) el.addEventListener("change", renderMarket);
+});
 if (buyMarketSearch) buyMarketSearch.addEventListener("input", renderBuyMarket);
+[buyTypeFilter, buyPriceFilter, buySort].forEach((el) => {
+    if (el) el.addEventListener("change", renderBuyMarket);
+});
 document.getElementById("openBuyMarketBtn").onclick = () => {
     document.getElementById("buyMarketModal").classList.add("open");
     renderBuyMarket();
@@ -1131,20 +1308,23 @@ function updateOnlineCounters(count) {
         bottomOnlineCountEl.textContent = count;
     }
 }
+
+
 function loadSiteStats() {
     fetch("/api/stats")
         .then(res => res.json())
         .then(data => {
-            const el = document.getElementById("totalUpgradesCount");
-            if (el) el.textContent = data.totalUpgrades || 0;
+            const value = data.totalUpgrades || 0;
+            const top = document.getElementById("totalUpgradesCount");
+            const bottom = document.getElementById("bottomTotalUpgradesCount");
+            if (top) top.textContent = value;
+            if (bottom) bottom.textContent = value;
         })
         .catch(() => {});
 }
 
-loadSiteStats();
-setInterval(loadSiteStats, 5000);
 function pingOnline() {
-     fetch("/api/ping")
+    fetch("/api/ping")
         .then(res => res.json())
         .then(data => {
             updateOnlineCounters(data.online);
@@ -1154,6 +1334,8 @@ function pingOnline() {
    
 pingOnline();
 setInterval(pingOnline, 15000);
+loadSiteStats();
+setInterval(loadSiteStats, 5000);
 loadLiveFeed();
 setInterval(loadLiveFeed, 4000);
 
