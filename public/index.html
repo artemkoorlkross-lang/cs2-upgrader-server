@@ -581,6 +581,67 @@ body.arrow-purple .pointer{border-top-color:#a855f7;filter:drop-shadow(0 0 12px 
     transition: transform .22s ease, border-color .22s ease, box-shadow .22s ease;
 }
 
+
+/* Profile sell-all + spin lock polish */
+.profile-inventory-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    flex-wrap:wrap;
+    margin-bottom:16px;
+}
+.profile-inventory-total{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:#c4b5fd;
+    font-weight:1000;
+}
+.profile-inventory-total strong{
+    color:#fde047;
+    font-size:18px;
+    text-shadow:0 0 12px rgba(234,179,8,.35);
+}
+.sell-all-btn{
+    min-height:42px;
+    padding:0 18px;
+    border-radius:12px;
+    background:linear-gradient(180deg,rgba(239,68,68,.18),rgba(127,29,29,.34));
+    border:1px solid rgba(248,113,113,.45);
+    color:#fecaca;
+    font-weight:1000;
+    box-shadow:0 0 18px rgba(239,68,68,.14), inset 0 0 18px rgba(255,255,255,.025);
+    transition:.22s cubic-bezier(.2,.8,.2,1);
+}
+.sell-all-btn:hover:not(:disabled){
+    transform:translateY(-2px) scale(1.025);
+    color:white;
+    border-color:rgba(248,113,113,.7);
+    box-shadow:0 0 26px rgba(239,68,68,.28), inset 0 0 18px rgba(255,255,255,.04);
+}
+.sell-all-btn:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+    filter:grayscale(.35);
+}
+body.spin-locked .chancePreset,
+body.spin-locked .multiplierPreset,
+body.spin-locked #skinSearch,
+body.spin-locked #skinTypeFilter,
+body.spin-locked #skinPriceFilter,
+body.spin-locked #skinSort,
+body.spin-locked #balanceBoostSlider,
+body.spin-locked #openSettingsBtn,
+body.spin-locked #marketGrid .skin-tile{
+    opacity:.55;
+    pointer-events:none;
+    filter:grayscale(.2);
+}
+body.spin-locked #marketGrid .skin-tile{
+    cursor:not-allowed;
+}
+
 </style>
 </head>
 <body class="text-white font-sans">
@@ -717,7 +778,14 @@ body.arrow-purple .pointer{border-top-color:#a855f7;filter:drop-shadow(0 0 12px 
                     </div>
 
                     <div id="profileInventoryTab" class="profile-tab-content">
-                        <h3 class="text-purple-300 font-bold mb-4">Inventory Preview</h3>
+                        <div class="profile-inventory-head">
+                            <h3 class="text-purple-300 font-bold">Inventory Preview</h3>
+                            <div class="profile-inventory-total">
+                                <span>Total:</span>
+                                <strong id="profileInventorySellValue">$0</strong>
+                                <button id="sellAllInventoryBtn" class="sell-all-btn">Sell all</button>
+                            </div>
+                        </div>
                         <div id="profileInventoryGrid" class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3"></div>
                     </div>
 
@@ -1187,6 +1255,30 @@ function sellInventoryItem(index) {
     updateStats();
 }
 
+function sellAllInventory() {
+    if (!inventory.length || pendingUpgrade) return;
+
+    const total = inventory.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
+    if (total <= 0) return;
+
+    balance += total;
+    inventory = [];
+    selectedInventoryIndex = 0;
+    balanceBoost = 0;
+
+    saveBalance();
+    saveInventory();
+    renderInventory();
+    renderMarket();
+    updateBalanceBoostLimits();
+    updateMainCards();
+    updateStats();
+
+    resultEl.classList.remove("hidden");
+    resultEl.textContent = `💰 SOLD ALL: +$${total}`;
+    resultEl.className = "result-popup mt-6 text-2xl font-black text-yellow-300 text-center";
+}
+
 function buySkin(skin) {
     if (!skin) return;
 
@@ -1322,7 +1414,7 @@ function getUpgradeTargetWarning() {
     const item = getSelectedItem();
     if (!item) return "Select item";
     if (!targetSkin) return "Select target";
-    if (!isValidUpgradeTarget()) return "TARGET MUST BE HIGHER VALUE";
+    if (!isValidUpgradeTarget()) return "UPGRADE";
     return "⌃ UPGRADE";
 }
 
@@ -1400,17 +1492,12 @@ function renderInventory() {
             <img src="${skin.image}" class="w-full h-24 object-cover rounded-xl mb-2" alt="${skin.name}">
             <div class="font-bold text-sm leading-tight">${skin.name}</div>
             <div class="text-purple-300 font-black mt-1">$${skin.price}</div>
-            <button class="sell-btn">Sell for $${skin.price}</button>
         `;
         tile.onclick = () => {
             selectedInventoryIndex = index;
             renderInventory();
             updateMainCards();
             updateStats();
-        };
-        tile.querySelector(".sell-btn").onclick = (e) => {
-            e.stopPropagation();
-            sellInventoryItem(index);
         };
         inventoryGrid.appendChild(tile);
     });
@@ -1440,6 +1527,7 @@ function renderMarket() {
             <div class="text-[10px] text-gray-500 mt-1">${skin.type}</div>
         `;
         tile.onclick = () => {
+            if (pendingUpgrade) return;
             targetSkin = skin;
             renderMarket();
             updateMainCards();
@@ -1644,6 +1732,19 @@ function pickLandingDistance(won, winArc) {
     return lossStart + Math.random() * (lossEnd - lossStart);
 }
 
+
+function setSpinControlsDisabled(disabled) {
+    document.body.classList.toggle("spin-locked", !!disabled);
+
+    document.querySelectorAll(".chancePreset, .multiplierPreset").forEach(btn => btn.disabled = !!disabled);
+    [balanceBoostSlider, skinSearch, skinTypeFilter, skinPriceFilter, skinSort].forEach(el => {
+        if (el) el.disabled = !!disabled;
+    });
+
+    const settingsBtn = document.getElementById("openSettingsBtn");
+    if (settingsBtn) settingsBtn.disabled = !!disabled;
+}
+
 function spinWheel(duration = 4500) {
     if (pendingUpgrade) return;
 
@@ -1713,6 +1814,7 @@ function spinWheel(duration = 4500) {
 
     upgradeBtn.disabled = true;
     if (fastUpgradeBtn) fastUpgradeBtn.disabled = true;
+    setSpinControlsDisabled(true);
     resultEl.classList.add("hidden");
     startWheelSound();
 
@@ -1747,6 +1849,7 @@ function finishSpin() {
 
     if (!pendingUpgrade) {
         updateMainCards();
+        setSpinControlsDisabled(false);
         if (fastUpgradeBtn) fastUpgradeBtn.disabled = false;
         return;
     }
@@ -1798,6 +1901,7 @@ function finishSpin() {
     updateBalanceBoostLimits();
     updateMainCards();
     updateStats();
+    setSpinControlsDisabled(false);
     if (fastUpgradeBtn) fastUpgradeBtn.disabled = false;
 }
 
@@ -1906,6 +2010,7 @@ function applyArrowStyle() {
 }
 
 function applyCustomChance(value) {
+    if (pendingUpgrade) return;
     const item = getSelectedItem();
     if (!item) return;
     const wantedChance = clampNumber(value, 0.01, 80, 50);
@@ -1964,6 +2069,7 @@ applyArrowStyle();
 
 document.querySelectorAll('.chancePreset').forEach((btn)=>{
     btn.onclick = () => {
+        if (pendingUpgrade) return;
         const item = getSelectedItem();
         if (!item) return;
         const wantedChance = clampNumber(btn.dataset.chance, 0.01, 80, 50);
@@ -1975,6 +2081,7 @@ document.querySelectorAll('.chancePreset').forEach((btn)=>{
 
 document.querySelectorAll('.multiplierPreset').forEach((btn)=>{
     btn.onclick = () => {
+        if (pendingUpgrade) return;
         const item = getSelectedItem();
         if (!item) return;
         const mult = Number(btn.dataset.mult);
@@ -1987,6 +2094,7 @@ document.querySelectorAll('.multiplierPreset').forEach((btn)=>{
 
 if (balanceBoostSlider) {
     balanceBoostSlider.addEventListener("input", () => {
+        if (pendingUpgrade) return;
         balanceBoost = Math.floor(Number(balanceBoostSlider.value) || 0);
         updateBalanceBoostLimits();
         calculateChance();
@@ -2030,6 +2138,7 @@ document.getElementById("buyMarketModal").addEventListener("click", (e) => {
         document.getElementById("buyMarketModal").classList.remove("open");
     }
 });
+document.getElementById("sellAllInventoryBtn")?.addEventListener("click", sellAllInventory);
 document.getElementById("resetInventoryBtn").onclick = () => {
     inventory = defaultInventory();
     selectedInventoryIndex = 0;
@@ -2078,6 +2187,16 @@ function renderProfileInventory() {
     const grid = document.getElementById("profileInventoryGrid");
     if (!grid) return;
 
+    const total = inventory.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
+    const sellValueEl = document.getElementById("profileInventorySellValue");
+    const sellAllBtn = document.getElementById("sellAllInventoryBtn");
+
+    if (sellValueEl) sellValueEl.textContent = "$" + total;
+    if (sellAllBtn) {
+        sellAllBtn.disabled = !inventory.length || pendingUpgrade;
+        sellAllBtn.textContent = inventory.length ? `Sell all for $${total}` : "Sell all";
+    }
+
     grid.innerHTML = "";
 
     if (!inventory.length) {
@@ -2085,16 +2204,14 @@ function renderProfileInventory() {
         return;
     }
 
-    inventory.forEach((skin, index) => {
+    inventory.forEach((skin) => {
         const card = document.createElement("div");
         card.className = "cyber-card rounded-2xl p-3";
         card.innerHTML = `
             <img src="${skin.image}" class="w-full h-24 object-cover rounded-xl mb-2" alt="${skin.name}">
             <div class="font-bold text-sm leading-tight">${skin.name}</div>
             <div class="text-purple-300 font-black mt-1">$${skin.price}</div>
-            <button class="sell-btn">Sell for $${skin.price}</button>
         `;
-        card.querySelector(".sell-btn").onclick = () => sellInventoryItem(index);
         grid.appendChild(card);
     });
 }
