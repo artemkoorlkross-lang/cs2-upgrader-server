@@ -72,12 +72,11 @@ body:after{
     backdrop-filter:blur(18px);
 }
 .brand{
-    cursor:pointer;
-    user-select:none;
     display:flex;
     align-items:center;
     gap:12px;
     min-width:210px;
+    cursor:pointer;
 }
 .brand img{width:48px;height:48px;object-fit:contain;filter:drop-shadow(0 0 16px rgba(168,85,247,.75));}
 .brand-name{font-size:26px;line-height:.88;font-weight:1000;letter-spacing:.02em;}
@@ -173,6 +172,7 @@ body:after{
     gap:34px;
     align-items:center;
     margin-top:12px;
+    position:relative;
 }
 .cyber-card{
     position:relative;
@@ -295,11 +295,11 @@ body:after{
 @media(max-width:1200px){.layout{grid-template-columns:1fr}.topbar{height:auto;gap:12px;flex-wrap:wrap}.top-stats{order:3;width:100%;margin:8px 0 0}.upgrade-area{grid-template-columns:1fr}.panels-grid{grid-template-columns:1fr}#liveFeed{position:relative;top:auto;height:auto;max-height:360px}.bottom-info{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:720px){.topbar{padding:12px}.brand-name{font-size:21px}.top-stats{gap:12px}.top-actions{width:100%;justify-content:space-between}.layout{padding:14px}.wheel-box{width:300px;height:300px}#wheel{width:280px;height:280px}.item-card{height:auto}.panels-grid{margin-top:18px}.bottom-info{grid-template-columns:1fr}.hero-title h1{font-size:22px}}
 /* Upgrade settings modal */
-.wheel-wrap{position:relative;}
+.wheel-wrap{position:static;}
 .wheel-tools{
     position:absolute;
-    left:-290px;
-    top:92px;
+    left:0;
+    top:-58px;
     z-index:50;
     display:flex;
     align-items:center;
@@ -319,19 +319,8 @@ body:after{
     transition:.2s ease;
 }
 .settings-gear:hover{transform:translateY(-2px) rotate(18deg);box-shadow:0 0 28px rgba(168,85,247,.5);}
-.fast-spin-icon{
-    color:#9ca3af;
-    border-color:rgba(156,163,175,.35);
-    background:linear-gradient(180deg,rgba(156,163,175,.10),rgba(24,14,38,.88))!important;
-}
-.fast-spin-icon:hover{transform:translateY(-2px) scale(1.08);box-shadow:0 0 24px rgba(156,163,175,.25);}
-.fast-spin-icon.active{
-    color:#fbbf24;
-    border-color:rgba(251,191,36,.75);
-    background:linear-gradient(180deg,rgba(251,191,36,.22),rgba(45,27,9,.92))!important;
-    box-shadow:0 0 22px rgba(251,191,36,.55),0 0 42px rgba(251,191,36,.22),inset 0 0 18px rgba(251,191,36,.08);
-}
-.fast-spin-icon.active:hover{box-shadow:0 0 30px rgba(251,191,36,.65),0 0 52px rgba(251,191,36,.28);}
+.fast-spin-icon{color:#fbbf24;border-color:rgba(251,191,36,.45);}
+.fast-spin-icon:hover{transform:translateY(-2px) scale(1.08);box-shadow:0 0 30px rgba(251,191,36,.45);}
 .fast-spin-icon:active{transform:scale(.96);}
 #upgradeSettingsModal{
     position:fixed;
@@ -807,6 +796,8 @@ let previousSegment = -1;
 let biggestWin = loadBiggestWin();
 let currentUser = { name: "Player", avatar: "" };
 let balance = loadBalance();
+let pendingUpgrade = null;
+let fastSpinEnabled = false;
 function cloneSkin(skin) {
     return { ...skin, uid: crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random()) };
 }
@@ -1282,11 +1273,9 @@ function spinWheel(duration = 4500) {
         won
     };
 
-    // Apply the result BEFORE the animation finishes.
-    // So if someone refreshes during the spin, the final inventory is already saved:
-    // loss = old skin removed, win = target skin already added.
+    // Result is saved immediately to block refresh exploit.
+    // Win -> old skin becomes target. Loss -> old skin is removed.
     inventory.splice(lockedIndex, 1);
-
     if (won) {
         const wonSkin = cloneSkin(lockedTarget);
         inventory.push(wonSkin);
@@ -1304,6 +1293,7 @@ function spinWheel(duration = 4500) {
     sendUpgradeToFeed(won ? "WIN" : "LOSS", won ? lockedTarget : lockedItem);
 
     upgradeBtn.disabled = true;
+    if (fastUpgradeBtn) fastUpgradeBtn.disabled = true;
     resultEl.classList.add("hidden");
     startWheelSound();
 
@@ -1338,6 +1328,7 @@ function finishSpin() {
 
     if (!pendingUpgrade) {
         upgradeBtn.disabled = false;
+        if (fastUpgradeBtn) fastUpgradeBtn.disabled = false;
         return;
     }
 
@@ -1367,6 +1358,7 @@ function finishSpin() {
     updateMainCards();
     updateStats();
     upgradeBtn.disabled = false;
+    if (fastUpgradeBtn) fastUpgradeBtn.disabled = false;
 }
 
 function renderLiveFeed(items) {
@@ -1552,12 +1544,24 @@ document.querySelectorAll('.multiplierPreset').forEach((btn)=>{
     };
 });
 
-upgradeBtn.addEventListener("click", () => spinWheel(appSettings.normalDuration));
-fastUpgradeBtn.addEventListener("click", () => spinWheel(appSettings.fastDuration));
+upgradeBtn.addEventListener("click", () => {
+    const duration = fastSpinEnabled ? appSettings.fastDuration : appSettings.normalDuration;
+    spinWheel(duration);
+});
+
+fastUpgradeBtn.addEventListener("click", () => {
+    fastSpinEnabled = !fastSpinEnabled;
+    fastUpgradeBtn.classList.toggle("active", fastSpinEnabled);
+    fastUpgradeBtn.title = fastSpinEnabled ? "Fast mode enabled" : "Fast mode disabled";
+});
 document.getElementById("openSettingsBtn")?.addEventListener("click", openSettingsModal);
 document.getElementById("closeSettingsBtn")?.addEventListener("click", closeSettingsModal);
 document.getElementById("saveSettingsBtn")?.addEventListener("click", saveSettingsFromModal);
 document.getElementById("applyCustomChanceBtn")?.addEventListener("click", () => applyCustomChance(document.getElementById("customChanceInput")?.value));
+document.querySelector(".brand")?.addEventListener("click", () => {
+    document.getElementById("profilePage")?.classList.add("hidden");
+    document.getElementById("homePage")?.classList.remove("hidden");
+});
 document.getElementById("upgradeSettingsModal")?.addEventListener("click", (e) => { if (e.target.id === "upgradeSettingsModal") closeSettingsModal(); });
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeSettingsModal(); });
 skinSearch.addEventListener("input", renderMarket);
@@ -1659,11 +1663,6 @@ function showHomePage() {
     if (window.location.hash === "#profile") {
         history.pushState("", document.title, window.location.pathname + window.location.search);
     }
-}
-
-const brandButton = document.querySelector(".brand");
-if (brandButton) {
-    brandButton.addEventListener("click", showHomePage);
 }
 
 function updateOnlineCounters(count) {
