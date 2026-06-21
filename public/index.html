@@ -232,7 +232,7 @@ body:after{
     transition:.22s ease;
 }
 .upgrade-btn:hover{transform:translateY(-2px) scale(1.02);box-shadow:0 0 34px rgba(168,85,247,.55)}
-#fastUpgradeBtn{height:44px;width:220px;margin-top:10px !important;background:linear-gradient(180deg,#b91bd1,#8614ba)!important;font-size:15px!important;}
+#fastUpgradeBtn.fast-spin-icon{margin:0!important;padding:0!important;background:linear-gradient(180deg,rgba(251,191,36,.18),rgba(24,14,38,.88))!important;font-size:22px!important;}
 .result-popup{animation:pop .35s ease;}
 @keyframes pop{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
 .panels-grid{display:grid;grid-template-columns:minmax(420px,.95fr) minmax(520px,1.05fr);gap:18px;margin-top:24px;}
@@ -294,10 +294,16 @@ body:after{
 @media(max-width:720px){.topbar{padding:12px}.brand-name{font-size:21px}.top-stats{gap:12px}.top-actions{width:100%;justify-content:space-between}.layout{padding:14px}.wheel-box{width:300px;height:300px}#wheel{width:280px;height:280px}.item-card{height:auto}.panels-grid{margin-top:18px}.bottom-info{grid-template-columns:1fr}.hero-title h1{font-size:22px}}
 /* Upgrade settings modal */
 .wheel-wrap{position:relative;}
-.settings-gear{
+.wheel-tools{
     position:absolute;
-    right:8px;
+    left:-10px;
     top:18px;
+    z-index:5;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+.settings-gear,.fast-spin-icon{
     width:44px;
     height:44px;
     display:grid;
@@ -311,6 +317,9 @@ body:after{
     transition:.2s ease;
 }
 .settings-gear:hover{transform:translateY(-2px) rotate(18deg);box-shadow:0 0 28px rgba(168,85,247,.5);}
+.fast-spin-icon{color:#fbbf24;border-color:rgba(251,191,36,.45);}
+.fast-spin-icon:hover{transform:translateY(-2px) scale(1.08);box-shadow:0 0 30px rgba(251,191,36,.45);}
+.fast-spin-icon:active{transform:scale(.96);}
 #upgradeSettingsModal{
     position:fixed;
     inset:0;
@@ -385,7 +394,7 @@ body.arrow-pink .pointer{border-top-color:#f472b6;filter:drop-shadow(0 0 12px #f
 body.arrow-green .pointer{border-top-color:#22c55e;filter:drop-shadow(0 0 12px #22c55e)}
 body.arrow-orange .pointer{border-top-color:#fb923c;filter:drop-shadow(0 0 12px #fb923c)}
 body.arrow-purple .pointer{border-top-color:#a855f7;filter:drop-shadow(0 0 12px #a855f7)}
-@media(max-width:720px){.settings-grid{grid-template-columns:1fr}.settings-gear{position:static;margin-top:10px}}
+@media(max-width:720px){.settings-grid{grid-template-columns:1fr}.wheel-tools{position:static;margin-top:10px;justify-content:center}}
 
 </style>
 </head>
@@ -438,9 +447,11 @@ body.arrow-purple .pointer{border-top-color:#a855f7;filter:drop-shadow(0 0 12px 
                         </div>
                     </div>
 
-                    <button id="openSettingsBtn" class="settings-gear" title="Upgrade settings">⚙</button>
+                    <div class="wheel-tools">
+                        <button id="openSettingsBtn" class="settings-gear" title="Upgrade settings">⚙</button>
+                        <button id="fastUpgradeBtn" class="fast-spin-icon" title="Fast spin">⚡</button>
+                    </div>
                     <button id="upgradeBtn" class="upgrade-btn mt-4 text-xl font-black tracking-wider">⌃ UPGRADE</button>
-                    <button id="fastUpgradeBtn" class="upgrade-btn mt-3 text-lg font-black tracking-wider">⚡ FAST SPIN</button>
                     <div class="preset-row">
                         <button class="multiplierPreset" data-mult="1.5">1.5x</button>
                         <button class="multiplierPreset" data-mult="2">2x</button>
@@ -544,10 +555,10 @@ body.arrow-purple .pointer{border-top-color:#a855f7;filter:drop-shadow(0 0 12px 
             <h3>Chance controls</h3>
             <p>Set any custom chance for the selected item. The target price will be recalculated automatically.</p>
             <div class="settings-row">
-                <input id="customChanceInput" class="settings-input" type="number" min="1" max="99" value="50">
+                <input id="customChanceInput" class="settings-input" type="number" min="0.01" max="80" step="0.01" value="50">
                 <button id="applyCustomChanceBtn" class="setting-chip">Apply custom %</button>
                 <span class="text-gray-400 text-sm">Max allowed:</span>
-                <input id="maxChanceInput" class="settings-input" type="number" min="1" max="99" value="80">
+                <input id="maxChanceInput" class="settings-input" type="number" min="0.01" max="80" step="0.01" value="80">
             </div>
         </div>
 
@@ -555,10 +566,10 @@ body.arrow-purple .pointer{border-top-color:#a855f7;filter:drop-shadow(0 0 12px 
             <h3>Quick chance buttons</h3>
             <p>These values will replace the purple 10%, 25%, 50%, 75% buttons.</p>
             <div class="settings-row">
-                <input class="settings-input quick-chance-input" type="number" min="1" max="99" value="10">
-                <input class="settings-input quick-chance-input" type="number" min="1" max="99" value="25">
-                <input class="settings-input quick-chance-input" type="number" min="1" max="99" value="50">
-                <input class="settings-input quick-chance-input" type="number" min="1" max="99" value="75">
+                <input class="settings-input quick-chance-input" type="number" min="0.01" max="80" step="0.01" value="10">
+                <input class="settings-input quick-chance-input" type="number" min="0.01" max="80" step="0.01" value="25">
+                <input class="settings-input quick-chance-input" type="number" min="0.01" max="80" step="0.01" value="50">
+                <input class="settings-input quick-chance-input" type="number" min="0.01" max="80" step="0.01" value="75">
             </div>
         </div>
 
@@ -644,7 +655,7 @@ function loadUpgradeSettings() {
     try {
         const saved = JSON.parse(localStorage.getItem("dropempire-upgrade-settings"));
         return {
-            maxChance: Number(saved?.maxChance) || 80,
+            maxChance: Math.min(80, Math.max(0.01, Number(saved?.maxChance) || 80)),
             normalDuration: Number(saved?.normalDuration) || 4500,
             fastDuration: Number(saved?.fastDuration) || 400,
             soundEnabled: saved?.soundEnabled !== false,
@@ -956,8 +967,8 @@ function calculateChance() {
         drawWheel(rotation);
         return;
     }
-    chance = Math.min(MAX_CHANCE, Math.max(1, (item.price / targetSkin.price) * 100));
-    chanceText.textContent = Math.round(chance) + "%";
+    chance = Math.min(MAX_CHANCE, Math.max(0.01, (item.price / targetSkin.price) * 100));
+    chanceText.textContent = formatPercent(chance);
     drawWheel(rotation);
 }
 
@@ -1373,11 +1384,18 @@ function clampNumber(value, min, max, fallback) {
     return Math.min(max, Math.max(min, n));
 }
 
+function formatPercent(value) {
+    const n = Number(value);
+    if (!Number.isFinite(n)) return "0%";
+    if (n < 1) return n.toFixed(2).replace(/\.?0+$/, "") + "%";
+    return n.toFixed(2).replace(/\.?0+$/, "") + "%";
+}
+
 function applyPresetButtons() {
     document.querySelectorAll('.chancePreset').forEach((btn, index) => {
-        const value = clampNumber(appSettings.chancePresets[index], 1, 99, [10,25,50,75][index]);
+        const value = clampNumber(appSettings.chancePresets[index], 0.01, 80, [10,25,50,75][index]);
         btn.dataset.chance = value;
-        btn.textContent = value + "%";
+        btn.textContent = formatPercent(value);
     });
 
     document.querySelectorAll('.multiplierPreset').forEach((btn, index) => {
@@ -1395,7 +1413,7 @@ function applyArrowStyle() {
 function applyCustomChance(value) {
     const item = getSelectedItem();
     if (!item) return;
-    const wantedChance = clampNumber(value, 1, 99, 50);
+    const wantedChance = clampNumber(value, 0.01, 80, 50);
     targetSkin = { ...targetSkin, price: Math.max(1, Math.round(item.price / (wantedChance / 100))) };
     renderMarket();
     updateMainCards();
@@ -1403,7 +1421,7 @@ function applyCustomChance(value) {
 
 function openSettingsModal() {
     document.getElementById("upgradeSettingsModal")?.classList.add("open");
-    document.getElementById("customChanceInput").value = Math.round(chance || 50);
+    document.getElementById("customChanceInput").value = Number(chance || 50).toFixed(2).replace(/\.?0+$/, "");
     document.getElementById("maxChanceInput").value = appSettings.maxChance;
 
     document.querySelectorAll('.quick-chance-input').forEach((input, index) => input.value = appSettings.chancePresets[index]);
@@ -1424,10 +1442,10 @@ function closeSettingsModal() {
 }
 
 function saveSettingsFromModal() {
-    appSettings.maxChance = clampNumber(document.getElementById("maxChanceInput")?.value, 1, 99, 80);
+    appSettings.maxChance = clampNumber(document.getElementById("maxChanceInput")?.value, 0.01, 80, 80);
     MAX_CHANCE = appSettings.maxChance;
 
-    appSettings.chancePresets = [...document.querySelectorAll('.quick-chance-input')].map((input, index) => clampNumber(input.value, 1, 99, [10,25,50,75][index]));
+    appSettings.chancePresets = [...document.querySelectorAll('.quick-chance-input')].map((input, index) => clampNumber(input.value, 0.01, 80, [10,25,50,75][index]));
     appSettings.multPresets = [...document.querySelectorAll('.quick-mult-input')].map((input, index) => clampNumber(input.value, 1.01, 100, [1.5,2,5,10][index]));
 
     const speed = document.querySelector('input[name="spinSpeed"]:checked');
@@ -1453,7 +1471,7 @@ document.querySelectorAll('.chancePreset').forEach((btn)=>{
     btn.onclick = () => {
         const item = getSelectedItem();
         if (!item) return;
-        const wantedChance = Number(btn.dataset.chance);
+        const wantedChance = clampNumber(btn.dataset.chance, 0.01, 80, 50);
         targetSkin = { ...targetSkin, price: Math.max(1, Math.round(item.price / (wantedChance / 100))) };
         renderMarket();
         updateMainCards();
