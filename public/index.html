@@ -72,6 +72,8 @@ body:after{
     backdrop-filter:blur(18px);
 }
 .brand{
+    cursor:pointer;
+    user-select:none;
     display:flex;
     align-items:center;
     gap:12px;
@@ -171,7 +173,6 @@ body:after{
     gap:34px;
     align-items:center;
     margin-top:12px;
-    position:relative;
 }
 .cyber-card{
     position:relative;
@@ -294,11 +295,11 @@ body:after{
 @media(max-width:1200px){.layout{grid-template-columns:1fr}.topbar{height:auto;gap:12px;flex-wrap:wrap}.top-stats{order:3;width:100%;margin:8px 0 0}.upgrade-area{grid-template-columns:1fr}.panels-grid{grid-template-columns:1fr}#liveFeed{position:relative;top:auto;height:auto;max-height:360px}.bottom-info{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:720px){.topbar{padding:12px}.brand-name{font-size:21px}.top-stats{gap:12px}.top-actions{width:100%;justify-content:space-between}.layout{padding:14px}.wheel-box{width:300px;height:300px}#wheel{width:280px;height:280px}.item-card{height:auto}.panels-grid{margin-top:18px}.bottom-info{grid-template-columns:1fr}.hero-title h1{font-size:22px}}
 /* Upgrade settings modal */
-.wheel-wrap{position:static;}
+.wheel-wrap{position:relative;}
 .wheel-tools{
     position:absolute;
-    left:10px;
-    top:42px;
+    left:-290px;
+    top:92px;
     z-index:50;
     display:flex;
     align-items:center;
@@ -321,16 +322,16 @@ body:after{
 .fast-spin-icon{
     color:#9ca3af;
     border-color:rgba(156,163,175,.35);
-    background:linear-gradient(180deg,rgba(156,163,175,.12),rgba(24,14,38,.88))!important;
+    background:linear-gradient(180deg,rgba(156,163,175,.10),rgba(24,14,38,.88))!important;
 }
-.fast-spin-icon:hover{transform:translateY(-2px) scale(1.08);box-shadow:0 0 24px rgba(156,163,175,.22);}
+.fast-spin-icon:hover{transform:translateY(-2px) scale(1.08);box-shadow:0 0 24px rgba(156,163,175,.25);}
 .fast-spin-icon.active{
     color:#fbbf24;
-    border-color:#fbbf24;
-    background:linear-gradient(180deg,rgba(251,191,36,.24),rgba(24,14,38,.88))!important;
-    box-shadow:0 0 24px rgba(251,191,36,.55),0 0 48px rgba(251,191,36,.22);
+    border-color:rgba(251,191,36,.75);
+    background:linear-gradient(180deg,rgba(251,191,36,.22),rgba(45,27,9,.92))!important;
+    box-shadow:0 0 22px rgba(251,191,36,.55),0 0 42px rgba(251,191,36,.22),inset 0 0 18px rgba(251,191,36,.08);
 }
-.fast-spin-icon.active:hover{box-shadow:0 0 30px rgba(251,191,36,.7),0 0 55px rgba(251,191,36,.28);}
+.fast-spin-icon.active:hover{box-shadow:0 0 30px rgba(251,191,36,.65),0 0 52px rgba(251,191,36,.28);}
 .fast-spin-icon:active{transform:scale(.96);}
 #upgradeSettingsModal{
     position:fixed;
@@ -406,7 +407,7 @@ body.arrow-pink .pointer{border-top-color:#f472b6;filter:drop-shadow(0 0 12px #f
 body.arrow-green .pointer{border-top-color:#22c55e;filter:drop-shadow(0 0 12px #22c55e)}
 body.arrow-orange .pointer{border-top-color:#fb923c;filter:drop-shadow(0 0 12px #fb923c)}
 body.arrow-purple .pointer{border-top-color:#a855f7;filter:drop-shadow(0 0 12px #a855f7)}
-@media(max-width:720px){.settings-grid{grid-template-columns:1fr}.wheel-wrap{position:relative}.wheel-tools{position:static;margin-top:10px;justify-content:center}}
+@media(max-width:720px){.settings-grid{grid-template-columns:1fr}.wheel-tools{position:static;margin-top:10px;justify-content:center}}
 
 </style>
 </head>
@@ -806,8 +807,6 @@ let previousSegment = -1;
 let biggestWin = loadBiggestWin();
 let currentUser = { name: "Player", avatar: "" };
 let balance = loadBalance();
-let pendingUpgrade = null;
-let fastSpinEnabled = false;
 function cloneSkin(skin) {
     return { ...skin, uid: crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random()) };
 }
@@ -1246,41 +1245,78 @@ function triggerLossAnimation() {
     restartClassAnimation(wheel, "loss-shake", 500);
 }
 
+function pickLandingDistance(won, winArc) {
+    const TAU = Math.PI * 2;
+    const safeWinArc = Math.max(0.0001, winArc);
+
+    if (won) {
+        const min = safeWinArc * 0.18;
+        const max = safeWinArc * 0.82;
+        return min + Math.random() * Math.max(0.0001, max - min);
+    }
+
+    const lossStart = Math.min(TAU - 0.0001, safeWinArc + 0.04);
+    const lossEnd = TAU - 0.04;
+    if (lossEnd <= lossStart) return safeWinArc + (TAU - safeWinArc) * 0.5;
+    return lossStart + Math.random() * (lossEnd - lossStart);
+}
+
 function spinWheel(duration = 4500) {
     if (pendingUpgrade) return;
 
     const item = getSelectedItem();
     if (!item) return;
 
+    calculateChance();
+
     const lockedIndex = selectedInventoryIndex;
     const lockedItem = { ...item };
     const lockedTarget = { ...targetSkin };
+    const lockedChance = Math.min(MAX_CHANCE, Math.max(0.01, chance));
+    const won = Math.random() * 100 < lockedChance;
 
     pendingUpgrade = {
         item: lockedItem,
         target: lockedTarget,
-        index: lockedIndex
+        index: lockedIndex,
+        won
     };
 
-    // IMPORTANT: remove the item immediately, before the animation finishes.
-    // This prevents the refresh exploit where a player reloads during a bad spin
-    // and keeps the skin after seeing that it will lose.
+    // Apply the result BEFORE the animation finishes.
+    // So if someone refreshes during the spin, the final inventory is already saved:
+    // loss = old skin removed, win = target skin already added.
     inventory.splice(lockedIndex, 1);
-    if (selectedInventoryIndex >= inventory.length) {
+
+    if (won) {
+        const wonSkin = cloneSkin(lockedTarget);
+        inventory.push(wonSkin);
+        selectedInventoryIndex = inventory.length - 1;
+
+        if (lockedTarget.price > biggestWin.price) {
+            biggestWin = { name: lockedTarget.name, price: lockedTarget.price };
+            saveBiggestWin();
+        }
+    } else if (selectedInventoryIndex >= inventory.length) {
         selectedInventoryIndex = Math.max(0, inventory.length - 1);
     }
+
     saveInventory();
-    renderInventory();
-    updateStats();
+    sendUpgradeToFeed(won ? "WIN" : "LOSS", won ? lockedTarget : lockedItem);
 
     upgradeBtn.disabled = true;
     resultEl.classList.add("hidden");
     startWheelSound();
 
-    const randomAngle = Math.random() * Math.PI * 2;
-    const extraSpins = 8 * Math.PI * 2;
+    const TAU = Math.PI * 2;
+    const normalize = angle => ((angle % TAU) + TAU) % TAU;
+    const winArc = (lockedChance / 100) * TAU;
+    const landingDistance = pickLandingDistance(won, winArc);
+    const targetMod = normalize(-landingDistance);
+    const extraSpins = 8 * TAU;
     const startRotation = rotation;
-    const targetRotation = rotation + extraSpins + randomAngle;
+    const baseRotation = rotation + extraSpins;
+    const offset = normalize(targetMod - normalize(baseRotation));
+    const targetRotation = baseRotation + offset;
     const start = performance.now();
 
     function animate(now){
@@ -1307,37 +1343,18 @@ function finishSpin() {
 
     const lockedItem = pendingUpgrade.item;
     const lockedTarget = pendingUpgrade.target;
+    const won = pendingUpgrade.won;
 
-    const TAU = Math.PI * 2;
-    const normalize = angle => ((angle % TAU) + TAU) % TAU;
-    const pointerAngle = -Math.PI / 2;
-    const angleUnderPointer = normalize(pointerAngle - rotation);
-    const winStart = normalize(-Math.PI / 2);
-    const winArc = (chance / 100) * TAU;
-    const distance = normalize(angleUnderPointer - winStart);
-    const won = distance <= winArc;
     resultEl.classList.remove("hidden");
 
     if (won) {
-        inventory.push(cloneSkin(lockedTarget));
-        selectedInventoryIndex = inventory.length - 1;
-
-        if (lockedTarget.price > biggestWin.price) {
-            biggestWin = {
-                name: lockedTarget.name,
-                price: lockedTarget.price
-            };
-            saveBiggestWin();
-        }
         playWinSound();
         triggerWinAnimation();
-        sendUpgradeToFeed("WIN", lockedTarget);
         resultEl.textContent = `🎉 WIN: ${lockedTarget.name}`;
         resultEl.className = "result-popup mt-6 text-2xl font-black text-green-400 text-center result-win-glow";
     } else {
         playLoseSound();
         triggerLossAnimation();
-        sendUpgradeToFeed("LOSS", lockedItem);
         resultEl.textContent = `❌ LOSS: ${lockedItem.name}`;
         resultEl.className = "result-popup mt-6 text-2xl font-black text-red-400 text-center result-loss-glow";
     }
@@ -1351,7 +1368,6 @@ function finishSpin() {
     updateStats();
     upgradeBtn.disabled = false;
 }
-
 
 function renderLiveFeed(items) {
     const feed = document.getElementById("feedItems");
@@ -1536,15 +1552,8 @@ document.querySelectorAll('.multiplierPreset').forEach((btn)=>{
     };
 });
 
-upgradeBtn.addEventListener("click", () => {
-    spinWheel(fastSpinEnabled ? appSettings.fastDuration : appSettings.normalDuration);
-});
-fastUpgradeBtn.addEventListener("click", () => {
-    if (upgradeBtn.disabled || pendingUpgrade) return;
-    fastSpinEnabled = !fastSpinEnabled;
-    fastUpgradeBtn.classList.toggle("active", fastSpinEnabled);
-    fastUpgradeBtn.title = fastSpinEnabled ? "Fast mode ON" : "Fast mode OFF";
-});
+upgradeBtn.addEventListener("click", () => spinWheel(appSettings.normalDuration));
+fastUpgradeBtn.addEventListener("click", () => spinWheel(appSettings.fastDuration));
 document.getElementById("openSettingsBtn")?.addEventListener("click", openSettingsModal);
 document.getElementById("closeSettingsBtn")?.addEventListener("click", closeSettingsModal);
 document.getElementById("saveSettingsBtn")?.addEventListener("click", saveSettingsFromModal);
@@ -1652,6 +1661,11 @@ function showHomePage() {
     }
 }
 
+const brandButton = document.querySelector(".brand");
+if (brandButton) {
+    brandButton.addEventListener("click", showHomePage);
+}
+
 function updateOnlineCounters(count) {
     const onlineCountEl = document.getElementById("onlineCount");
     const profileOnlineCountEl = document.getElementById("profileOnlineCount");
@@ -1718,17 +1732,8 @@ fetch("/api/user", { credentials: "include" })
         document.getElementById("profileName").textContent = user.name;
         document.getElementById("profileSteamId").textContent = "SteamID: " + user.steamId;
 
-        function toggleProfileFromHeader() {
-            const profilePage = document.getElementById("profilePage");
-            if (profilePage && !profilePage.classList.contains("hidden")) {
-                showHomePage();
-            } else {
-                showProfilePage();
-            }
-        }
-
-        document.getElementById("topProfileAvatar").onclick = toggleProfileFromHeader;
-        document.getElementById("topProfileName").onclick = toggleProfileFromHeader;
+        document.getElementById("topProfileAvatar").onclick = showProfilePage;
+        document.getElementById("topProfileName").onclick = showProfilePage;
     }
 })
 .catch(() => {});
