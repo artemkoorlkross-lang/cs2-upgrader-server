@@ -2,7 +2,24 @@ const express = require("express");
 const session = require("express-session");
 const passport = require("passport");
 const SteamStrategy = require("passport-steam").Strategy;
+const fs = require("fs");
+const path = require("path");
 
+const STATS_FILE = path.join(__dirname, "stats.json");
+
+function loadStats() {
+    try {
+        return JSON.parse(fs.readFileSync(STATS_FILE, "utf8"));
+    } catch {
+        return { totalUpgrades: 0 };
+    }
+}
+
+function saveStats() {
+    fs.writeFileSync(STATS_FILE, JSON.stringify(stats, null, 2));
+}
+
+let stats = loadStats();
 const STEAM_API_KEY = "BC1836EB654E870330A748FC29490806";
 
 const app = express();
@@ -74,6 +91,8 @@ app.get("/api/upgrades", (req, res) => {
 });
 
 app.post("/api/upgrades", (req, res) => {
+    stats.totalUpgrades++;
+saveStats();
     const body = req.body || {};
 
     const playerName = req.user?.displayName || "Guest";
@@ -112,7 +131,9 @@ app.get("/logout", (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-
+app.get("/api/stats", (req, res) => {
+    res.json(stats);
+});
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
