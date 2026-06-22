@@ -1515,6 +1515,148 @@ body.spin-locked #marketGrid .skin-tile{
 }
 @keyframes confirmPop{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
 
+
+
+/* Drop Empire case result menu v4 */
+.case-detail .case-visual{
+    transition:height .35s cubic-bezier(.2,.8,.2,1), transform .35s ease, filter .35s ease;
+}
+.case-visual.showing-win{
+    width:min(520px,92vw)!important;
+    height:310px!important;
+    margin-top:10px!important;
+}
+.case-visual.showing-win:before{
+    opacity:.95!important;
+    background:repeating-conic-gradient(from 0deg, rgba(234,179,8,.55) 0 8deg, transparent 8deg 18deg)!important;
+}
+.case-visual.showing-win:after{
+    width:300px!important;
+    height:120px!important;
+    background:radial-gradient(circle, rgba(234,179,8,.38), rgba(168,85,247,.24), transparent 70%)!important;
+}
+.case-visual.showing-win .case-visual-icon img{
+    object-fit:contain!important;
+    filter:drop-shadow(0 36px 38px rgba(0,0,0,.78)) drop-shadow(0 0 38px rgba(234,179,8,.42))!important;
+    animation:caseWinFloat 2.8s ease-in-out infinite!important;
+}
+@keyframes caseWinFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-10px) scale(1.035)}}
+.case-reel-panel.multi-opening{
+    min-height:unset!important;
+    padding:22px!important;
+    border-color:rgba(168,85,247,.34)!important;
+    background:
+        radial-gradient(circle at 50% 0%, rgba(168,85,247,.20), transparent 42%),
+        linear-gradient(180deg,rgba(15,9,26,.90),rgba(8,5,14,.88))!important;
+}
+.case-multi-reels{
+    display:grid;
+    gap:12px;
+}
+.case-reel-lane{
+    display:grid;
+    grid-template-columns:72px minmax(0,1fr);
+    align-items:center;
+    gap:12px;
+    animation:casesFadeUp .38s cubic-bezier(.2,.8,.2,1) both;
+}
+.case-reel-lane-label{
+    height:42px;
+    display:grid;
+    place-items:center;
+    border-radius:12px;
+    color:#e9d5ff;
+    font-weight:1000;
+    background:rgba(168,85,247,.10);
+    border:1px solid rgba(168,85,247,.22);
+    box-shadow:inset 0 0 18px rgba(255,255,255,.018);
+}
+.case-reel-lane .case-reel-viewport{
+    height:124px!important;
+    border-color:rgba(168,85,247,.36)!important;
+}
+.case-reel-lane .case-reel-item{
+    flex-basis:140px!important;
+    height:104px!important;
+    padding:8px!important;
+}
+.case-reel-lane .case-reel-item img{height:54px!important;}
+.case-reel-lane .case-reel-name{font-size:11px!important;}
+.case-reel-winner{
+    transform:translateY(-4px) scale(1.08)!important;
+    border-color:#fde047!important;
+    box-shadow:0 0 24px rgba(234,179,8,.55), inset 0 0 20px rgba(234,179,8,.08)!important;
+    animation:caseWinnerPulse 1.2s ease-in-out infinite;
+}
+@keyframes caseWinnerPulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.18) saturate(1.18)}}
+.case-result-menu{
+    margin-top:18px;
+    padding:18px;
+    border-radius:22px;
+    border:1px solid rgba(168,85,247,.28);
+    background:linear-gradient(180deg,rgba(21,12,34,.86),rgba(9,5,16,.92));
+    box-shadow:0 0 38px rgba(168,85,247,.16), inset 0 1px 0 rgba(255,255,255,.04);
+    animation:casesFadeUp .45s cubic-bezier(.2,.8,.2,1) both;
+}
+.case-result-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:14px;
+    flex-wrap:wrap;
+    margin-bottom:14px;
+}
+.case-result-head strong{
+    font-size:22px;
+    color:#fde047;
+    text-shadow:0 0 18px rgba(234,179,8,.35);
+}
+.case-result-head span{color:#cdbde2;font-weight:900;}
+.case-result-actions{display:flex;gap:10px;flex-wrap:wrap;}
+.case-keep-all,.case-sell-all,.case-mini-keep,.case-mini-sell{
+    min-height:40px;
+    padding:0 15px;
+    border-radius:12px;
+    font-weight:1000;
+    transition:.22s cubic-bezier(.2,.8,.2,1);
+}
+.case-keep-all,.case-mini-keep{
+    color:white;background:linear-gradient(180deg,#8b2cf6,#6d28d9);border:1px solid rgba(216,180,254,.34);box-shadow:0 0 22px rgba(168,85,247,.26);
+}
+.case-sell-all,.case-mini-sell{
+    color:#fde68a;background:linear-gradient(180deg,rgba(234,179,8,.14),rgba(92,52,5,.30));border:1px solid rgba(234,179,8,.38);box-shadow:0 0 18px rgba(234,179,8,.12);
+}
+.case-keep-all:hover,.case-sell-all:hover,.case-mini-keep:hover,.case-mini-sell:hover{transform:translateY(-2px) scale(1.025);filter:brightness(1.08)}
+.case-result-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(170px,1fr));
+    gap:12px;
+}
+.case-result-card{
+    position:relative;
+    min-height:190px;
+    padding:12px;
+    border-radius:16px;
+    background:linear-gradient(180deg,rgba(19,13,31,.94),rgba(10,7,18,.96));
+    border:1px solid rgba(168,85,247,.32);
+    box-shadow:inset 0 0 18px rgba(255,255,255,.018);
+    overflow:hidden;
+}
+.case-result-card:before{
+    content:"";position:absolute;inset:auto 12px 48px;height:54px;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.28),transparent 72%);filter:blur(14px);
+}
+.case-result-card.rarity-common{border-color:rgba(96,165,250,.42)}
+.case-result-card.rarity-rare{border-color:rgba(168,85,247,.65)}
+.case-result-card.rarity-epic{border-color:rgba(239,68,68,.65)}
+.case-result-card.rarity-legendary{border-color:rgba(234,179,8,.85);box-shadow:0 0 28px rgba(234,179,8,.18), inset 0 0 18px rgba(255,255,255,.018)}
+.case-result-card img{position:relative;z-index:2;width:100%;height:82px;object-fit:contain;filter:drop-shadow(0 0 14px rgba(0,0,0,.85));}
+.case-result-name{position:relative;z-index:2;font-size:12px;font-weight:1000;line-height:1.15;margin-top:8px;color:white;min-height:30px;}
+.case-result-price{position:relative;z-index:2;color:#fde047;font-weight:1000;margin-top:4px;text-shadow:0 0 12px rgba(234,179,8,.28)}
+.case-result-card-actions{position:relative;z-index:2;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;}
+.case-result-card.done{opacity:.58;filter:grayscale(.25);}
+.case-result-card.done:after{content:attr(data-done);position:absolute;inset:0;display:grid;place-items:center;background:rgba(5,3,10,.55);font-weight:1000;color:white;text-shadow:0 0 16px rgba(168,85,247,.8);}
+@media(max-width:720px){.case-reel-lane{grid-template-columns:1fr}.case-reel-lane-label{width:max-content;padding:0 14px}.case-result-grid{grid-template-columns:1fr 1fr}.case-visual.showing-win{height:245px!important}}
+
 </style>
 </head>
 <body class="text-white font-sans">
@@ -3782,6 +3924,265 @@ document.getElementById("backFromCasesBtn")?.addEventListener("click", showHomeP
 document.getElementById("openCasesBtn")?.addEventListener("click", showCasesPage);
 document.getElementById("navUpgraderBtn")?.addEventListener("click", showHomePage);
 document.getElementById("navCasesBtn")?.addEventListener("click", showCasesPage);
+
+
+
+/* Drop Empire case result menu v4 */
+let pendingCaseWins = [];
+
+function renderCasePanelIdleShell() {
+    const panel = document.querySelector(".case-reel-panel");
+    if (!panel) return;
+    panel.classList.remove("multi-opening", "case-finished", "case-opening");
+    panel.innerHTML = `
+        <div class="case-reel-viewport">
+            <div class="case-reel-marker"></div>
+            <div id="caseReelTrack" class="case-reel-track"></div>
+        </div>
+        <div id="caseReelStatus" class="case-reel-status">Choose a case and open it.</div>
+    `;
+}
+
+function setCaseHeroCase(caseData) {
+    const visual = document.querySelector(".case-visual");
+    const icon = document.getElementById("caseDetailIcon");
+    visual?.classList.remove("showing-win");
+    if (icon) {
+        icon.innerHTML = `<img src="${caseData.image || ''}" alt="${caseData.title}" onerror="this.remove(); this.parentElement.textContent='${caseData.icon || '📦'}';">`;
+    }
+}
+
+function setCaseHeroSkin(item) {
+    const visual = document.querySelector(".case-visual");
+    const icon = document.getElementById("caseDetailIcon");
+    visual?.classList.add("showing-win");
+    if (icon && item?.skin) {
+        icon.innerHTML = `<img src="${item.skin.image}" alt="${item.skin.name}">`;
+    }
+}
+
+function showCaseDetail(caseId) {
+    const caseData = DROP_CASES[caseId] || DROP_CASES.dragon;
+    selectedCaseId = caseData.id;
+    pendingCaseWins = [];
+
+    document.getElementById("casesListView")?.classList.add("hidden");
+    document.getElementById("caseDetailView")?.classList.remove("hidden");
+
+    const title = document.getElementById("caseDetailTitle");
+    const price = document.getElementById("caseDetailPrice");
+    if (title) title.textContent = caseData.title;
+    if (price) price.textContent = `$${caseData.price.toFixed(2)}`;
+    setCaseHeroCase(caseData);
+
+    caseOpenCount = 1;
+    document.querySelectorAll(".case-count-btn").forEach(btn => btn.classList.toggle("active", Number(btn.dataset.count) === 1));
+
+    renderCasePanelIdleShell();
+    renderCaseContains(caseData);
+    renderIdleCaseReel(caseData);
+    updateCaseButtons();
+}
+
+function renderIdleCaseReel(caseData) {
+    const track = document.getElementById("caseReelTrack");
+    const status = document.getElementById("caseReelStatus");
+    if (!track) return;
+    const items = getCaseItems(caseData);
+    const reelItems = [];
+    for (let i = 0; i < 18; i++) reelItems.push(items[i % items.length]);
+    track.style.transition = "none";
+    track.style.transform = "translateX(0px)";
+    track.style.filter = "blur(0px) saturate(1)";
+    track.innerHTML = reelItems.map(item => `
+        <div class="case-reel-item rarity-${item.rarity}">
+            <img src="${item.skin.image}" alt="${item.skin.name}">
+            <div class="case-reel-name">${item.skin.name.replace(" | ", "<br>")}</div>
+        </div>
+    `).join("");
+    if (status) status.innerHTML = "Ready to open case.";
+}
+
+function renderCaseReelItemsForTrack(track, caseData, winningItem, winningIndex) {
+    const baseItems = getCaseItems(caseData);
+    const reelItems = [];
+    for (let i = 0; i < 62; i++) {
+        reelItems.push(baseItems[Math.floor(Math.random() * baseItems.length)]);
+    }
+    reelItems[winningIndex] = winningItem;
+    track.style.transition = "none";
+    track.style.transform = "translateX(0px)";
+    track.style.filter = "blur(0px) saturate(1)";
+    track.innerHTML = reelItems.map((item, index) => `
+        <div class="case-reel-item rarity-${item.rarity} ${index === winningIndex ? 'case-winning-target' : ''}">
+            <img src="${item.skin.image}" alt="${item.skin.name}">
+            <div class="case-reel-name">${item.skin.name.replace(" | ", "<br>")}</div>
+        </div>
+    `).join("");
+}
+
+function animateOneCaseLane(viewport, track, caseData, winningItem, laneIndex, fast = false) {
+    const winningIndex = fast ? 20 + laneIndex : 46 + laneIndex;
+    renderCaseReelItemsForTrack(track, caseData, winningItem, winningIndex);
+    const itemWidth = track.querySelector(".case-reel-item")?.getBoundingClientRect().width || 150;
+    const gap = 8;
+    const itemStep = itemWidth + gap;
+    const viewportCenter = viewport.clientWidth / 2;
+    const randomOffset = (Math.random() * 22) - 11;
+    const targetX = -(winningIndex * itemStep - viewportCenter + itemWidth / 2 + randomOffset);
+    return new Promise(resolve => {
+        requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+                const duration = fast ? 1050 + laneIndex * 80 : 5600 + laneIndex * 190;
+                track.style.transition = `transform ${duration}ms cubic-bezier(.05,.82,.12,1), filter ${duration}ms ease`;
+                track.style.transform = `translateX(${targetX}px)`;
+                track.style.filter = fast ? "blur(.15px) saturate(1.12)" : "blur(.45px) saturate(1.18)";
+                setTimeout(() => {
+                    track.style.filter = "blur(0px) saturate(1.25)";
+                    track.querySelector(".case-winning-target")?.classList.add("case-reel-winner");
+                    resolve();
+                }, duration + 70);
+            });
+        });
+    });
+}
+
+function buildCaseReelLanes(count) {
+    const panel = document.querySelector(".case-reel-panel");
+    if (!panel) return [];
+    panel.classList.add("multi-opening", "case-opening");
+    const lanes = Array.from({length: count}, (_, i) => `
+        <div class="case-reel-lane" style="animation-delay:${i * 0.05}s">
+            <div class="case-reel-lane-label">#${i + 1}</div>
+            <div class="case-reel-viewport">
+                <div class="case-reel-marker"></div>
+                <div class="case-reel-track"></div>
+            </div>
+        </div>
+    `).join("");
+    panel.innerHTML = `<div class="case-multi-reels">${lanes}</div><div id="caseReelStatus" class="case-reel-status"><span class="case-loading-dot"></span><span>Opening ${count} case${count > 1 ? 's' : ''}...</span></div>`;
+    return [...panel.querySelectorAll(".case-reel-lane")].map(lane => ({
+        viewport: lane.querySelector(".case-reel-viewport"),
+        track: lane.querySelector(".case-reel-track")
+    }));
+}
+
+async function animateCaseOpen(caseData, wins, fast = false) {
+    const winList = Array.isArray(wins) ? wins : [wins];
+    const lanes = buildCaseReelLanes(winList.length);
+    if (!lanes.length) return;
+    const promises = lanes.map((lane, i) => animateOneCaseLane(lane.viewport, lane.track, caseData, winList[i], i, fast));
+    await Promise.all(promises);
+    const panel = document.querySelector(".case-reel-panel");
+    panel?.classList.remove("case-opening");
+    panel?.classList.add("case-finished");
+}
+
+function renderCaseResultMenu(wins) {
+    pendingCaseWins = wins.map((item, index) => ({
+        key: `casewin-${Date.now()}-${index}-${Math.random().toString(16).slice(2)}`,
+        item,
+        handled: false
+    }));
+    const status = document.getElementById("caseReelStatus");
+    const totalWon = wins.reduce((sum, item) => sum + (Number(item.skin.price) || 0), 0);
+    if (!status) return;
+    status.innerHTML = `
+        <div class="case-result-menu">
+            <div class="case-result-head">
+                <div><strong>YOU WON ${wins.length} ITEM${wins.length > 1 ? 'S' : ''}</strong><br><span>Total value: $${totalWon}</span></div>
+                <div class="case-result-actions">
+                    <button class="case-keep-all" data-case-action="keep-all">KEEP ALL</button>
+                    <button class="case-sell-all" data-case-action="sell-all">SELL ALL $${totalWon}</button>
+                </div>
+            </div>
+            <div class="case-result-grid">
+                ${pendingCaseWins.map(entry => `
+                    <div class="case-result-card rarity-${entry.item.rarity}" data-win-key="${entry.key}">
+                        <img src="${entry.item.skin.image}" alt="${entry.item.skin.name}">
+                        <div class="case-result-name">${entry.item.skin.name.replace(" | ", "<br>")}</div>
+                        <div class="case-result-price">$${entry.item.skin.price}</div>
+                        <div class="case-result-card-actions">
+                            <button class="case-mini-keep" data-case-action="keep" data-win-key="${entry.key}">Keep</button>
+                            <button class="case-mini-sell" data-case-action="sell" data-win-key="${entry.key}">Sell</button>
+                        </div>
+                    </div>
+                `).join("")}
+            </div>
+        </div>
+    `;
+}
+
+function handlePendingCaseWin(key, action) {
+    const entry = pendingCaseWins.find(w => w.key === key && !w.handled);
+    if (!entry) return;
+    entry.handled = true;
+    const card = document.querySelector(`[data-win-key="${key}"]`);
+    if (action === "keep") {
+        addCaseWinToInventory(entry.item);
+        if (card) { card.classList.add("done"); card.dataset.done = "KEPT"; }
+    } else {
+        balance += Number(entry.item.skin.price) || 0;
+        saveBalance();
+        updateBalanceUI();
+        updateStats();
+        if (card) { card.classList.add("done"); card.dataset.done = "SOLD"; }
+    }
+    updateCaseButtons();
+}
+
+function handleAllPendingCaseWins(action) {
+    pendingCaseWins.filter(w => !w.handled).forEach(w => handlePendingCaseWin(w.key, action));
+}
+
+document.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-case-action]");
+    if (!btn) return;
+    const action = btn.dataset.caseAction;
+    if (action === "keep-all") return handleAllPendingCaseWins("keep");
+    if (action === "sell-all") return handleAllPendingCaseWins("sell");
+    const key = btn.dataset.winKey;
+    if (key && (action === "keep" || action === "sell")) handlePendingCaseWin(key, action);
+});
+
+async function openSelectedCase(fast = false) {
+    if (caseSpinning) return;
+    const caseData = DROP_CASES[selectedCaseId];
+    if (!caseData) return;
+    const totalCost = caseData.price * caseOpenCount;
+    if (balance < totalCost) {
+        const status = document.getElementById("caseReelStatus");
+        if (status) status.innerHTML = `<span class="result-loss-glow text-red-300">❌ Not enough balance</span>`;
+        updateCaseButtons();
+        return;
+    }
+
+    pendingCaseWins = [];
+    caseSpinning = true;
+    balance -= totalCost;
+    saveBalance();
+    updateBalanceUI();
+    updateCaseButtons();
+
+    const wins = [];
+    for (let i = 0; i < caseOpenCount; i++) wins.push(pickWeightedCaseItem(caseData));
+    const mainWin = wins[wins.length - 1];
+
+    await animateCaseOpen(caseData, wins, fast);
+    setCaseHeroSkin(mainWin);
+    renderCaseResultMenu(wins);
+    renderBuyMarket();
+    updateBalanceBoostLimits();
+
+    if (wins.some(w => w.rarity === "legendary" || w.skin.price >= 250)) {
+        createParticles(46);
+        playWinSound();
+    } else {
+        playAudio("tickSound", 0.4);
+    }
+    caseSpinning = false;
+    updateCaseButtons();
+}
 
 setupProfileTabs();
 setupCasesOpening();
