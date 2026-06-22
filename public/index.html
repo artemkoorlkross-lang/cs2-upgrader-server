@@ -1297,6 +1297,123 @@ body.spin-locked #marketGrid .skin-tile{
     .case-visual{width:min(390px,92vw)!important;height:245px!important;}
 }
 
+
+/* Drop Empire Cases polish - fixed on index 35 */
+#casesPage{max-width:1420px!important;}
+#casesListView{
+    position:relative;min-height:690px;padding:44px 46px 34px!important;border-radius:30px;overflow:hidden;
+    background:
+        radial-gradient(circle at 50% 18%, rgba(168,85,247,.23), transparent 31%),
+        radial-gradient(circle at 8% 45%, rgba(124,58,237,.16), transparent 33%),
+        radial-gradient(circle at 95% 46%, rgba(217,70,239,.13), transparent 30%),
+        linear-gradient(180deg, rgba(11,6,20,.78), rgba(6,4,12,.58));
+    border:1px solid rgba(168,85,247,.16);
+    box-shadow:0 26px 80px rgba(0,0,0,.36), inset 0 1px 0 rgba(255,255,255,.035);
+}
+#casesListView:before{
+    content:"DROP EMPIRE";position:absolute;inset:25px 20px auto;text-align:center;font-size:142px;font-weight:1000;
+    letter-spacing:.06em;color:rgba(255,255,255,.018);pointer-events:none;white-space:nowrap;
+}
+#casesListView:after{
+    content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(90deg,transparent,rgba(168,85,247,.09),transparent),radial-gradient(circle at 50% 55%, rgba(168,85,247,.13), transparent 48%);
+    opacity:.8;
+}
+#casesListView > *{position:relative;z-index:2;}
+.cases-hero-title{margin-top:0!important;margin-bottom:6px!important;animation:casesFadeUp .55s cubic-bezier(.2,.8,.2,1) both;}
+.cases-hero-title h1{font-size:38px!important;text-shadow:0 0 24px rgba(168,85,247,.42);}
+.cases-hero-title .chev{
+    width:44px;height:44px;display:grid;place-items:center;border-radius:14px;background:rgba(139,44,246,.22);
+    border:1px solid rgba(168,85,247,.28);box-shadow:0 0 28px rgba(168,85,247,.32);
+}
+.cases-hero-subtitle{text-align:center;margin:0 0 34px;color:#cdbde2;font-size:15px;animation:casesFadeUp .65s cubic-bezier(.2,.8,.2,1) .04s both;}
+#casesGrid.cases-grid{grid-template-columns:repeat(3,minmax(260px,1fr))!important;gap:48px!important;align-items:end!important;margin-top:12px!important;}
+#casesGrid .case-card{animation:casesFadeUp .72s cubic-bezier(.2,.8,.2,1) both;transition:transform .38s cubic-bezier(.2,.8,.2,1), filter .38s ease!important;}
+#casesGrid .case-card:nth-child(1){animation-delay:.06s}
+#casesGrid .case-card:nth-child(2){animation-delay:.14s}
+#casesGrid .case-card:nth-child(3){animation-delay:.22s}
+#casesGrid .case-card:hover{transform:translateY(-12px) scale(1.025)!important;filter:saturate(1.12) brightness(1.06);}
+.case-art{height:315px!important;margin-bottom:4px!important;}
+.case-art:before{width:88%!important;height:56%!important;left:6%!important;bottom:28px!important;filter:blur(28px)!important;}
+.case-art:after{inset:42px 28px 18px!important;border-radius:999px!important;background:radial-gradient(circle at 50% 58%, rgba(255,255,255,.10), transparent 62%)!important;}
+.case-art img{width:430px!important;height:300px!important;filter:drop-shadow(0 36px 34px rgba(0,0,0,.72)) drop-shadow(0 0 28px rgba(168,85,247,.42))!important;}
+#casesGrid .case-card:hover .case-art img{transform:translateY(-18px) scale(1.075) rotate(-1.25deg)!important;filter:drop-shadow(0 46px 42px rgba(0,0,0,.78)) drop-shadow(0 0 48px rgba(168,85,247,.72))!important;}
+.case-art-fallback{font-size:110px!important;text-shadow:0 0 34px rgba(168,85,247,.72);}
+#casesGrid .case-card h2{font-size:29px!important;margin-top:0!important;letter-spacing:.01em;}
+#casesGrid .case-card .case-price{
+    min-width:108px!important;margin-top:16px!important;padding:9px 24px!important;border-radius:13px!important;font-size:30px!important;
+    background:linear-gradient(180deg,rgba(124,58,237,.55),rgba(58,19,105,.72))!important;
+    border-color:rgba(216,180,254,.45)!important;color:#fde047!important;
+    box-shadow:0 0 30px rgba(139,44,246,.42), inset 0 0 20px rgba(255,255,255,.04)!important;
+}
+.case-card[data-case-id="premium"] .case-price{color:#fde047!important;background:linear-gradient(180deg,rgba(202,138,4,.26),rgba(58,19,105,.72))!important;border-color:rgba(234,179,8,.65)!important;}
+.case-card[data-case-id="dragon"] .case-price{color:#f0abfc!important;background:linear-gradient(180deg,rgba(168,85,247,.45),rgba(76,29,149,.72))!important;}
+.cases-info-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:44px;animation:casesFadeUp .8s cubic-bezier(.2,.8,.2,1) .25s both;}
+.cases-info-card{
+    min-height:92px;display:flex;align-items:center;gap:16px;padding:18px 20px;border-radius:18px;
+    background:rgba(8,5,14,.62);border:1px solid rgba(168,85,247,.13);box-shadow:inset 0 0 22px rgba(255,255,255,.015);
+    transition:.28s cubic-bezier(.2,.8,.2,1);
+}
+.cases-info-card:hover{transform:translateY(-4px);border-color:rgba(216,180,254,.35);box-shadow:0 0 32px rgba(168,85,247,.13), inset 0 0 22px rgba(255,255,255,.025);}
+.cases-info-card span{
+    width:50px;height:50px;display:grid;place-items:center;border-radius:15px;color:#c084fc;background:rgba(139,44,246,.16);
+    border:1px solid rgba(168,85,247,.2);font-size:25px;box-shadow:0 0 18px rgba(168,85,247,.18);
+}
+.cases-info-card strong{display:block;font-size:15px;line-height:1.1;}
+.cases-info-card small{display:block;margin-top:4px;color:#a99abc;line-height:1.25;}
+@keyframes casesFadeUp{from{opacity:0;transform:translateY(24px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+
+/* Case detail polish */
+#caseDetailView{animation:casesFadeUp .42s cubic-bezier(.2,.8,.2,1) both;}
+.case-detail{
+    padding:18px 22px 34px;border-radius:28px;
+    background:radial-gradient(circle at 50% 16%, rgba(168,85,247,.22), transparent 30%),linear-gradient(180deg,rgba(10,6,18,.68),rgba(6,4,12,.45));
+    border:1px solid rgba(168,85,247,.12);
+}
+.case-title{font-size:36px!important;}
+.case-title-price{transform:translateY(-1px);color:#fde047!important;}
+.case-visual{width:500px!important;height:315px!important;}
+.case-visual:before{inset:-25px 20px!important;opacity:.95!important;animation:slowRotate 8s linear infinite!important;}
+.case-visual-icon img{animation:caseFloat 3.1s ease-in-out infinite;}
+.case-action-row{margin-top:8px!important;}
+.case-action-btn,.case-fast-btn{transition:transform .24s cubic-bezier(.2,.8,.2,1), box-shadow .24s ease, filter .24s ease!important;}
+.case-action-btn:hover:not(:disabled),.case-fast-btn:hover:not(:disabled){transform:translateY(-5px) scale(1.035)!important;filter:brightness(1.08) saturate(1.13);}
+.case-reel-panel{
+    min-height:270px!important;border-radius:26px!important;border-color:rgba(168,85,247,.28)!important;
+    background:radial-gradient(circle at 50% 50%, rgba(168,85,247,.16), transparent 50%),linear-gradient(180deg,rgba(15,9,26,.86),rgba(7,4,13,.9))!important;
+    transition:box-shadow .35s ease, border-color .35s ease, transform .35s ease;
+}
+.case-reel-panel.case-opening{border-color:rgba(216,180,254,.45)!important;box-shadow:0 24px 76px rgba(0,0,0,.42),0 0 45px rgba(168,85,247,.20), inset 0 0 28px rgba(255,255,255,.02)!important;}
+.case-reel-panel.case-finished{border-color:rgba(234,179,8,.66)!important;box-shadow:0 24px 78px rgba(0,0,0,.45),0 0 58px rgba(234,179,8,.18), inset 0 0 30px rgba(255,255,255,.025)!important;}
+.case-reel-viewport{height:170px!important;border-radius:18px!important;}
+.case-reel-track{gap:10px!important;}
+.case-reel-item{flex-basis:164px!important;height:146px!important;border-radius:15px!important;transition:transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease, border-color .35s ease, filter .35s ease;}
+.case-reel-item img{height:84px!important;}
+.case-reel-item.case-reel-winner{
+    transform:scale(1.08) translateY(-4px);filter:brightness(1.16) saturate(1.22);border-color:#fde047!important;
+    box-shadow:0 0 34px rgba(234,179,8,.55), inset 0 0 28px rgba(234,179,8,.08)!important;animation:winnerPulse 1.4s ease-in-out infinite;
+}
+@keyframes winnerPulse{0%,100%{box-shadow:0 0 24px rgba(234,179,8,.38), inset 0 0 24px rgba(234,179,8,.06)}50%{box-shadow:0 0 45px rgba(234,179,8,.7), inset 0 0 34px rgba(234,179,8,.1)}}
+.case-win-result{font-size:22px!important;color:#fde047!important;text-shadow:0 0 18px rgba(234,179,8,.55),0 0 34px rgba(168,85,247,.25)!important;}
+.case-contains-grid{gap:14px!important;}
+.case-contain-card{transition:transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s ease, border-color .25s ease;}
+.case-contain-card:hover{transform:translateY(-5px) scale(1.025);box-shadow:0 0 28px rgba(168,85,247,.18);}
+@media(max-width:1100px){
+    #casesGrid.cases-grid{gap:26px!important}
+    .case-art img{width:360px!important;height:260px!important}
+    .case-art{height:285px!important}
+    .cases-info-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:760px){
+    #casesListView{padding:30px 16px!important}
+    #casesListView:before{font-size:64px}
+    #casesGrid.cases-grid{grid-template-columns:1fr!important;gap:22px!important}
+    .case-art{height:250px!important}
+    .case-art img{width:330px!important;height:235px!important}
+    .cases-info-row{grid-template-columns:1fr}
+    .case-visual{width:min(420px,94vw)!important;height:270px!important}
+}
+
 </style>
 </head>
 <body class="text-white font-sans">
@@ -1425,7 +1542,8 @@ body.spin-locked #marketGrid .skin-tile{
                 <div class="case-top-row">
                     <button id="backFromCasesBtn" class="case-back-btn">← Back to upgrader</button>
                 </div>
-                <div class="hero-title"><span class="chev">📦</span><h1>CASES</h1></div>
+                <div class="hero-title cases-hero-title"><span class="chev">📦</span><h1>CASES</h1></div>
+                <p class="cases-hero-subtitle">Open cases and get the best CS2 skins</p>
                 <div class="cases-grid" id="casesGrid">
                     <section class="cyber-card case-card" data-case-id="purple">
                         <div>
@@ -1459,6 +1577,12 @@ body.spin-locked #marketGrid .skin-tile{
                         </div>
                         <button class="upgrade-btn mt-6 w-full case-select-btn">OPEN CASE</button>
                     </section>
+                </div>
+                <div class="cases-info-row">
+                    <div class="cases-info-card"><span>🛡</span><div><strong>100% SECURE</strong><small>Your simulator data is safe</small></div></div>
+                    <div class="cases-info-card"><span>⚖</span><div><strong>FAIR PLAY</strong><small>Chance based case opening</small></div></div>
+                    <div class="cases-info-card"><span>🎧</span><div><strong>LIVE FEED</strong><small>Wins appear in real time</small></div></div>
+                    <div class="cases-info-card"><span>🎁</span><div><strong>DAILY BONUS</strong><small>More features coming soon</small></div></div>
                 </div>
             </div>
 
@@ -3169,8 +3293,8 @@ function renderIdleCaseReel(caseData) {
 
     track.style.transition = "none";
     track.style.transform = "translateX(0px)";
-    track.innerHTML = reelItems.map(item => `
-        <div class="case-reel-item rarity-${item.rarity}">
+    track.innerHTML = reelItems.map((item, index) => `
+        <div class="case-reel-item rarity-${item.rarity} ${index === winningIndex ? "case-winning-target" : ""}">
             <img src="${item.skin.image}" alt="${item.skin.name}">
             <div class="case-reel-name">${item.skin.name.replace(" | ", "<br>")}</div>
         </div>
@@ -3275,31 +3399,48 @@ function animateCaseOpen(caseData, winningItem, fast = false) {
     const track = document.getElementById("caseReelTrack");
     const viewport = document.querySelector(".case-reel-viewport");
     const status = document.getElementById("caseReelStatus");
+    const panel = document.querySelector(".case-reel-panel");
     if (!track || !viewport) return Promise.resolve();
 
-    const winningIndex = fast ? 18 : 45;
+    const winningIndex = fast ? 20 : 48;
     renderCaseReelItems(caseData, winningItem, winningIndex);
+
+    panel?.classList.remove("case-finished", "case-opening");
+    panel?.classList.add("case-opening");
 
     if (status) {
         status.innerHTML = `<span class="case-loading-dot"></span><span>Opening case...</span>`;
     }
 
-    const itemStep = 158;
+    const itemWidth = track.querySelector(".case-reel-item")?.getBoundingClientRect().width || 150;
+    const gap = 10;
+    const itemStep = itemWidth + gap;
     const viewportCenter = viewport.clientWidth / 2;
-    const randomOffset = (Math.random() * 38) - 19;
-    const targetX = -(winningIndex * itemStep - viewportCenter + 75 + randomOffset);
+    const randomOffset = (Math.random() * 28) - 14;
+    const targetX = -(winningIndex * itemStep - viewportCenter + itemWidth / 2 + randomOffset);
+
+    track.style.transition = "none";
+    track.style.transform = "translateX(0px)";
+    track.style.filter = "blur(0px) saturate(1)";
 
     return new Promise(resolve => {
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
                 track.style.transition = fast
-                    ? "transform 900ms cubic-bezier(.12,.74,.17,1)"
-                    : "transform 5200ms cubic-bezier(.08,.78,.12,1)";
+                    ? "transform 1150ms cubic-bezier(.05,.82,.18,1), filter 1150ms ease"
+                    : "transform 6500ms cubic-bezier(.05,.82,.12,1), filter 6500ms ease";
                 track.style.transform = `translateX(${targetX}px)`;
+                track.style.filter = fast ? "blur(.2px) saturate(1.15)" : "blur(.55px) saturate(1.2)";
             });
         });
 
-        setTimeout(resolve, fast ? 980 : 5350);
+        setTimeout(() => {
+            track.style.filter = "blur(0px) saturate(1.25)";
+            panel?.classList.remove("case-opening");
+            panel?.classList.add("case-finished");
+            track.querySelector(".case-winning-target")?.classList.add("case-reel-winner");
+            resolve();
+        }, fast ? 1240 : 6650);
     });
 }
 
