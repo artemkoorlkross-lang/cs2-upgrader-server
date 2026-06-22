@@ -1178,6 +1178,125 @@ body.spin-locked #marketGrid .skin-tile{
     .top-actions{order:5;width:100%;justify-content:center;}
 }
 
+
+
+/* Drop Empire real case images v3 */
+#casesListView .hero-title{margin-top:10px;margin-bottom:26px;}
+#casesGrid.cases-grid{
+    grid-template-columns:repeat(3,minmax(260px,1fr));
+    gap:34px;
+    align-items:start;
+}
+#casesGrid .case-card{
+    min-height:0;
+    padding:12px 14px 22px!important;
+    background:transparent!important;
+    border:0!important;
+    box-shadow:none!important;
+    backdrop-filter:none!important;
+    overflow:visible!important;
+    cursor:pointer;
+    transform-style:preserve-3d;
+}
+#casesGrid .case-card:before{display:none!important;}
+.case-art{
+    position:relative;
+    height:265px;
+    display:grid;
+    place-items:center;
+    margin-bottom:8px;
+}
+.case-art:before{
+    content:"";
+    position:absolute;
+    width:82%;
+    height:52%;
+    left:9%;
+    bottom:16px;
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(168,85,247,.34), rgba(168,85,247,.08) 42%, transparent 72%);
+    filter:blur(20px);
+    opacity:.72;
+    transition:.32s cubic-bezier(.2,.8,.2,1);
+}
+.case-art:after{
+    content:"";
+    position:absolute;
+    inset:22px 22px 0;
+    border-radius:28px;
+    background:radial-gradient(circle at 50% 58%, rgba(255,255,255,.07), transparent 57%);
+    opacity:.35;
+    pointer-events:none;
+}
+.case-art img{
+    position:relative;
+    z-index:2;
+    max-width:100%;
+    width:360px;
+    height:250px;
+    object-fit:contain;
+    filter:drop-shadow(0 28px 30px rgba(0,0,0,.62)) drop-shadow(0 0 20px rgba(168,85,247,.34));
+    transition:transform .38s cubic-bezier(.2,.8,.2,1), filter .38s ease;
+}
+#casesGrid .case-card:hover .case-art img{
+    transform:translateY(-13px) scale(1.055) rotate(-1deg);
+    filter:drop-shadow(0 36px 34px rgba(0,0,0,.7)) drop-shadow(0 0 36px rgba(168,85,247,.62));
+}
+#casesGrid .case-card:hover .case-art:before{
+    transform:scale(1.08);
+    opacity:1;
+}
+#casesGrid .case-card h2{
+    font-size:25px;
+    line-height:1;
+    color:white!important;
+    text-shadow:0 0 18px rgba(168,85,247,.45);
+}
+#casesGrid .case-card .case-price{
+    width:max-content;
+    min-width:92px;
+    margin:14px auto 0;
+    padding:7px 20px;
+    border-radius:10px;
+    background:rgba(91,33,182,.46);
+    border:1px solid rgba(168,85,247,.38);
+    color:#fde047;
+    box-shadow:0 0 18px rgba(139,44,246,.28), inset 0 0 16px rgba(255,255,255,.03);
+}
+#casesGrid .case-card .case-subtitle,
+#casesGrid .case-card .case-items,
+#casesGrid .case-card .case-select-btn{display:none!important;}
+.case-card[data-case-id="premium"] .case-art:before{background:radial-gradient(circle, rgba(234,179,8,.35), rgba(168,85,247,.08) 45%, transparent 72%)}
+.case-card[data-case-id="dragon"] .case-art:before{background:radial-gradient(circle, rgba(217,70,239,.38), rgba(239,68,68,.10) 45%, transparent 72%)}
+.case-visual{
+    width:430px!important;
+    height:285px!important;
+    margin:8px auto 0!important;
+}
+.case-visual-icon{
+    width:100%;
+    height:100%;
+    display:grid;
+    place-items:center;
+    font-size:0!important;
+}
+.case-visual-icon img{
+    position:relative;
+    z-index:3;
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    filter:drop-shadow(0 30px 34px rgba(0,0,0,.72)) drop-shadow(0 0 32px rgba(168,85,247,.55));
+    animation:caseFloat 3.2s ease-in-out infinite;
+}
+@keyframes caseFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@media(max-width:900px){
+    #casesGrid.cases-grid{grid-template-columns:1fr;gap:26px;}
+    .case-art{height:235px;}
+    .case-art img{height:220px;width:330px;}
+    .case-visual{width:min(390px,92vw)!important;height:245px!important;}
+}
+
 </style>
 </head>
 <body class="text-white font-sans">
@@ -1310,7 +1429,7 @@ body.spin-locked #marketGrid .skin-tile{
                 <div class="cases-grid" id="casesGrid">
                     <section class="cyber-card case-card" data-case-id="purple">
                         <div>
-                            <div class="case-box">📦</div>
+                            <div class="case-art"><img src="case-purple.png" alt="Purple Case" onerror="this.style.display='none'; this.parentElement.classList.add('case-art-fallback'); this.parentElement.textContent='📦';"></div>
                             <h2 class="text-2xl font-black text-purple-300">Purple Case</h2>
                             <div class="case-price">$5</div>
                             <p class="case-subtitle">Basic skins for warm-up openings.</p>
@@ -1321,7 +1440,7 @@ body.spin-locked #marketGrid .skin-tile{
 
                     <section class="cyber-card case-card" data-case-id="premium">
                         <div>
-                            <div class="case-box">💜</div>
+                            <div class="case-art"><img src="case-premium.png" alt="Premium Case" onerror="this.style.display='none'; this.parentElement.classList.add('case-art-fallback'); this.parentElement.textContent='💜';"></div>
                             <h2 class="text-2xl font-black text-purple-300">Premium Case</h2>
                             <div class="case-price">$25</div>
                             <p class="case-subtitle">Better rewards and higher value skins.</p>
@@ -1332,7 +1451,7 @@ body.spin-locked #marketGrid .skin-tile{
 
                     <section class="cyber-card case-card" data-case-id="dragon">
                         <div>
-                            <div class="case-box">🐉</div>
+                            <div class="case-art"><img src="case-dragon.png" alt="Dragon Case" onerror="this.style.display='none'; this.parentElement.classList.add('case-art-fallback'); this.parentElement.textContent='🐉';"></div>
                             <h2 class="text-2xl font-black text-purple-300">Dragon Case</h2>
                             <div class="case-price">$100</div>
                             <p class="case-subtitle">High tier skins for risky openings.</p>
@@ -2951,6 +3070,7 @@ const DROP_CASES = {
         id: "purple",
         title: "PURPLE CASE",
         icon: "📦",
+        image: "case-purple.png",
         price: 5,
         items: [
             { skinId:"usp-cortex", chance:35, rarity:"common" },
@@ -2965,6 +3085,7 @@ const DROP_CASES = {
         id: "premium",
         title: "PREMIUM CASE",
         icon: "💜",
+        image: "case-premium.png",
         price: 25,
         items: [
             { skinId:"ak-neon", chance:28, rarity:"common" },
@@ -2980,6 +3101,7 @@ const DROP_CASES = {
         id: "dragon",
         title: "DRAGON CASE",
         icon: "🐉",
+        image: "case-dragon.png",
         price: 100,
         items: [
             { skinId:"ak-fire-serpent", chance:30, rarity:"epic" },
@@ -3075,7 +3197,9 @@ function showCaseDetail(caseId) {
 
     if (title) title.textContent = caseData.title;
     if (price) price.textContent = `$${caseData.price.toFixed(2)}`;
-    if (icon) icon.textContent = caseData.icon;
+    if (icon) {
+        icon.innerHTML = `<img src="${caseData.image || ''}" alt="${caseData.title}" onerror="this.remove(); this.parentElement.textContent='${caseData.icon || '📦'}';">`;
+    }
 
     caseOpenCount = 1;
     document.querySelectorAll(".case-count-btn").forEach(btn => {
