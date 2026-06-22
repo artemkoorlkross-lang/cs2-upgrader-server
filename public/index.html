@@ -1983,6 +1983,119 @@ body.streamer-mode #profileSoldValue{
     filter:blur(7px);
 }
 
+
+
+/* Drop Empire cases v7 polish: centered reel, more cases, cleaner win choice */
+#caseDetailView .case-detail{
+    max-width:1280px!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+}
+#caseDetailView .case-hero{
+    min-height:420px!important;
+    justify-content:center!important;
+}
+#caseDetailView .case-visual{
+    margin-left:auto!important;
+    margin-right:auto!important;
+}
+#caseDetailView .case-reel-panel{
+    max-width:1040px!important;
+    margin:24px auto 0!important;
+    padding:20px 22px 24px!important;
+}
+#caseDetailView .case-reel-viewport{
+    max-width:1000px!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+}
+.case-multi-reels{
+    display:grid!important;
+    gap:14px!important;
+    justify-content:center!important;
+}
+.case-reel-lane{
+    max-width:1040px!important;
+    width:100%!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+}
+.case-result-menu.clean-choice{
+    max-width:720px;
+    margin:0 auto;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:16px;
+    padding:6px 0 2px;
+}
+.case-choice-preview{
+    display:grid;
+    grid-template-columns:120px 1fr;
+    align-items:center;
+    gap:18px;
+    width:100%;
+    padding:16px;
+    border-radius:18px;
+    background:linear-gradient(135deg,rgba(18,12,30,.92),rgba(39,20,59,.78));
+    border:1px solid rgba(168,85,247,.32);
+    box-shadow:0 0 34px rgba(168,85,247,.16), inset 0 0 22px rgba(255,255,255,.02);
+}
+.case-choice-preview img{
+    width:120px;height:86px;object-fit:contain;filter:drop-shadow(0 0 22px rgba(0,0,0,.8));
+}
+.case-choice-title{
+    font-size:13px;text-transform:uppercase;color:#c4b5fd;font-weight:1000;letter-spacing:.06em;
+}
+.case-choice-name{
+    margin-top:4px;font-size:24px;line-height:1.05;color:white;font-weight:1000;
+    text-shadow:0 0 18px rgba(168,85,247,.36);
+}
+.case-choice-price{
+    margin-top:8px;color:#fde047;font-size:24px;font-weight:1000;text-shadow:0 0 16px rgba(234,179,8,.32);
+}
+.case-choice-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    width:min(620px,100%);
+}
+.case-choice-keep,.case-choice-sell{
+    height:56px;
+    border-radius:14px;
+    font-weight:1000;
+    font-size:16px;
+    transition:.22s cubic-bezier(.2,.8,.2,1);
+}
+.case-choice-keep{
+    background:linear-gradient(180deg,#9d28ff,#6d28d9);
+    border:1px solid rgba(216,180,254,.42);
+    box-shadow:0 0 28px rgba(168,85,247,.35), inset 0 1px 0 rgba(255,255,255,.16);
+    color:white;
+}
+.case-choice-sell{
+    background:linear-gradient(180deg,rgba(234,179,8,.28),rgba(120,53,15,.42));
+    border:1px solid rgba(234,179,8,.52);
+    color:#fde68a;
+    box-shadow:0 0 22px rgba(234,179,8,.18), inset 0 1px 0 rgba(255,255,255,.10);
+}
+.case-choice-keep:hover,.case-choice-sell:hover{transform:translateY(-3px) scale(1.025);filter:brightness(1.08)}
+.case-choice-done{
+    padding:14px 18px;border-radius:14px;background:rgba(34,197,94,.10);border:1px solid rgba(34,197,94,.35);
+    color:#86efac;font-weight:1000;text-align:center;width:min(620px,100%);
+}
+#casesGrid.cases-grid{
+    grid-template-columns:repeat(auto-fill,minmax(260px,1fr))!important;
+}
+.case-art img.de-fallback-hidden{display:none!important;}
+.case-art-fallback,.case-img-fallback{
+    display:grid;place-items:center;width:100%;height:100%;font-size:92px;filter:drop-shadow(0 0 28px rgba(168,85,247,.65));
+}
+@media(max-width:720px){
+    .case-choice-preview{grid-template-columns:1fr;text-align:center;justify-items:center}
+    .case-choice-actions{grid-template-columns:1fr}
+}
+
 </style>
 
 <script>
@@ -4951,6 +5064,239 @@ if (window.location.hash === "#profile") {
         bindAccountSettingsModalReliable();
         try { if (typeof setSpinControlsDisabled === "function" && !window.pendingUpgrade) setSpinControlsDisabled(false); } catch(e) {}
         try { if (typeof updateStats === "function") updateStats(); } catch(e) { console.warn(e); }
+    });
+})();
+</script>
+
+
+<script>
+(function(){
+    function imgFallbackMarkup(){
+        return `onerror="window.dropEmpireImgFallback && window.dropEmpireImgFallback(this)"`;
+    }
+    window.dropEmpireImgFallback = function(img){
+        const current = img.getAttribute('src') || '';
+        const raw = (img.dataset.raw || current || '').replace(/^\/+/, '');
+        const file = raw.split('/').pop();
+        const tries = [
+            '/photos/' + file,
+            'photos/' + file,
+            '/' + file,
+            file
+        ];
+        const step = Number(img.dataset.fallbackStep || 0);
+        const next = tries.find((src, i) => i >= step && src !== current);
+        if (next) {
+            img.dataset.fallbackStep = String(tries.indexOf(next) + 1);
+            img.src = next;
+            return;
+        }
+        img.style.display = 'none';
+        const parent = img.parentElement;
+        if (parent && !parent.querySelector('.case-img-fallback')) {
+            const fallback = document.createElement('div');
+            fallback.className = 'case-img-fallback';
+            fallback.textContent = img.dataset.fallbackIcon || '🔫';
+            parent.prepend(fallback);
+        }
+    };
+    function safeSrc(path){
+        try { return normalizeAssetPath(path || ''); } catch(e) { return path || ''; }
+    }
+    function imgTag(path, alt, icon='🔫'){
+        const src = safeSrc(path);
+        return `<img src="${src}" data-raw="${String(path || src).replace(/"/g,'&quot;')}" data-fallback-icon="${icon}" alt="${String(alt || '').replace(/"/g,'&quot;')}" ${imgFallbackMarkup()}>`;
+    }
+    function addSkin(skin){
+        if (!skin || !skin.id || allSkins.some(s => s.id === skin.id)) return;
+        skin.image = safeSrc(skin.image || 'ak47.redline.png');
+        allSkins.push(skin);
+    }
+    [
+        { id:'p250-sand-dune', name:'P250 | Sand Dune', price:1, image:'usp.cortex.png', type:'Pistol' },
+        { id:'nova-candy-apple', name:'Nova | Candy Apple', price:2, image:'m4a4.theemperor.png', type:'Rifle' },
+        { id:'galil-blue-titanium', name:'Galil AR | Blue Titanium', price:3, image:'ak47.neonrider.png', type:'Rifle' },
+        { id:'mp5-lab-rats', name:'MP5-SD | Lab Rats', price:4, image:'ak47.redline.png', type:'SMG' },
+        { id:'famas-colony', name:'FAMAS | Colony', price:5, image:'ak47.redline.png', type:'Rifle' },
+        { id:'ssg-abyss', name:'SSG 08 | Abyss', price:7, image:'awp.asimov.png', type:'AWP' },
+        { id:'ak-elite-build', name:'AK-47 | Elite Build', price:9, image:'ak47.redline.png', type:'Rifle' },
+        { id:'awp-phobos', name:'AWP | Phobos', price:11, image:'awp.asimov.png', type:'AWP' },
+        { id:'m4a1-nightmare', name:'M4A1-S | Nightmare', price:39, image:'m4a4.theemperor.png', type:'Rifle' },
+        { id:'ak-head-shot', name:'AK-47 | Head Shot', price:48, image:'ak47.neonrider.png', type:'Rifle' },
+        { id:'usp-ticket', name:'USP-S | Ticket to Hell', price:6, image:'usp.cortex.png', type:'Pistol' },
+        { id:'knife-paracord-fade', name:'★ Paracord Knife | Fade', price:390, image:'knife.fade.png', type:'Knife' },
+        { id:'knife-stiletto-doppler', name:'★ Stiletto Knife | Doppler', price:560, image:'knife.fade.png', type:'Knife' },
+        { id:'knife-huntsman-fade', name:'★ Huntsman Knife | Fade', price:340, image:'knife.fade.png', type:'Knife' },
+        { id:'knife-classic-fade', name:'★ Classic Knife | Fade', price:470, image:'knife.fade.png', type:'Knife' }
+    ].forEach(addSkin);
+
+    function item(skinId, chance, rarity){ return { skinId, chance, rarity }; }
+    function replaceCase(id, data){
+        if (!DROP_CASES[id]) DROP_CASES[id] = { id, title:id.toUpperCase()+' CASE', icon:'📦', image:`case-${id}.png`, price:10, items:[] };
+        Object.assign(DROP_CASES[id], data, { id });
+        DROP_CASES[id].image = safeSrc(DROP_CASES[id].image || `case-${id}.png`);
+    }
+
+    replaceCase('purple', {title:'PURPLE CASE', icon:'💜', image:'case-purple.png', price:5, items:[
+        item('p250-sand-dune',18,'common'),item('nova-candy-apple',14,'common'),item('galil-blue-titanium',12,'common'),item('mp5-lab-rats',10,'common'),item('famas-colony',9,'common'),item('usp-ticket',8,'common'),item('ssg-abyss',7,'rare'),item('ak-elite-build',6,'rare'),item('tec-decimator',5,'rare'),item('glock-moonrise',4,'rare'),item('p250-see-ya',3,'epic'),item('usp-cortex',2,'epic'),item('ak-redline',1.4,'epic'),item('knife-navaja-fade',.6,'legendary')
+    ]});
+    replaceCase('storm', {title:'STORM CASE', icon:'⚡', image:'case-storm.png', price:12, items:[
+        item('m249-warbird',15,'common'),item('xm-seasons',13,'common'),item('sawed-kisslove',12,'common'),item('awp-phobos',10,'common'),item('mp7-neon-ply',9,'rare'),item('mp9-mount-fuji',8,'rare'),item('ak-ice-coaled',7,'rare'),item('mp9-starlight',6,'rare'),item('awp-chromatic',5,'epic'),item('m4a1-nightmare',4,'epic'),item('ak-vulcan',3,'epic'),item('deagle-ocean',2,'epic'),item('knife-huntsman-fade',1,'legendary'),item('gloves-polygon',.8,'legendary'),item('knife-talon-fade',.2,'legendary')
+    ]});
+    replaceCase('simple', {title:'S1MPLE CASE', icon:'⚡', image:'case-simple.png', price:18, items:[
+        item('p250-sand-dune',10,'common'),item('ssg-abyss',10,'common'),item('awp-phobos',9,'common'),item('awp-fever-dream',8,'rare'),item('scar-cyrex',8,'rare'),item('ssg-dragonfire',7,'rare'),item('awp-redline',7,'epic'),item('awp-neo-noir',7,'epic'),item('awp-hyper-beast',6,'epic'),item('awp-asiimov',5,'epic'),item('awp-wildfire',5,'epic'),item('awp-containment',4,'epic'),item('awp-lore',2,'legendary'),item('awp-medusa',1.5,'legendary'),item('awp-gungnir',.5,'legendary')
+    ]});
+    replaceCase('premium', {title:'PREMIUM CASE', icon:'👑', image:'case-premium.png', price:25, items:[
+        item('usp-ticket',10,'common'),item('ak-elite-build',9,'common'),item('awp-phobos',8,'common'),item('mp9-starlight',7,'rare'),item('ak-point-disarray',7,'rare'),item('m4a1-nightmare',6,'rare'),item('m4a4-neo-noir',6,'rare'),item('awp-asiimov',6,'epic'),item('m4-emperor',5,'epic'),item('usp-printstream',5,'epic'),item('ak-bloodsport',4,'epic'),item('awp-wildfire',4,'epic'),item('knife-fade',2,'legendary'),item('knife-butterfly-doppler',1,'legendary'),item('gloves-omega',.8,'legendary'),item('awp-medusa',.2,'legendary')
+    ]});
+    replaceCase('neon', {title:'NEON CASE', icon:'💎', image:'case-neon.png', price:45, items:[
+        item('mac10-disco',10,'common'),item('mac10-neon',9,'common'),item('mp7-neon-ply',8,'common'),item('ak-point-disarray',8,'rare'),item('ak-head-shot',7,'rare'),item('m4a4-in-living-color',7,'rare'),item('awp-chromatic',6,'epic'),item('m4a1-printstream',6,'epic'),item('deagle-blaze',4,'epic'),item('awp-containment',4,'epic'),item('ak-fuel-injector',3,'epic'),item('glock-fade',3,'legendary'),item('knife-m9-doppler',2,'legendary'),item('knife-karambit-doppler',1.5,'legendary'),item('gloves-pandora',1,'legendary'),item('awp-prince',.5,'legendary')
+    ]});
+    replaceCase('covert', {title:'COVERT CASE', icon:'🔴', image:'case-covert.png', price:70, items:[
+        item('deagle-code-red',10,'common'),item('awp-redline',9,'common'),item('m4a4-royal-paladin',8,'rare'),item('m4a4-temukau',7,'rare'),item('m4a1-printstream',7,'rare'),item('ak-bloodsport',7,'epic'),item('deagle-fennec',6,'epic'),item('ak-case-hardened',5,'epic'),item('aug-akihabara',4,'epic'),item('knife-paracord-fade',3,'legendary'),item('knife-classic-fade',2,'legendary'),item('knife-m9-fade',1.3,'legendary'),item('gloves-slingshot',.7,'legendary')
+    ]});
+    replaceCase('knife', {title:'KNIFE CASE', icon:'🔪', image:'case-knife.png', price:150, items:[
+        item('p250-sand-dune',10,'common'),item('ak-elite-build',9,'common'),item('awp-phobos',8,'common'),item('knife-navaja-fade',12,'rare'),item('knife-huntsman-fade',10,'rare'),item('knife-paracord-fade',9,'epic'),item('knife-classic-fade',8,'epic'),item('knife-bayonet-lore',7,'epic'),item('knife-stiletto-doppler',6,'legendary'),item('knife-talon-fade',5,'legendary'),item('knife-m9-doppler',4,'legendary'),item('knife-karambit-doppler',3,'legendary'),item('knife-butterfly-doppler',2,'legendary'),item('knife-skeleton-fade',1,'legendary')
+    ]});
+    replaceCase('dragon', {title:'DRAGON CASE', icon:'🐉', image:'case-dragon.png', price:100, items:[
+        item('deagle-code-red',9,'common'),item('m4a4-royal-paladin',8,'rare'),item('ak-bloodsport',8,'rare'),item('deagle-fennec',7,'rare'),item('ak-case-hardened',6,'epic'),item('ak-fire-serpent',6,'epic'),item('m4a4-howl',5,'epic'),item('awp-lore',5,'epic'),item('awp-gungnir',4,'legendary'),item('awp-medusa',4,'legendary'),item('ak-wild-lotus',3,'legendary'),item('knife-butterfly-fade',3,'legendary'),item('knife-karambit-doppler',2.5,'legendary'),item('knife-m9-fade',2,'legendary'),item('gloves-pandora',1,'legendary'),item('awp-prince',.5,'legendary')
+    ]});
+    replaceCase('empire', {title:'EMPIRE CASE', icon:'♛', image:'case-empire.png', price:250, items:[
+        item('ak-bloodsport',10,'common'),item('awp-asiimov',9,'common'),item('m4a4-temukau',8,'rare'),item('deagle-fennec',7,'rare'),item('aug-akihabara',7,'rare'),item('knife-fade',8,'epic'),item('knife-bayonet-lore',7,'epic'),item('knife-m9-doppler',6,'epic'),item('awp-gungnir',5,'legendary'),item('awp-prince',5,'legendary'),item('ak-wild-lotus',4,'legendary'),item('m4a4-howl',4,'legendary'),item('awp-lore',4,'legendary'),item('gloves-pandora',3,'legendary'),item('gloves-vice',3,'legendary'),item('knife-karambit-fade',3,'legendary'),item('knife-butterfly-fade',2,'legendary'),item('knife-skeleton-fade',1,'legendary')
+    ]});
+
+    window.renderCasesListDynamic = function(){
+        const grid = document.getElementById('casesGrid');
+        if (!grid) return;
+        grid.innerHTML = Object.values(DROP_CASES).map((c, index) => `
+            <section class="cyber-card case-card" data-case-id="${c.id}" style="animation-delay:${0.06 + index*0.05}s">
+                <div class="case-art">${imgTag(c.image, c.title, c.icon || '📦')}</div>
+                <div>
+                    <h2>${c.title.replace('S1MPLE','S1MPLE')}</h2>
+                    <div class="case-price">$${Number(c.price).toFixed(0)}</div>
+                </div>
+            </section>
+        `).join('');
+        grid.querySelectorAll('.case-card').forEach(card => {
+            card.addEventListener('click', () => showCaseDetail(card.dataset.caseId));
+        });
+    };
+
+    renderCaseContains = function(caseData) {
+        const grid = document.getElementById('caseContainsGrid');
+        if (!grid) return;
+        grid.innerHTML = getCaseItems(caseData).map(item => `
+            <div class="case-contain-card rarity-${item.rarity}">
+                <div class="case-contain-chance">${Number(item.chance).toFixed(item.chance < 1 ? 2 : 0)}%</div>
+                ${imgTag(item.skin.image, item.skin.name)}
+                <div class="case-contain-name">${item.skin.name.replace(' | ', '<br>')}</div>
+            </div>
+        `).join('');
+    };
+
+    renderIdleCaseReel = function(caseData) {
+        const track = document.getElementById('caseReelTrack');
+        const status = document.getElementById('caseReelStatus');
+        if (!track) return;
+        const items = getCaseItems(caseData);
+        const reelItems = [];
+        for (let i = 0; i < 20; i++) reelItems.push(items[i % items.length]);
+        track.style.transition = 'none';
+        track.style.transform = 'translateX(0px)';
+        track.style.filter = 'blur(0px) saturate(1)';
+        track.innerHTML = reelItems.map(item => `
+            <div class="case-reel-item rarity-${item.rarity}">
+                ${imgTag(item.skin.image, item.skin.name)}
+                <div class="case-reel-name">${item.skin.name.replace(' | ', '<br>')}</div>
+            </div>
+        `).join('');
+        if (status) status.innerHTML = 'Ready to open case.';
+    };
+
+    renderCaseReelItemsForTrack = function(track, caseData, winningItem, winningIndex) {
+        const baseItems = getCaseItems(caseData);
+        const reelItems = [];
+        for (let i = 0; i < 66; i++) reelItems.push(baseItems[Math.floor(Math.random() * baseItems.length)]);
+        reelItems[winningIndex] = winningItem;
+        track.style.transition = 'none';
+        track.style.transform = 'translateX(0px)';
+        track.style.filter = 'blur(0px) saturate(1)';
+        track.innerHTML = reelItems.map((item, index) => `
+            <div class="case-reel-item rarity-${item.rarity} ${index === winningIndex ? 'case-winning-target' : ''}">
+                ${imgTag(item.skin.image, item.skin.name)}
+                <div class="case-reel-name">${item.skin.name.replace(' | ', '<br>')}</div>
+            </div>
+        `).join('');
+    };
+
+    setCaseHeroCase = function(caseData) {
+        const wrap = document.querySelector('.case-visual');
+        const icon = document.getElementById('caseDetailIcon');
+        if (wrap) wrap.classList.remove('showing-win');
+        if (icon) icon.innerHTML = imgTag(caseData.image || '', caseData.title, caseData.icon || '📦');
+    };
+
+    setCaseHeroSkin = function(winItem) {
+        const wrap = document.querySelector('.case-visual');
+        const icon = document.getElementById('caseDetailIcon');
+        if (wrap) wrap.classList.add('showing-win');
+        if (icon) icon.innerHTML = imgTag(winItem.skin.image, winItem.skin.name);
+    };
+
+    renderCaseResultMenu = function(wins) {
+        pendingCaseWins = wins.map((item, index) => ({
+            key:`casewin-${Date.now()}-${index}-${Math.random().toString(16).slice(2)}`,
+            item,
+            handled:false
+        }));
+        const status = document.getElementById('caseReelStatus');
+        if (!status) return;
+        const totalWon = wins.reduce((sum, item) => sum + (Number(item.skin.price) || 0), 0);
+        const totalCost = (DROP_CASES[selectedCaseId]?.price || 0) * wins.length;
+        const main = wins[wins.length - 1];
+        const title = wins.length === 1 ? 'YOU WON' : `YOU OPENED ${wins.length} CASES`;
+        const name = wins.length === 1 ? main.skin.name : `${wins.length} items total`;
+        const profit = totalWon - totalCost;
+        status.innerHTML = `
+            <div class="case-result-menu clean-choice">
+                <div class="case-choice-preview rarity-${main.rarity}">
+                    ${wins.length === 1 ? imgTag(main.skin.image, main.skin.name) : `<div class="case-img-fallback">📦</div>`}
+                    <div>
+                        <div class="case-choice-title">${title}</div>
+                        <div class="case-choice-name">${name.replace(' | ', '<br>')}</div>
+                        <div class="case-choice-price">$${totalWon} <span style="font-size:14px;color:${profit>=0?'#86efac':'#fca5a5'}">${profit>=0?'+':'-'}$${Math.abs(profit)}</span></div>
+                    </div>
+                </div>
+                <div class="case-choice-actions">
+                    <button class="case-choice-keep" data-case-action="keep-all">KEEP</button>
+                    <button class="case-choice-sell" data-case-action="sell-all">SELL $${totalWon}</button>
+                </div>
+            </div>
+        `;
+    };
+
+    const oldHandleAll = handleAllPendingCaseWins;
+    handleAllPendingCaseWins = function(action){
+        if (typeof oldHandleAll === 'function') oldHandleAll(action);
+        const status = document.getElementById('caseReelStatus');
+        if (status) status.innerHTML = `<div class="case-choice-done">${action === 'keep' ? '✅ Items added to inventory' : '💰 Items sold and balance updated'}</div>`;
+        try { renderProfileInventory && renderProfileInventory(); } catch(e) {}
+        try { updateStats && updateStats(); } catch(e) {}
+    };
+
+    const oldShowCaseDetail = showCaseDetail;
+    showCaseDetail = function(caseId){
+        const c = DROP_CASES[caseId] || DROP_CASES.dragon;
+        if (typeof oldShowCaseDetail === 'function') oldShowCaseDetail(caseId);
+        setCaseHeroCase(c);
+        renderCaseContains(c);
+        renderIdleCaseReel(c);
+    };
+
+    window.addEventListener('load', function(){
+        renderCasesListDynamic();
+        const c = DROP_CASES[selectedCaseId] || DROP_CASES.dragon;
+        try { renderCaseContains(c); renderIdleCaseReel(c); } catch(e) {}
     });
 })();
 </script>
