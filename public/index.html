@@ -1984,6 +1984,23 @@ body.streamer-mode #profileSoldValue{
 }
 
 </style>
+
+<script>
+(function(){
+    document.addEventListener("error", function(e){
+        const img = e.target;
+        if (!img || img.tagName !== "IMG") return;
+        if (!img.dataset.photoRetry) {
+            img.dataset.photoRetry = "1";
+            const file = (img.getAttribute("src") || "").split("/").pop();
+            if (file) { img.src = "/photos/" + file; return; }
+        }
+        img.style.opacity = ".22";
+        img.style.filter = "grayscale(1)";
+    }, true);
+})();
+</script>
+
 </head>
 <body class="text-white font-sans">
 <div class="topbar">
@@ -2117,7 +2134,7 @@ body.streamer-mode #profileSoldValue{
                 <div class="cases-grid" id="casesGrid">
                     <section class="cyber-card case-card" data-case-id="purple">
                         <div>
-                            <div class="case-art"><img src="case-purple.png" alt="Purple Case" onerror="this.style.display='none'; this.parentElement.classList.add('case-art-fallback'); this.parentElement.textContent='💜';"></div>
+                            <div class="case-art"><img src="/photos/case-purple.png" alt="Purple Case" onerror="this.style.display='none'; this.parentElement.classList.add('case-art-fallback'); this.parentElement.textContent='💜';"></div>
                             <h2 class="text-2xl font-black text-purple-300">Purple Case</h2>
                             <div class="case-price">$5</div>
                             <p class="case-subtitle">Basic skins for warm-up openings.</p>
@@ -2128,7 +2145,7 @@ body.streamer-mode #profileSoldValue{
 
                     <section class="cyber-card case-card" data-case-id="storm">
                         <div>
-                            <div class="case-art"><img src="storm-case.png" alt="Storm Case" onerror="this.style.display='none'; this.parentElement.classList.add('case-art-fallback'); this.parentElement.textContent='⚡';"></div>
+                            <div class="case-art"><img src="/photos/case-storm.png" alt="Storm Case" onerror="this.style.display='none'; this.parentElement.classList.add('case-art-fallback'); this.parentElement.textContent='⚡';"></div>
                             <h2 class="text-2xl font-black text-purple-300">Storm Case</h2>
                             <div class="case-price">$12</div>
                             <p class="case-subtitle">Fast blue skins and electric drops.</p>
@@ -2139,7 +2156,7 @@ body.streamer-mode #profileSoldValue{
 
                     <section class="cyber-card case-card" data-case-id="premium">
                         <div>
-                            <div class="case-art"><img src="case-premium.png" alt="Premium Case" onerror="this.style.display='none'; this.parentElement.classList.add('case-art-fallback'); this.parentElement.textContent='👑';"></div>
+                            <div class="case-art"><img src="/photos/case-premium.png" alt="Premium Case" onerror="this.style.display='none'; this.parentElement.classList.add('case-art-fallback'); this.parentElement.textContent='👑';"></div>
                             <h2 class="text-2xl font-black text-purple-300">Premium Case</h2>
                             <div class="case-price">$25</div>
                             <p class="case-subtitle">Better rewards and higher value skins.</p>
@@ -2150,7 +2167,7 @@ body.streamer-mode #profileSoldValue{
 
                     <section class="cyber-card case-card" data-case-id="neon">
                         <div>
-                            <div class="case-art"><img src="case-neon.png" alt="Neon Case" onerror="this.style.display='none'; this.parentElement.classList.add('case-art-fallback'); this.parentElement.textContent='💎';"></div>
+                            <div class="case-art"><img src="/photos/case-neon.png" alt="Neon Case" onerror="this.style.display='none'; this.parentElement.classList.add('case-art-fallback'); this.parentElement.textContent='💎';"></div>
                             <h2 class="text-2xl font-black text-purple-300">Neon Case</h2>
                             <div class="case-price">$45</div>
                             <p class="case-subtitle">Bright purple skins with high value hits.</p>
@@ -2161,7 +2178,7 @@ body.streamer-mode #profileSoldValue{
 
                     <section class="cyber-card case-card" data-case-id="dragon">
                         <div>
-                            <div class="case-art"><img src="case-dragon.png" alt="Dragon Case" onerror="this.style.display='none'; this.parentElement.classList.add('case-art-fallback'); this.parentElement.textContent='🐉';"></div>
+                            <div class="case-art"><img src="/photos/case-dragon.png" alt="Dragon Case" onerror="this.style.display='none'; this.parentElement.classList.add('case-art-fallback'); this.parentElement.textContent='🐉';"></div>
                             <h2 class="text-2xl font-black text-purple-300">Dragon Case</h2>
                             <div class="case-price">$100</div>
                             <p class="case-subtitle">High tier skins for risky openings.</p>
@@ -2172,7 +2189,7 @@ body.streamer-mode #profileSoldValue{
 
                     <section class="cyber-card case-card" data-case-id="empire">
                         <div>
-                            <div class="case-art"><img src="case-empire.png" alt="Empire Case" onerror="this.style.display='none'; this.parentElement.classList.add('case-art-fallback'); this.parentElement.textContent='♛';"></div>
+                            <div class="case-art"><img src="/photos/case-empire.png" alt="Empire Case" onerror="this.style.display='none'; this.parentElement.classList.add('case-art-fallback'); this.parentElement.textContent='♛';"></div>
                             <h2 class="text-2xl font-black text-purple-300">Empire Case</h2>
                             <div class="case-price">$250</div>
                             <p class="case-subtitle">The biggest Drop Empire rewards.</p>
@@ -2583,7 +2600,25 @@ const allSkins = [
     { id:"m249-warbird", name:"M249 | Warbird", price:6, image:"ak47.redline.png", type:"Rifle" }
 ];
 
-let inventory = loadInventory();
+function normalizeAssetPath(path) {
+    if (!path) return path;
+    const value = String(path).trim();
+    if (!value || value.startsWith('http') || value.startsWith('data:') || value.startsWith('/photos/') || value.startsWith('photos/')) {
+        return value.startsWith('photos/') ? '/' + value : value;
+    }
+    return '/photos/' + value.replace(/^\/+/, '');
+}
+
+function normalizeSkinAsset(skin) {
+    if (!skin) return skin;
+    return { ...skin, image: normalizeAssetPath(skin.image) };
+}
+
+allSkins.forEach((skin) => {
+    skin.image = normalizeAssetPath(skin.image);
+});
+
+let inventory = loadInventory().map(normalizeSkinAsset);
 let selectedInventoryIndex = 0;
 let targetSkin = allSkins[1];
 let rotation = 0;
@@ -3353,7 +3388,7 @@ function spinWheel(duration = 4500) {
         selectedInventoryIndex = inventory.length - 1;
 
         if (lockedTarget.price > biggestWin.price) {
-            biggestWin = { name: lockedTarget.name, price: lockedTarget.price };
+            biggestWin = { name: lockedTarget.name, price: lockedTarget.price, image: lockedTarget.image };
             saveBiggestWin();
         }
     } else if (selectedInventoryIndex >= inventory.length) {
@@ -3696,7 +3731,7 @@ document.getElementById("sellAllInventoryBtn")?.addEventListener("click", openSe
 document.getElementById("resetInventoryBtn").onclick = () => {
     inventory = defaultInventory();
     selectedInventoryIndex = 0;
-    biggestWin = { name: "None", price: 0 };
+    biggestWin = { name: "None", price: 0, image: "" };
     balance = 1000;
     balanceBoost = 0;
     localStorage.removeItem(UPGRADE_HISTORY_KEY);
@@ -3729,7 +3764,9 @@ function updateStats() {
     }
     const profileBestDropImage = document.getElementById("profileBestDropImage");
     if (profileBestDropImage) {
-        profileBestDropImage.src = biggestWin.image || (targetItem?.image || "awp.png.png");
+        const bestSkin = allSkins.find(s => s.name === biggestWin.name);
+        const bestImage = normalizeAssetPath(biggestWin.image || bestSkin?.image || "awp.png.png");
+        profileBestDropImage.src = bestImage;
         profileBestDropImage.style.display = biggestWin.price ? "block" : "none";
     }
 
@@ -3767,7 +3804,7 @@ function renderProfileInventory() {
         const card = document.createElement("div");
         card.className = "profile-v5-item-card cyber-card rounded-2xl p-3";
         card.innerHTML = `
-            <img src="${skin.image}" alt="${skin.name}">
+            <img src="${normalizeAssetPath(skin.image)}" alt="${skin.name}" onerror="this.style.opacity=\'.25\'; this.alt=\'image not found\';">
             <div class="profile-v5-item-name">${skin.name}</div>
             <div class="profile-v5-item-bottom">
                 <span class="profile-v5-item-price">$${skin.price}</span>
@@ -4025,6 +4062,10 @@ const DROP_CASES = {
     }
 };
 
+Object.values(DROP_CASES).forEach((caseData) => {
+    caseData.image = normalizeAssetPath(caseData.image);
+});
+
 let selectedCaseId = "dragon";
 let caseOpenCount = 1;
 let caseSpinning = false;
@@ -4060,7 +4101,7 @@ function renderCaseContains(caseData) {
     grid.innerHTML = getCaseItems(caseData).map(item => `
         <div class="case-contain-card rarity-${item.rarity}">
             <div class="case-contain-chance">${item.chance.toFixed(item.chance < 1 ? 2 : 0)}%</div>
-            <img src="${item.skin.image}" alt="${item.skin.name}">
+            <img src="${normalizeAssetPath(item.skin.image)}" alt="${item.skin.name}">
             <div class="case-contain-name">${item.skin.name.replace(" | ", "<br>")}</div>
         </div>
     `).join("");
@@ -4081,7 +4122,7 @@ function renderIdleCaseReel(caseData) {
     track.style.transform = "translateX(0px)";
     track.innerHTML = reelItems.map((item, index) => `
         <div class="case-reel-item rarity-${item.rarity}">
-            <img src="${item.skin.image}" alt="${item.skin.name}">
+            <img src="${normalizeAssetPath(item.skin.image)}" alt="${item.skin.name}">
             <div class="case-reel-name">${item.skin.name.replace(" | ", "<br>")}</div>
         </div>
     `).join("");
@@ -4108,7 +4149,7 @@ function showCaseDetail(caseId) {
     if (title) title.textContent = caseData.title;
     if (price) price.textContent = `$${caseData.price.toFixed(2)}`;
     if (icon) {
-        icon.innerHTML = `<img src="${caseData.image || ''}" alt="${caseData.title}" onerror="this.remove(); this.parentElement.textContent='${caseData.icon || '📦'}';">`;
+        icon.innerHTML = `<img src="${normalizeAssetPath(caseData.image || '')}" alt="${caseData.title}" onerror="this.remove(); this.parentElement.textContent='${caseData.icon || '📦'}';">`;
     }
 
     caseOpenCount = 1;
@@ -4147,7 +4188,7 @@ function addCaseWinToInventory(item) {
     selectedInventoryIndex = inventory.length - 1;
 
     if (wonSkin.price > biggestWin.price) {
-        biggestWin = { name: wonSkin.name, price: wonSkin.price };
+        biggestWin = { name: wonSkin.name, price: wonSkin.price, image: wonSkin.image };
         saveBiggestWin();
     }
 
@@ -4175,7 +4216,7 @@ function renderCaseReelItems(caseData, winningItem, winningIndex) {
     track.style.transform = "translateX(0px)";
     track.innerHTML = reelItems.map(item => `
         <div class="case-reel-item rarity-${item.rarity}">
-            <img src="${item.skin.image}" alt="${item.skin.name}">
+            <img src="${normalizeAssetPath(item.skin.image)}" alt="${item.skin.name}">
             <div class="case-reel-name">${item.skin.name.replace(" | ", "<br>")}</div>
         </div>
     `).join("");
@@ -4337,7 +4378,7 @@ function setCaseHeroCase(caseData) {
     const icon = document.getElementById("caseDetailIcon");
     visual?.classList.remove("showing-win");
     if (icon) {
-        icon.innerHTML = `<img src="${caseData.image || ''}" alt="${caseData.title}" onerror="this.remove(); this.parentElement.textContent='${caseData.icon || '📦'}';">`;
+        icon.innerHTML = `<img src="${normalizeAssetPath(caseData.image || '')}" alt="${caseData.title}" onerror="this.remove(); this.parentElement.textContent='${caseData.icon || '📦'}';">`;
     }
 }
 
@@ -4346,7 +4387,7 @@ function setCaseHeroSkin(item) {
     const icon = document.getElementById("caseDetailIcon");
     visual?.classList.add("showing-win");
     if (icon && item?.skin) {
-        icon.innerHTML = `<img src="${item.skin.image}" alt="${item.skin.name}">`;
+        icon.innerHTML = `<img src="${normalizeAssetPath(item.skin.image)}" alt="${item.skin.name}">`;
     }
 }
 
@@ -4385,7 +4426,7 @@ function renderIdleCaseReel(caseData) {
     track.style.filter = "blur(0px) saturate(1)";
     track.innerHTML = reelItems.map(item => `
         <div class="case-reel-item rarity-${item.rarity}">
-            <img src="${item.skin.image}" alt="${item.skin.name}">
+            <img src="${normalizeAssetPath(item.skin.image)}" alt="${item.skin.name}">
             <div class="case-reel-name">${item.skin.name.replace(" | ", "<br>")}</div>
         </div>
     `).join("");
@@ -4404,7 +4445,7 @@ function renderCaseReelItemsForTrack(track, caseData, winningItem, winningIndex)
     track.style.filter = "blur(0px) saturate(1)";
     track.innerHTML = reelItems.map((item, index) => `
         <div class="case-reel-item rarity-${item.rarity} ${index === winningIndex ? 'case-winning-target' : ''}">
-            <img src="${item.skin.image}" alt="${item.skin.name}">
+            <img src="${normalizeAssetPath(item.skin.image)}" alt="${item.skin.name}">
             <div class="case-reel-name">${item.skin.name.replace(" | ", "<br>")}</div>
         </div>
     `).join("");
@@ -4413,12 +4454,10 @@ function renderCaseReelItemsForTrack(track, caseData, winningItem, winningIndex)
 function animateOneCaseLane(viewport, track, caseData, winningItem, laneIndex, fast = false) {
     const winningIndex = fast ? 20 + laneIndex : 46 + laneIndex;
     renderCaseReelItemsForTrack(track, caseData, winningItem, winningIndex);
-    const itemWidth = track.querySelector(".case-reel-item")?.getBoundingClientRect().width || 150;
-    const gap = 8;
-    const itemStep = itemWidth + gap;
+    const winnerEl = track.querySelector(".case-winning-target");
     const viewportCenter = viewport.clientWidth / 2;
-    const randomOffset = (Math.random() * 22) - 11;
-    const targetX = -(winningIndex * itemStep - viewportCenter + itemWidth / 2 + randomOffset);
+    const winnerCenter = winnerEl ? (winnerEl.offsetLeft + winnerEl.offsetWidth / 2) : 0;
+    const targetX = -(winnerCenter - viewportCenter);
     return new Promise(resolve => {
         requestAnimationFrame(() => {
             requestAnimationFrame(() => {
@@ -4488,7 +4527,7 @@ function renderCaseResultMenu(wins) {
             <div class="case-result-grid">
                 ${pendingCaseWins.map(entry => `
                     <div class="case-result-card rarity-${entry.item.rarity}" data-win-key="${entry.key}">
-                        <img src="${entry.item.skin.image}" alt="${entry.item.skin.name}">
+                        <img src="${normalizeAssetPath(entry.item.skin.image)}" alt="${entry.item.skin.name}">
                         <div class="case-result-name">${entry.item.skin.name.replace(" | ", "<br>")}</div>
                         <div class="case-result-price">$${entry.item.skin.price}</div>
                         <div class="case-result-card-actions">
@@ -4848,6 +4887,73 @@ if (window.location.hash === "#profile") {
     </div>
 </div>
 <div id="profileToast" class="profile-toast"></div>
+
+<script>
+(function(){
+    function bindAccountSettingsModalReliable(){
+        const overlay = document.getElementById("accountSettingsOverlay");
+        const closeBtn = document.getElementById("accountSettingsClose");
+        const saveBtn = document.getElementById("accountSettingsSave");
+        const streamer = document.getElementById("settingsStreamerSwitch");
+        const settingsBtn = document.querySelector(".profile-v5-settings");
+
+        if (settingsBtn && !settingsBtn.dataset.boundReliable) {
+            settingsBtn.dataset.boundReliable = "1";
+            settingsBtn.addEventListener("click", function(e){
+                e.preventDefault();
+                if (typeof openAccountSettings === "function") openAccountSettings();
+            });
+        }
+        if (closeBtn && !closeBtn.dataset.boundReliable) {
+            closeBtn.dataset.boundReliable = "1";
+            closeBtn.addEventListener("click", function(e){
+                e.preventDefault();
+                if (typeof closeAccountSettings === "function") closeAccountSettings();
+                else overlay?.classList.remove("open");
+            });
+        }
+        if (overlay && !overlay.dataset.boundReliable) {
+            overlay.dataset.boundReliable = "1";
+            overlay.addEventListener("click", function(e){
+                if (e.target === overlay) {
+                    if (typeof closeAccountSettings === "function") closeAccountSettings();
+                    else overlay.classList.remove("open");
+                }
+            });
+        }
+        if (saveBtn && !saveBtn.dataset.boundReliable) {
+            saveBtn.dataset.boundReliable = "1";
+            saveBtn.addEventListener("click", function(e){
+                e.preventDefault();
+                if (typeof saveAccountSettingsFromModal === "function") saveAccountSettingsFromModal();
+            });
+        }
+        if (streamer && !streamer.dataset.boundReliable) {
+            streamer.dataset.boundReliable = "1";
+            streamer.addEventListener("click", function(){ streamer.classList.toggle("active"); });
+        }
+        document.addEventListener("keydown", function(e){
+            if (e.key === "Escape" && overlay?.classList.contains("open")) {
+                if (typeof closeAccountSettings === "function") closeAccountSettings();
+                else overlay.classList.remove("open");
+            }
+        });
+    }
+
+    // Fix old localStorage items that were saved before the /photos folder move.
+    try {
+        if (Array.isArray(window.inventory)) {
+            window.inventory = window.inventory.map(s => typeof normalizeSkinAsset === "function" ? normalizeSkinAsset(s) : s);
+        }
+    } catch(e) {}
+
+    window.addEventListener("load", function(){
+        bindAccountSettingsModalReliable();
+        try { if (typeof setSpinControlsDisabled === "function" && !window.pendingUpgrade) setSpinControlsDisabled(false); } catch(e) {}
+        try { if (typeof updateStats === "function") updateStats(); } catch(e) { console.warn(e); }
+    });
+})();
+</script>
 
 </body>
 </html>
