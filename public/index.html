@@ -5533,5 +5533,256 @@ if (window.location.hash === "#profile") {
 })();
 </script>
 
+
+
+<!-- DROP EMPIRE CASES LIKE SKETCH PATCH -->
+<style id="dropempire-sketch-cases-style">
+/* v8 sketch layout: minimal left case list + reel as main center */
+#caseDetailView.case-detail{
+    max-width:1500px!important;
+    width:100%!important;
+    margin:0 auto!important;
+    display:grid!important;
+    grid-template-columns:220px minmax(0,1fr)!important;
+    gap:22px!important;
+    align-items:start!important;
+}
+.case-side-menu{
+    position:sticky;
+    top:104px;
+    align-self:start;
+    min-height:720px;
+    padding:14px 10px;
+    border-radius:18px;
+    background:linear-gradient(180deg,rgba(10,7,18,.82),rgba(5,3,10,.72));
+    border:1px solid rgba(168,85,247,.16);
+    box-shadow:0 20px 60px rgba(0,0,0,.30), inset 0 1px 0 rgba(255,255,255,.035);
+    overflow:hidden;
+}
+.case-side-title{
+    display:flex;align-items:center;gap:8px;padding:8px 10px 12px;
+    font-size:12px;font-weight:1000;text-transform:uppercase;letter-spacing:.05em;color:#eee6ff;
+    border-bottom:1px solid rgba(168,85,247,.12);margin-bottom:8px;
+}
+.case-side-item{
+    display:grid;grid-template-columns:58px 1fr;gap:10px;align-items:center;
+    width:100%;min-height:64px;padding:7px 8px;margin-bottom:6px;border-radius:12px;
+    background:rgba(255,255,255,.018);border:1px solid transparent;color:white;text-align:left;
+    transition:transform .18s cubic-bezier(.2,.8,.2,1), background .18s ease, border-color .18s ease, box-shadow .18s ease;
+}
+.case-side-item:hover{transform:translateX(3px);background:rgba(168,85,247,.07);border-color:rgba(168,85,247,.26)}
+.case-side-item.active{background:linear-gradient(90deg,rgba(124,58,237,.22),rgba(14,9,24,.7));border-color:rgba(168,85,247,.58);box-shadow:0 0 22px rgba(168,85,247,.22)}
+.case-side-art{position:relative;width:56px;height:46px;display:grid;place-items:center;}
+.case-side-art img{width:60px;height:48px;object-fit:contain;filter:drop-shadow(0 10px 12px rgba(0,0,0,.65)) drop-shadow(0 0 10px rgba(168,85,247,.38));}
+.case-side-art .case-img-fallback{font-size:34px;filter:drop-shadow(0 0 12px rgba(168,85,247,.7));}
+.case-side-name{font-size:12px;font-weight:1000;line-height:1.05;text-transform:uppercase;color:#fff;}
+.case-side-price{font-size:12px;font-weight:1000;color:#fde047;margin-top:4px;text-shadow:0 0 10px rgba(234,179,8,.28)}
+.case-side-bonus{margin-top:18px;padding:14px 12px;border-radius:14px;background:linear-gradient(180deg,rgba(139,44,246,.12),rgba(15,10,27,.72));border:1px solid rgba(168,85,247,.16);font-size:12px;color:#d9c8ff;}
+.case-side-bonus strong{display:block;color:#c084fc;margin-bottom:4px;}
+.case-main-stage{
+    min-width:0;
+    border-radius:28px;
+    padding:34px 26px 26px;
+    background:
+      radial-gradient(circle at 50% 38%, rgba(168,85,247,.24), transparent 34%),
+      radial-gradient(circle at 50% 58%, rgba(168,85,247,.10), transparent 52%),
+      linear-gradient(180deg,rgba(8,5,15,.68),rgba(5,3,10,.48));
+    border:1px solid rgba(168,85,247,.16);
+    box-shadow:0 24px 80px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.03);
+}
+#caseDetailView .case-hero{padding-top:0!important;position:relative;z-index:3;}
+#caseDetailView .case-title{font-size:34px!important;line-height:1.05!important;margin-top:0!important;text-shadow:0 0 22px rgba(168,85,247,.44)!important;}
+#caseDetailView .case-title-price{margin-top:11px!important;padding:6px 18px!important;font-size:16px!important;border-radius:10px!important;}
+#caseDetailView .case-visual{
+    position:absolute!important;left:50%!important;top:126px!important;transform:translateX(-50%) scale(.72)!important;
+    opacity:.20!important;z-index:0!important;pointer-events:none!important;filter:blur(.1px) saturate(1.25)!important;
+}
+#caseDetailView .case-visual:before{opacity:.72!important;}
+#caseDetailView .case-visual img{opacity:.72!important;}
+#caseDetailView .case-reel-panel{
+    position:relative!important;z-index:4!important;
+    width:min(1180px,100%)!important;min-height:252px!important;margin:92px auto 0!important;padding:16px 12px 18px!important;
+    border-radius:18px!important;background:linear-gradient(180deg,rgba(12,7,22,.72),rgba(5,3,10,.70))!important;
+    border:1px solid rgba(168,85,247,.48)!important;
+    box-shadow:0 0 0 1px rgba(168,85,247,.10),0 0 48px rgba(168,85,247,.22), inset 0 0 30px rgba(255,255,255,.018)!important;
+    overflow:hidden!important;
+}
+#caseDetailView .case-reel-panel:before{
+    content:"";position:absolute;left:50%;top:50%;width:560px;height:560px;transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;opacity:.46;
+    background:radial-gradient(circle,rgba(168,85,247,.24),transparent 45%),repeating-conic-gradient(from 0deg,rgba(168,85,247,.35) 0 1deg,transparent 1deg 6deg);
+    mask:radial-gradient(circle,transparent 41%,#000 42%,#000 52%,transparent 53%);
+    animation:slowRotate 18s linear infinite;
+}
+#caseDetailView .case-reel-viewport{
+    position:relative!important;z-index:2!important;height:185px!important;border-radius:12px!important;border-color:rgba(168,85,247,.36)!important;
+    background:linear-gradient(180deg,rgba(8,5,14,.78),rgba(10,6,18,.82))!important;
+    box-shadow:0 0 30px rgba(168,85,247,.18), inset 0 0 18px rgba(255,255,255,.015)!important;
+}
+#caseDetailView .case-reel-viewport:before{width:92px!important;background:linear-gradient(90deg,rgba(6,3,12,.96),transparent)!important;}
+#caseDetailView .case-reel-viewport:after{width:92px!important;background:linear-gradient(270deg,rgba(6,3,12,.96),transparent)!important;}
+#caseDetailView .case-reel-track{gap:8px!important;padding:10px!important;}
+#caseDetailView .case-reel-item{
+    flex-basis:150px!important;height:160px!important;border-radius:10px!important;padding:12px!important;
+    background:linear-gradient(180deg,rgba(20,13,31,.76),rgba(8,5,14,.92))!important;
+    border-color:rgba(168,85,247,.22)!important;box-shadow:inset 0 0 18px rgba(255,255,255,.014)!important;
+}
+#caseDetailView .case-reel-item img{height:82px!important;margin:0 0 12px!important;object-fit:contain!important;filter:drop-shadow(0 12px 14px rgba(0,0,0,.82));}
+#caseDetailView .case-reel-name{font-size:12px!important;line-height:1.1!important;color:#f7f2ff!important;}
+#caseDetailView .case-reel-item.rarity-common{border-color:rgba(96,165,250,.30)!important;}
+#caseDetailView .case-reel-item.rarity-rare{border-color:rgba(168,85,247,.48)!important;}
+#caseDetailView .case-reel-item.rarity-epic{border-color:rgba(239,68,68,.55)!important;}
+#caseDetailView .case-reel-item.rarity-legendary{border-color:rgba(234,179,8,.68)!important;}
+#caseDetailView .case-winning-target,#caseDetailView .case-reel-winner{
+    border-color:#fde047!important;box-shadow:0 0 28px rgba(234,179,8,.55), inset 0 0 22px rgba(234,179,8,.08)!important;transform:scale(1.02);filter:saturate(1.15) brightness(1.1);
+}
+#caseDetailView .case-reel-marker{width:2px!important;background:linear-gradient(180deg,transparent,#d8b4fe,#a855f7,#d8b4fe,transparent)!important;box-shadow:0 0 22px rgba(168,85,247,.95)!important;}
+#caseDetailView .case-reel-marker:before{border-top-color:#d8b4fe!important;border-left-width:12px!important;border-right-width:12px!important;border-top-width:20px!important;}
+#caseDetailView .case-reel-marker:after{border-bottom-color:#a855f7!important;border-left-width:12px!important;border-right-width:12px!important;border-bottom-width:20px!important;}
+#caseDetailView .case-action-row{margin:26px auto 0!important;grid-template-columns:minmax(250px,310px) minmax(230px,280px)!important;gap:18px!important;position:relative;z-index:5;}
+#caseDetailView .case-open-counts{margin:24px 0 0!important;position:relative;z-index:5;}
+#caseDetailView .case-action-btn,#caseDetailView .case-fast-btn{height:58px!important;border-radius:12px!important;font-size:15px!important;}
+#caseDetailView .case-reel-status{position:relative!important;z-index:6!important;min-height:58px!important;margin-top:14px!important;}
+#caseDetailView .case-multi-reels{position:relative;z-index:3;display:flex;flex-direction:column;gap:10px;}
+#caseDetailView .case-reel-lane{display:grid;grid-template-columns:54px 1fr;gap:10px;align-items:center;}
+#caseDetailView .case-reel-lane .case-reel-viewport{height:145px!important;}
+#caseDetailView .case-reel-lane .case-reel-item{height:122px!important;flex-basis:132px!important;}
+#caseDetailView .case-reel-lane .case-reel-item img{height:62px!important;}
+#caseDetailView .case-reel-lane-label{height:44px;border-radius:12px;background:rgba(168,85,247,.13);border:1px solid rgba(168,85,247,.25);display:grid;place-items:center;font-weight:1000;color:#fff;}
+#caseDetailView .case-result-menu.clean-choice{width:min(620px,94vw)!important;margin:0 auto!important;}
+#caseDetailView .case-choice-actions{grid-template-columns:1fr 1fr!important;}
+#caseDetailView .case-contains-title{margin-top:34px!important;}
+#casesListView{padding:36px 36px 34px!important;min-height:auto!important;}
+#casesGrid.cases-grid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr))!important;gap:28px!important;}
+#casesGrid .case-card{padding:6px 10px 20px!important;}
+#casesGrid .case-art{height:205px!important;}
+#casesGrid .case-art img{width:300px!important;height:195px!important;}
+#casesGrid .case-card h2{font-size:22px!important;}
+#casesGrid .case-card .case-price{font-size:23px!important;min-width:92px!important;padding:8px 20px!important;}
+@media(max-width:950px){
+    #caseDetailView.case-detail{grid-template-columns:1fr!important;}
+    .case-side-menu{position:relative;top:auto;min-height:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;}
+    .case-side-title,.case-side-bonus{grid-column:1/-1;}
+    #caseDetailView .case-reel-panel{margin-top:80px!important;}
+}
+</style>
+<script id="dropempire-sketch-cases-script">
+(function(){
+    function onReady(fn){ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',fn); else fn(); }
+    const caseOrder=['purple','storm','premium','neon','knife','simple','donk','monesy','niko','zywoo','device','kennys','dragon','covert','empire','legends'];
+    function money(v){ return '$'+Number(v||0).toFixed(Number(v||0)%1?2:0); }
+    function cleanPath(path){
+        if(!path) return '';
+        const v=String(path).trim();
+        if(v.startsWith('http')||v.startsWith('data:')) return v;
+        const clean=v.replace(/^\/+/, '').replace(/^photos\//,'');
+        return '/photos/'+clean;
+    }
+    window.dropEmpireCaseImgError=function(img){
+        const raw=(img.dataset.raw||img.getAttribute('src')||'').replace(/^\/+/, '').replace(/^photos\//,'');
+        const file=raw.split('/').pop();
+        const tries=['/photos/'+raw,'/photos/'+file,'./photos/'+file,'photos/'+file,'./'+file,'/'+file,file].filter(Boolean);
+        let i=Number(img.dataset.try||0);
+        if(i<tries.length){ img.dataset.try=String(i+1); img.src=tries[i]; return; }
+        img.style.display='none';
+        const p=img.parentElement;
+        if(p&&!p.querySelector('.case-img-fallback')){ const f=document.createElement('div'); f.className='case-img-fallback'; f.textContent=img.dataset.icon||'📦'; p.prepend(f); }
+    };
+    function caseImg(c){
+        return `<img src="${cleanPath(c.image||('case-'+c.id+'.png'))}" data-raw="${String(c.image||'').replace(/"/g,'&quot;')}" data-icon="${c.icon||'📦'}" alt="${String(c.title||'Case').replace(/"/g,'&quot;')}" onerror="dropEmpireCaseImgError(this)">`;
+    }
+    function addSkin(s){
+        if(!window.allSkins||!s||!s.id) return;
+        s.image=cleanPath(s.image||'ak47.redline.png');
+        const old=allSkins.find(x=>x.id===s.id);
+        if(old) Object.assign(old,s); else allSkins.push(s);
+    }
+    function item(skinId,chance,rarity){return{skinId,chance,rarity};}
+    function addCase(id,data){
+        if(!window.DROP_CASES) return;
+        DROP_CASES[id]=Object.assign({id,title:id.toUpperCase()+' CASE',icon:'📦',image:'case-'+id+'.png',price:10,items:[]},DROP_CASES[id]||{},data,{id});
+        DROP_CASES[id].image=cleanPath(DROP_CASES[id].image||('case-'+id+'.png'));
+    }
+    function installData(){
+        [
+            {id:'ak-wild-lotus-pro',name:'AK-47 | Wild Lotus',price:1450,image:'ak47.neonrider.png',type:'Rifle'},
+            {id:'ak-gold-arabesque',name:'AK-47 | Gold Arabesque',price:1180,image:'ak47.neonrider.png',type:'Rifle'},
+            {id:'m4a1-hot-rod',name:'M4A1-S | Hot Rod',price:820,image:'m4a4.theemperor.png',type:'Rifle'},
+            {id:'m4a4-poseidon',name:'M4A4 | Poseidon',price:690,image:'m4a4.theemperor.png',type:'Rifle'},
+            {id:'deagle-blaze-pro',name:'Desert Eagle | Blaze',price:780,image:'deagle.print.png',type:'Pistol'},
+            {id:'awp-desert-hydra',name:'AWP | Desert Hydra',price:1250,image:'awp.asimov.png',type:'AWP'},
+            {id:'awp-lightning',name:'AWP | Lightning Strike',price:540,image:'awp.asimov.png',type:'AWP'},
+            {id:'awp-graphite',name:'AWP | Graphite',price:420,image:'awp.asimov.png',type:'AWP'},
+            {id:'knife-karambit-sapphire',name:'★ Karambit | Sapphire',price:3200,image:'knife.fade.png',type:'Knife'},
+            {id:'knife-butterfly-ruby',name:'★ Butterfly Knife | Ruby',price:4100,image:'knife.fade.png',type:'Knife'},
+            {id:'knife-m9-sapphire',name:'★ M9 Bayonet | Sapphire',price:2850,image:'knife.fade.png',type:'Knife'},
+            {id:'gloves-hedge-maze',name:'★ Sport Gloves | Hedge Maze',price:1600,image:'knife.fade.png',type:'Gloves'},
+            {id:'gloves-superconductor',name:'★ Sport Gloves | Superconductor',price:1900,image:'knife.fade.png',type:'Gloves'}
+        ].forEach(addSkin);
+        addCase('donk',{title:'DONK CASE',icon:'🔥',image:'case-donk.png',price:199,items:[item('ak-redline',16,'common'),item('ak-elite-build',13,'common'),item('ak-head-shot',10,'rare'),item('ak-vulcan',9,'rare'),item('ak-bloodsport',8,'epic'),item('ak-case-hardened',7,'epic'),item('ak-fire-serpent',6,'epic'),item('m4a4-howl',5,'legendary'),item('ak-wild-lotus-pro',4,'legendary'),item('ak-gold-arabesque',3,'legendary'),item('knife-karambit-fade',3,'legendary'),item('gloves-vice',2,'legendary'),item('knife-butterfly-ruby',1,'legendary')]});
+        addCase('monesy',{title:'m0NESY CASE',icon:'❄️',image:'case-monesy.png',price:199,items:[item('awp-phobos',15,'common'),item('awp-redline',12,'common'),item('awp-neo-noir',10,'rare'),item('awp-asiimov',9,'rare'),item('awp-wildfire',8,'epic'),item('awp-containment',7,'epic'),item('awp-lightning',6,'epic'),item('awp-lore',5,'legendary'),item('awp-medusa',4,'legendary'),item('awp-gungnir',3,'legendary'),item('awp-desert-hydra',2,'legendary'),item('knife-karambit-sapphire',1,'legendary')]});
+        addCase('niko',{title:'NiKo CASE',icon:'🎯',image:'case-niko.png',price:199,items:[item('deagle-ocean',12,'common'),item('deagle-code-red',10,'rare'),item('ak-vulcan',10,'rare'),item('m4a1-printstream',9,'rare'),item('m4a4-poseidon',6,'epic'),item('deagle-blaze-pro',6,'epic'),item('ak-fire-serpent',5,'epic'),item('m4a4-howl',4,'legendary'),item('knife-m9-doppler',4,'legendary'),item('gloves-superconductor',2,'legendary'),item('knife-m9-sapphire',1,'legendary')]});
+        addCase('zywoo',{title:'ZywOo CASE',icon:'🐝',image:'case-zywoo.png',price:199,items:[item('awp-phobos',14,'common'),item('awp-chromatic',11,'rare'),item('ak-fuel-injector',9,'rare'),item('awp-graphite',8,'epic'),item('m4a1-hot-rod',6,'epic'),item('awp-lore',5,'legendary'),item('awp-prince',4,'legendary'),item('awp-gungnir',3,'legendary'),item('knife-butterfly-fade',3,'legendary'),item('gloves-hedge-maze',2,'legendary'),item('knife-butterfly-ruby',1,'legendary')]});
+        addCase('device',{title:'DEVICE CASE',icon:'🎯',image:'case-device.png',price:199,items:[item('usp-ticket',13,'common'),item('awp-neo-noir',12,'common'),item('awp-graphite',10,'rare'),item('awp-asiimov',9,'rare'),item('m4a1-hot-rod',8,'epic'),item('awp-lore',6,'epic'),item('awp-medusa',4,'legendary'),item('knife-m9-sapphire',2,'legendary'),item('gloves-superconductor',1,'legendary')]});
+        addCase('kennys',{title:'kennyS CASE',icon:'⚡',image:'case-kennys.png',price:199,items:[item('awp-phobos',14,'common'),item('awp-redline',12,'common'),item('awp-asiimov',10,'rare'),item('awp-wildfire',9,'rare'),item('awp-lightning',7,'epic'),item('awp-lore',6,'epic'),item('awp-medusa',5,'legendary'),item('awp-gungnir',3,'legendary'),item('knife-karambit-sapphire',1,'legendary')]});
+        addCase('legends',{title:'LEGENDS CASE',icon:'👑',image:'case-legends.png',price:299,items:[item('m4a4-howl',10,'common'),item('ak-wild-lotus-pro',9,'rare'),item('awp-lore',8,'rare'),item('awp-medusa',7,'epic'),item('awp-gungnir',7,'epic'),item('awp-desert-hydra',6,'epic'),item('ak-gold-arabesque',6,'epic'),item('gloves-pandora',5,'legendary'),item('gloves-superconductor',5,'legendary'),item('knife-karambit-sapphire',4,'legendary'),item('knife-m9-sapphire',3,'legendary'),item('knife-butterfly-ruby',2,'legendary')]});
+    }
+    function orderedCases(){
+        if(!window.DROP_CASES) return [];
+        const vals=Object.values(DROP_CASES);
+        return caseOrder.map(id=>DROP_CASES[id]).filter(Boolean).concat(vals.filter(c=>!caseOrder.includes(c.id)));
+    }
+    function renderSide(){
+        const detail=document.getElementById('caseDetailView'); if(!detail) return;
+        let side=detail.querySelector('.case-side-menu');
+        if(!side){ side=document.createElement('aside'); side.className='case-side-menu'; detail.prepend(side); }
+        side.innerHTML='<div class="case-side-title">▾ CASES</div>'+orderedCases().map(c=>`<button class="case-side-item ${c.id===window.selectedCaseId?'active':''}" data-side-case="${c.id}"><div class="case-side-art">${caseImg(c)}</div><div><div class="case-side-name">${c.title.replace(' CASE',' Case')}</div><div class="case-side-price">${money(c.price)}</div></div></button>`).join('')+'<div class="case-side-bonus"><strong>🎁 DAILY BONUS</strong><span>Available soon</span></div>';
+    }
+    function ensureMainStage(){
+        const detail=document.getElementById('caseDetailView'); if(!detail) return;
+        let main=detail.querySelector('.case-main-stage');
+        if(!main){
+            main=document.createElement('div'); main.className='case-main-stage';
+            [...detail.children].forEach(ch=>{ if(!ch.classList.contains('case-side-menu')) main.appendChild(ch); });
+            detail.appendChild(main);
+        }
+    }
+    function renderCasesGrid(){
+        const grid=document.getElementById('casesGrid'); if(!grid) return;
+        grid.innerHTML=orderedCases().map((c,i)=>`<section class="cyber-card case-card" data-case-id="${c.id}" style="animation-delay:${0.04+i*.035}s"><div class="case-art">${caseImg(c)}</div><div><h2>${c.title.replace(' CASE',' Case')}</h2><div class="case-price">${money(c.price)}</div></div></section>`).join('');
+        grid.querySelectorAll('.case-card').forEach(card=>card.onclick=()=>window.showCaseDetail?window.showCaseDetail(card.dataset.caseId):null);
+    }
+    const oldShowCaseDetail=window.showCaseDetail;
+    window.showCaseDetail=function(caseId){
+        if(typeof oldShowCaseDetail==='function') oldShowCaseDetail(caseId);
+        ensureMainStage(); renderSide();
+        const c=window.DROP_CASES&&DROP_CASES[window.selectedCaseId||caseId];
+        if(c){
+            const btn=document.getElementById('openSelectedCaseBtn'); if(btn) btn.innerHTML=`OPEN CASE<br><small>${money(c.price*(window.caseOpenCount||1))}</small>`;
+            const icon=document.getElementById('caseDetailIcon'); if(icon) icon.innerHTML=caseImg(c);
+        }
+    };
+    window.renderCasesListDynamic=renderCasesGrid;
+    function patchOpenButtons(){
+        document.addEventListener('click',e=>{
+            const side=e.target.closest('[data-side-case]');
+            if(side){ e.preventDefault(); window.showCaseDetail(side.dataset.sideCase); }
+        });
+        document.querySelectorAll('.case-count-btn').forEach(btn=>{
+            btn.addEventListener('click',()=>setTimeout(()=>{const c=DROP_CASES[selectedCaseId];const b=document.getElementById('openSelectedCaseBtn'); if(c&&b) b.innerHTML=`OPEN CASE<br><small>${money(c.price*(caseOpenCount||1))}</small>`;},0));
+        });
+    }
+    const oldRenderResult=window.renderCaseResultMenu;
+    window.renderCaseResultMenu=function(wins){
+        if(!Array.isArray(wins)) wins=[wins];
+        if(window.pendingCaseWins){ pendingCaseWins = wins.map((item,index)=>({key:`casewin-${Date.now()}-${index}-${Math.random().toString(16).slice(2)}`,item,handled:false})); }
+        const status=document.getElementById('caseReelStatus'); if(!status) return;
+        const total=wins.reduce((s,w)=>s+(Number(w.skin&&w.skin.price)||0),0);
+        const first=wins[0];
+        status.innerHTML=`<div class="case-result-menu clean-choice"><div class="case-choice-preview"><img src="${cleanPath(first.skin.image)}" data-raw="${first.skin.image||''}" onerror="dropEmpireCaseImgError(this)" alt="${first.skin.name}"><div><div class="case-choice-title">${wins.length>1?'YOU WON '+wins.length+' ITEMS':'YOU WON'}</div><div class="case-choice-name">${wins.length>1?'Total result':first.skin.name.replace(' | ','<br>')}</div><div class="case-choice-price">${money(total)}</div></div></div><div class="case-choice-actions"><button class="case-choice-keep" data-case-action="keep-all">KEEP</button><button class="case-choice-sell" data-case-action="sell-all">SELL</button></div></div>`;
+    };
+    onReady(()=>setTimeout(()=>{ installData(); renderCasesGrid(); ensureMainStage(); renderSide(); patchOpenButtons(); },120));
+})();
+</script>
+
 </body>
 </html>
