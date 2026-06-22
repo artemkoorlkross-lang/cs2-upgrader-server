@@ -1414,6 +1414,107 @@ body.spin-locked #marketGrid .skin-tile{
     .case-visual{width:min(420px,94vw)!important;height:270px!important}
 }
 
+
+/* More cases + confirmation modal */
+#casesGrid.cases-grid{
+    grid-template-columns:repeat(3,minmax(260px,1fr))!important;
+}
+#casesGrid .case-card:nth-child(4){animation-delay:.30s}
+#casesGrid .case-card:nth-child(5){animation-delay:.38s}
+#casesGrid .case-card:nth-child(6){animation-delay:.46s}
+.case-card[data-case-id="storm"] .case-art:before{background:radial-gradient(circle, rgba(59,130,246,.36), rgba(168,85,247,.07) 45%, transparent 72%)}
+.case-card[data-case-id="neon"] .case-art:before{background:radial-gradient(circle, rgba(34,211,238,.34), rgba(217,70,239,.12) 45%, transparent 72%)}
+.case-card[data-case-id="empire"] .case-art:before{background:radial-gradient(circle, rgba(234,179,8,.45), rgba(168,85,247,.12) 45%, transparent 72%)}
+@media(max-width:1180px){
+    #casesGrid.cases-grid{grid-template-columns:repeat(2,minmax(240px,1fr))!important;}
+}
+@media(max-width:720px){
+    #casesGrid.cases-grid{grid-template-columns:1fr!important;}
+}
+#sellConfirmModal{
+    position:fixed;
+    inset:0;
+    z-index:12000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:22px;
+    background:rgba(3,2,9,.72);
+    backdrop-filter:blur(12px);
+}
+#sellConfirmModal.open{display:flex;}
+.sell-confirm-card{
+    width:min(460px,94vw);
+    border-radius:24px;
+    padding:26px;
+    background:linear-gradient(180deg,rgba(21,12,36,.98),rgba(9,6,16,.98));
+    border:1px solid rgba(168,85,247,.38);
+    box-shadow:0 0 55px rgba(139,44,246,.36),0 28px 90px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.06);
+    animation:confirmPop .25s cubic-bezier(.2,.8,.2,1) both;
+}
+.sell-confirm-icon{
+    width:62px;
+    height:62px;
+    margin:0 auto 14px;
+    display:grid;
+    place-items:center;
+    border-radius:20px;
+    background:rgba(239,68,68,.16);
+    border:1px solid rgba(248,113,113,.34);
+    color:#fecaca;
+    font-size:30px;
+    box-shadow:0 0 26px rgba(239,68,68,.18);
+}
+.sell-confirm-title{
+    text-align:center;
+    font-size:25px;
+    font-weight:1000;
+    color:white;
+    text-shadow:0 0 18px rgba(168,85,247,.35);
+}
+.sell-confirm-text{
+    text-align:center;
+    margin-top:8px;
+    color:#cdbde2;
+    line-height:1.45;
+}
+.sell-confirm-text strong{
+    color:#fde047;
+    text-shadow:0 0 14px rgba(234,179,8,.35);
+}
+.sell-confirm-actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+    margin-top:22px;
+}
+.sell-confirm-btn{
+    min-height:48px;
+    border-radius:14px;
+    font-weight:1000;
+    transition:.2s cubic-bezier(.2,.8,.2,1);
+}
+.sell-confirm-cancel{
+    background:rgba(255,255,255,.045);
+    border:1px solid rgba(168,85,247,.22);
+    color:#ddd6fe;
+}
+.sell-confirm-cancel:hover{
+    transform:translateY(-2px);
+    border-color:rgba(216,180,254,.42);
+}
+.sell-confirm-yes{
+    background:linear-gradient(180deg,rgba(239,68,68,.85),rgba(127,29,29,.9));
+    border:1px solid rgba(248,113,113,.55);
+    color:white;
+    box-shadow:0 0 24px rgba(239,68,68,.22);
+}
+.sell-confirm-yes:hover{
+    transform:translateY(-2px) scale(1.02);
+    box-shadow:0 0 34px rgba(239,68,68,.34);
+}
+@keyframes confirmPop{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+
 </style>
 </head>
 <body class="text-white font-sans">
@@ -1547,7 +1648,7 @@ body.spin-locked #marketGrid .skin-tile{
                 <div class="cases-grid" id="casesGrid">
                     <section class="cyber-card case-card" data-case-id="purple">
                         <div>
-                            <div class="case-art"><img src="case-purple.png" alt="Purple Case" onerror="this.style.display='none'; this.parentElement.classList.add('case-art-fallback'); this.parentElement.textContent='📦';"></div>
+                            <div class="case-art"><img src="case-purple.png" alt="Purple Case" onerror="this.style.display='none'; this.parentElement.classList.add('case-art-fallback'); this.parentElement.textContent='💜';"></div>
                             <h2 class="text-2xl font-black text-purple-300">Purple Case</h2>
                             <div class="case-price">$5</div>
                             <p class="case-subtitle">Basic skins for warm-up openings.</p>
@@ -1556,13 +1657,35 @@ body.spin-locked #marketGrid .skin-tile{
                         <button class="upgrade-btn mt-6 w-full case-select-btn">OPEN CASE</button>
                     </section>
 
+                    <section class="cyber-card case-card" data-case-id="storm">
+                        <div>
+                            <div class="case-art"><img src="case-storm.png" alt="Storm Case" onerror="this.style.display='none'; this.parentElement.classList.add('case-art-fallback'); this.parentElement.textContent='⚡';"></div>
+                            <h2 class="text-2xl font-black text-purple-300">Storm Case</h2>
+                            <div class="case-price">$12</div>
+                            <p class="case-subtitle">Fast blue skins and electric drops.</p>
+                            <div class="case-items">AK Ice Coaled • MP9 Starlight • AWP Neo-Noir</div>
+                        </div>
+                        <button class="upgrade-btn mt-6 w-full case-select-btn">OPEN CASE</button>
+                    </section>
+
                     <section class="cyber-card case-card" data-case-id="premium">
                         <div>
-                            <div class="case-art"><img src="case-premium.png" alt="Premium Case" onerror="this.style.display='none'; this.parentElement.classList.add('case-art-fallback'); this.parentElement.textContent='💜';"></div>
+                            <div class="case-art"><img src="case-premium.png" alt="Premium Case" onerror="this.style.display='none'; this.parentElement.classList.add('case-art-fallback'); this.parentElement.textContent='👑';"></div>
                             <h2 class="text-2xl font-black text-purple-300">Premium Case</h2>
                             <div class="case-price">$25</div>
                             <p class="case-subtitle">Better rewards and higher value skins.</p>
                             <div class="case-items">AK Neon Rider • AWP Asiimov • M4A4 Emperor</div>
+                        </div>
+                        <button class="upgrade-btn mt-6 w-full case-select-btn">OPEN CASE</button>
+                    </section>
+
+                    <section class="cyber-card case-card" data-case-id="neon">
+                        <div>
+                            <div class="case-art"><img src="case-neon.png" alt="Neon Case" onerror="this.style.display='none'; this.parentElement.classList.add('case-art-fallback'); this.parentElement.textContent='💎';"></div>
+                            <h2 class="text-2xl font-black text-purple-300">Neon Case</h2>
+                            <div class="case-price">$45</div>
+                            <p class="case-subtitle">Bright purple skins with high value hits.</p>
+                            <div class="case-items">AWP Chromatic • Glock Fade • M4A1 Printstream</div>
                         </div>
                         <button class="upgrade-btn mt-6 w-full case-select-btn">OPEN CASE</button>
                     </section>
@@ -1574,6 +1697,17 @@ body.spin-locked #marketGrid .skin-tile{
                             <div class="case-price">$100</div>
                             <p class="case-subtitle">High tier skins for risky openings.</p>
                             <div class="case-items">AWP Dragon Lore • Knife Fade • AWP Gungnir</div>
+                        </div>
+                        <button class="upgrade-btn mt-6 w-full case-select-btn">OPEN CASE</button>
+                    </section>
+
+                    <section class="cyber-card case-card" data-case-id="empire">
+                        <div>
+                            <div class="case-art"><img src="case-empire.png" alt="Empire Case" onerror="this.style.display='none'; this.parentElement.classList.add('case-art-fallback'); this.parentElement.textContent='♛';"></div>
+                            <h2 class="text-2xl font-black text-purple-300">Empire Case</h2>
+                            <div class="case-price">$250</div>
+                            <p class="case-subtitle">The biggest Drop Empire rewards.</p>
+                            <div class="case-items">AWP Gungnir • Gloves Pandora • Rare Knives</div>
                         </div>
                         <button class="upgrade-btn mt-6 w-full case-select-btn">OPEN CASE</button>
                     </section>
@@ -1680,6 +1814,23 @@ body.spin-locked #marketGrid .skin-tile{
             </div>
         </div>
         <div id="buyMarketGrid" class="market-modal-grid grid sm:grid-cols-2 lg:grid-cols-4 gap-3 pr-2"></div>
+    </div>
+</div>
+
+
+<div id="sellConfirmModal">
+    <div class="sell-confirm-card">
+        <div class="sell-confirm-icon">⚠</div>
+        <div class="sell-confirm-title">Sell all skins?</div>
+        <div class="sell-confirm-text">
+            You are about to sell <strong id="sellConfirmCount">0</strong> skins for
+            <strong id="sellConfirmValue">$0</strong>.<br>
+            This action will clear your inventory.
+        </div>
+        <div class="sell-confirm-actions">
+            <button id="cancelSellAllBtn" class="sell-confirm-btn sell-confirm-cancel">Cancel</button>
+            <button id="confirmSellAllBtn" class="sell-confirm-btn sell-confirm-yes">Sell all</button>
+        </div>
     </div>
 </div>
 
@@ -2124,10 +2275,33 @@ function sellInventoryItem(index) {
     updateStats();
 }
 
+function getInventorySellTotal() {
+    return inventory.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
+}
+
+function openSellAllConfirm() {
+    if (!inventory.length || pendingUpgrade) return;
+
+    const total = getInventorySellTotal();
+    if (total <= 0) return;
+
+    const countEl = document.getElementById("sellConfirmCount");
+    const valueEl = document.getElementById("sellConfirmValue");
+    const modal = document.getElementById("sellConfirmModal");
+
+    if (countEl) countEl.textContent = inventory.length;
+    if (valueEl) valueEl.textContent = "$" + total;
+    modal?.classList.add("open");
+}
+
+function closeSellAllConfirm() {
+    document.getElementById("sellConfirmModal")?.classList.remove("open");
+}
+
 function sellAllInventory() {
     if (!inventory.length || pendingUpgrade) return;
 
-    const total = inventory.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
+    const total = getInventorySellTotal();
     if (total <= 0) return;
 
     balance += total;
@@ -2135,6 +2309,7 @@ function sellAllInventory() {
     selectedInventoryIndex = 0;
     balanceBoost = 0;
 
+    closeSellAllConfirm();
     saveBalance();
     saveInventory();
     renderInventory();
@@ -2147,6 +2322,12 @@ function sellAllInventory() {
     resultEl.textContent = `💰 SOLD ALL: +$${total}`;
     resultEl.className = "result-popup mt-6 text-2xl font-black text-yellow-300 text-center";
 }
+
+document.getElementById("cancelSellAllBtn")?.addEventListener("click", closeSellAllConfirm);
+document.getElementById("confirmSellAllBtn")?.addEventListener("click", sellAllInventory);
+document.getElementById("sellConfirmModal")?.addEventListener("click", (e) => {
+    if (e.target.id === "sellConfirmModal") closeSellAllConfirm();
+});
 
 function buySkin(skin) {
     if (!skin) return;
@@ -3007,7 +3188,7 @@ document.getElementById("buyMarketModal").addEventListener("click", (e) => {
         document.getElementById("buyMarketModal").classList.remove("open");
     }
 });
-document.getElementById("sellAllInventoryBtn")?.addEventListener("click", sellAllInventory);
+document.getElementById("sellAllInventoryBtn")?.addEventListener("click", openSellAllConfirm);
 document.getElementById("resetInventoryBtn").onclick = () => {
     inventory = defaultInventory();
     selectedInventoryIndex = 0;
@@ -3193,32 +3374,81 @@ const DROP_CASES = {
     purple: {
         id: "purple",
         title: "PURPLE CASE",
-        icon: "📦",
+        icon: "💜",
         image: "case-purple.png",
         price: 5,
         items: [
-            { skinId:"usp-cortex", chance:35, rarity:"common" },
-            { skinId:"ak-redline", chance:25, rarity:"common" },
-            { skinId:"m4a4-neo-noir", chance:18, rarity:"rare" },
+            { skinId:"usp-cortex", chance:22, rarity:"common" },
+            { skinId:"ak-redline", chance:18, rarity:"common" },
+            { skinId:"m4a4-neo-noir", chance:14, rarity:"rare" },
             { skinId:"deagle-print", chance:12, rarity:"rare" },
+            { skinId:"glock-vogue", chance:10, rarity:"rare" },
+            { skinId:"mp9-mount-fuji", chance:8, rarity:"rare" },
             { skinId:"awp-fever-dream", chance:7, rarity:"epic" },
-            { skinId:"knife-navaja-fade", chance:3, rarity:"legendary" }
+            { skinId:"usp-neo-noir", chance:5, rarity:"epic" },
+            { skinId:"ak-neon", chance:3, rarity:"epic" },
+            { skinId:"knife-navaja-fade", chance:1, rarity:"legendary" }
+        ]
+    },
+    storm: {
+        id: "storm",
+        title: "STORM CASE",
+        icon: "⚡",
+        image: "case-storm.png",
+        price: 12,
+        items: [
+            { skinId:"ak-ice-coaled", chance:20, rarity:"common" },
+            { skinId:"mp7-neon-ply", chance:15, rarity:"common" },
+            { skinId:"mp9-starlight", chance:14, rarity:"rare" },
+            { skinId:"awp-neo-noir", chance:12, rarity:"rare" },
+            { skinId:"m4a1-hyper-beast", chance:10, rarity:"rare" },
+            { skinId:"deagle-ocean", chance:9, rarity:"epic" },
+            { skinId:"awp-chromatic", chance:8, rarity:"epic" },
+            { skinId:"ak-vulcan", chance:6, rarity:"epic" },
+            { skinId:"knife-talon-fade", chance:4, rarity:"legendary" },
+            { skinId:"gloves-vice", chance:2, rarity:"legendary" }
         ]
     },
     premium: {
         id: "premium",
         title: "PREMIUM CASE",
-        icon: "💜",
+        icon: "👑",
         image: "case-premium.png",
         price: 25,
         items: [
-            { skinId:"ak-neon", chance:28, rarity:"common" },
-            { skinId:"awp-asiimov", chance:22, rarity:"rare" },
-            { skinId:"m4-emperor", chance:18, rarity:"rare" },
-            { skinId:"usp-printstream", chance:12, rarity:"epic" },
-            { skinId:"deagle-ocean", chance:10, rarity:"epic" },
-            { skinId:"ak-bloodsport", chance:7, rarity:"epic" },
-            { skinId:"knife-fade", chance:3, rarity:"legendary" }
+            { skinId:"ak-neon", chance:18, rarity:"common" },
+            { skinId:"awp-asiimov", chance:14, rarity:"rare" },
+            { skinId:"m4-emperor", chance:12, rarity:"rare" },
+            { skinId:"m4a4-temukau", chance:10, rarity:"rare" },
+            { skinId:"usp-printstream", chance:9, rarity:"epic" },
+            { skinId:"deagle-ocean", chance:9, rarity:"epic" },
+            { skinId:"ak-bloodsport", chance:8, rarity:"epic" },
+            { skinId:"awp-wildfire", chance:7, rarity:"epic" },
+            { skinId:"knife-fade", chance:5, rarity:"legendary" },
+            { skinId:"knife-butterfly-doppler", chance:3, rarity:"legendary" },
+            { skinId:"gloves-vice", chance:2, rarity:"legendary" },
+            { skinId:"awp-medusa", chance:3, rarity:"legendary" }
+        ]
+    },
+    neon: {
+        id: "neon",
+        title: "NEON CASE",
+        icon: "💎",
+        image: "case-neon.png",
+        price: 45,
+        items: [
+            { skinId:"mac10-neon", chance:16, rarity:"common" },
+            { skinId:"ak-point-disarray", chance:13, rarity:"rare" },
+            { skinId:"glock-fade", chance:11, rarity:"rare" },
+            { skinId:"awp-chromatic", chance:10, rarity:"rare" },
+            { skinId:"m4a1-printstream", chance:9, rarity:"epic" },
+            { skinId:"deagle-blaze", chance:8, rarity:"epic" },
+            { skinId:"awp-containment", chance:8, rarity:"epic" },
+            { skinId:"ak-fuel-injector", chance:7, rarity:"epic" },
+            { skinId:"knife-m9-doppler", chance:6, rarity:"legendary" },
+            { skinId:"knife-karambit-doppler", chance:5, rarity:"legendary" },
+            { skinId:"gloves-pandora", chance:4, rarity:"legendary" },
+            { skinId:"awp-prince", chance:3, rarity:"legendary" }
         ]
     },
     dragon: {
@@ -3228,13 +3458,39 @@ const DROP_CASES = {
         image: "case-dragon.png",
         price: 100,
         items: [
-            { skinId:"ak-fire-serpent", chance:30, rarity:"epic" },
-            { skinId:"m4a4-howl", chance:20, rarity:"epic" },
-            { skinId:"knife-butterfly-fade", chance:8, rarity:"legendary" },
-            { skinId:"awp-lore", chance:16, rarity:"epic" },
+            { skinId:"ak-fire-serpent", chance:15, rarity:"epic" },
+            { skinId:"m4a4-howl", chance:12, rarity:"epic" },
+            { skinId:"awp-lore", chance:12, rarity:"epic" },
             { skinId:"awp-gungnir", chance:10, rarity:"rare" },
-            { skinId:"knife-karambit-doppler", chance:6, rarity:"legendary" },
-            { skinId:"m4a1-printstream", chance:10, rarity:"epic" }
+            { skinId:"awp-medusa", chance:8, rarity:"epic" },
+            { skinId:"ak-wild-lotus", chance:7, rarity:"epic" },
+            { skinId:"knife-butterfly-fade", chance:7, rarity:"legendary" },
+            { skinId:"knife-karambit-doppler", chance:7, rarity:"legendary" },
+            { skinId:"knife-m9-fade", chance:6, rarity:"legendary" },
+            { skinId:"knife-bayonet-lore", chance:6, rarity:"legendary" },
+            { skinId:"gloves-pandora", chance:5, rarity:"legendary" },
+            { skinId:"awp-prince", chance:5, rarity:"legendary" }
+        ]
+    },
+    empire: {
+        id: "empire",
+        title: "EMPIRE CASE",
+        icon: "♛",
+        image: "case-empire.png",
+        price: 250,
+        items: [
+            { skinId:"awp-gungnir", chance:13, rarity:"epic" },
+            { skinId:"awp-prince", chance:11, rarity:"epic" },
+            { skinId:"ak-wild-lotus", chance:10, rarity:"epic" },
+            { skinId:"m4a4-howl", chance:9, rarity:"epic" },
+            { skinId:"awp-lore", chance:9, rarity:"epic" },
+            { skinId:"gloves-pandora", chance:8, rarity:"legendary" },
+            { skinId:"gloves-vice", chance:8, rarity:"legendary" },
+            { skinId:"knife-karambit-fade", chance:8, rarity:"legendary" },
+            { skinId:"knife-butterfly-fade", chance:7, rarity:"legendary" },
+            { skinId:"knife-skeleton-fade", chance:6, rarity:"legendary" },
+            { skinId:"knife-m9-doppler", chance:6, rarity:"legendary" },
+            { skinId:"knife-karambit-doppler", chance:5, rarity:"legendary" }
         ]
     }
 };
@@ -3294,7 +3550,7 @@ function renderIdleCaseReel(caseData) {
     track.style.transition = "none";
     track.style.transform = "translateX(0px)";
     track.innerHTML = reelItems.map((item, index) => `
-        <div class="case-reel-item rarity-${item.rarity} ${index === winningIndex ? "case-winning-target" : ""}">
+        <div class="case-reel-item rarity-${item.rarity}">
             <img src="${item.skin.image}" alt="${item.skin.name}">
             <div class="case-reel-name">${item.skin.name.replace(" | ", "<br>")}</div>
         </div>
