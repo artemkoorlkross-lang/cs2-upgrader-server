@@ -5301,5 +5301,237 @@ if (window.location.hash === "#profile") {
 })();
 </script>
 
+
+
+<!-- Drop Empire Case Opening Main Stage + Pro Player Cases -->
+<style>
+/* Case opening should feel like the main event */
+.case-detail{
+    display:flex!important;
+    flex-direction:column!important;
+    gap:18px!important;
+    max-width:1380px!important;
+    margin:0 auto!important;
+    padding:22px 24px 38px!important;
+}
+.case-hero{
+    order:1!important;
+    padding-top:0!important;
+}
+.case-title{
+    font-size:38px!important;
+    margin-bottom:0!important;
+}
+.case-title-price{
+    margin-top:6px!important;
+}
+.case-visual{
+    width:360px!important;
+    height:205px!important;
+    margin:2px auto -6px!important;
+    opacity:.92;
+    transform:scale(.82);
+    transition:.35s cubic-bezier(.2,.8,.2,1);
+}
+.case-detail:hover .case-visual{opacity:1;transform:scale(.86) translateY(-2px)}
+.case-visual:before{opacity:.45!important;inset:-28px 10px!important;}
+.case-visual:after{opacity:.55!important;}
+.case-open-counts{
+    order:3!important;
+    margin:4px 0 2px!important;
+}
+.case-action-row{
+    order:4!important;
+    margin:0 auto 0!important;
+    width:min(650px,94vw)!important;
+}
+.case-reel-panel{
+    order:2!important;
+    width:min(1260px,96vw)!important;
+    margin:6px auto 0!important;
+    min-height:270px!important;
+    padding:24px 26px 18px!important;
+    border-radius:30px!important;
+    background:
+        radial-gradient(circle at 50% 28%,rgba(168,85,247,.30),transparent 42%),
+        linear-gradient(180deg,rgba(18,10,32,.94),rgba(8,4,14,.92))!important;
+    border:1px solid rgba(216,180,254,.32)!important;
+    box-shadow:0 30px 90px rgba(0,0,0,.48),0 0 70px rgba(168,85,247,.20),inset 0 0 28px rgba(255,255,255,.025)!important;
+}
+.case-reel-panel:before{
+    content:'CASE OPENING';
+    position:absolute;
+    inset:8px 0 auto;
+    text-align:center;
+    font-size:78px;
+    line-height:1;
+    font-weight:1000;
+    letter-spacing:.08em;
+    color:rgba(255,255,255,.018);
+    pointer-events:none;
+}
+.case-reel-viewport{
+    height:178px!important;
+    border-radius:20px!important;
+    border-color:rgba(216,180,254,.45)!important;
+    background:radial-gradient(circle at center,rgba(168,85,247,.20),rgba(9,6,16,.92))!important;
+    box-shadow:0 0 42px rgba(168,85,247,.26),inset 0 0 30px rgba(255,255,255,.035)!important;
+}
+.case-reel-track{gap:12px!important;padding:13px!important;}
+.case-reel-item{
+    flex-basis:178px!important;
+    height:148px!important;
+    padding:12px!important;
+    border-radius:16px!important;
+    transition:transform .25s ease,filter .25s ease,box-shadow .25s ease,border-color .25s ease;
+}
+.case-reel-item img{height:86px!important;}
+.case-reel-name{font-size:13px!important;}
+.case-reel-marker{width:3px!important;box-shadow:0 0 24px rgba(168,85,247,1),0 0 60px rgba(168,85,247,.52)!important;}
+.case-reel-marker:before{border-left-width:13px!important;border-right-width:13px!important;border-top-width:24px!important;}
+.case-reel-marker:after{border-left-width:13px!important;border-right-width:13px!important;border-bottom-width:24px!important;}
+.case-reel-panel.case-opening{animation:caseMainPulse 1.15s ease-in-out infinite alternate;}
+@keyframes caseMainPulse{from{box-shadow:0 30px 90px rgba(0,0,0,.48),0 0 55px rgba(168,85,247,.20),inset 0 0 28px rgba(255,255,255,.025)}to{box-shadow:0 30px 90px rgba(0,0,0,.48),0 0 95px rgba(168,85,247,.38),inset 0 0 34px rgba(255,255,255,.04)}}
+.case-winning-target,.case-reel-panel.case-finished .case-winning-target{
+    transform:scale(1.055)!important;
+    border-color:#fde047!important;
+    box-shadow:0 0 34px rgba(234,179,8,.55),inset 0 0 24px rgba(234,179,8,.08)!important;
+    filter:saturate(1.2) brightness(1.12)!important;
+}
+.case-reel-status{min-height:88px!important;margin-top:16px!important;}
+.case-result-menu.clean-choice{
+    width:min(720px,92vw);
+    margin:0 auto;
+    padding:14px;
+    border-radius:20px;
+    background:linear-gradient(180deg,rgba(18,10,31,.98),rgba(8,5,14,.98));
+    border:1px solid rgba(216,180,254,.30);
+    box-shadow:0 0 34px rgba(168,85,247,.22);
+}
+.case-choice-preview{display:grid;grid-template-columns:132px 1fr;gap:14px;align-items:center;text-align:left;}
+.case-choice-preview img{width:132px;height:86px;object-fit:contain;filter:drop-shadow(0 0 22px rgba(0,0,0,.85));}
+.case-choice-title{font-size:13px;color:#c4b5fd;font-weight:1000;text-transform:uppercase;letter-spacing:.08em;}
+.case-choice-name{font-size:21px;font-weight:1000;color:white;line-height:1.05;margin-top:3px;}
+.case-choice-price{font-size:24px;font-weight:1000;color:#fde047;margin-top:5px;text-shadow:0 0 18px rgba(234,179,8,.32)}
+.case-choice-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px;}
+.case-choice-keep,.case-choice-sell{
+    height:50px;border-radius:14px;font-weight:1000;transition:.22s cubic-bezier(.2,.8,.2,1);
+}
+.case-choice-keep{background:linear-gradient(180deg,#8b2cf6,#6d28d9);border:1px solid rgba(216,180,254,.42);color:white;box-shadow:0 0 24px rgba(168,85,247,.34)}
+.case-choice-sell{background:linear-gradient(180deg,rgba(34,197,94,.20),rgba(22,101,52,.35));border:1px solid rgba(74,222,128,.45);color:#dcfce7;box-shadow:0 0 22px rgba(34,197,94,.15)}
+.case-choice-keep:hover,.case-choice-sell:hover{transform:translateY(-3px) scale(1.02)}
+.case-contains-title{order:5!important;}
+.case-contains-grid{order:6!important;}
+#casesGrid.cases-grid{grid-template-columns:repeat(auto-fill,minmax(245px,1fr))!important;gap:36px!important;}
+#casesGrid .case-card h2{font-size:25px!important;}
+#casesGrid .case-card .case-price{font-size:25px!important;}
+.case-card[data-case-id*="donk"] .case-art:before{background:radial-gradient(circle,rgba(239,68,68,.38),rgba(168,85,247,.10) 45%,transparent 72%)!important;}
+.case-card[data-case-id*="monesy"] .case-art:before{background:radial-gradient(circle,rgba(96,165,250,.38),rgba(168,85,247,.10) 45%,transparent 72%)!important;}
+.case-card[data-case-id*="niko"] .case-art:before{background:radial-gradient(circle,rgba(251,191,36,.36),rgba(168,85,247,.10) 45%,transparent 72%)!important;}
+.case-card[data-case-id*="zywoo"] .case-art:before{background:radial-gradient(circle,rgba(34,197,94,.34),rgba(168,85,247,.10) 45%,transparent 72%)!important;}
+.case-card[data-case-id*="legends"] .case-art:before{background:radial-gradient(circle,rgba(234,179,8,.44),rgba(168,85,247,.12) 45%,transparent 72%)!important;}
+@media(max-width:760px){
+    .case-reel-item{flex-basis:142px!important;height:132px!important;}
+    .case-reel-item img{height:72px!important;}
+    .case-reel-viewport{height:158px!important;}
+    .case-choice-preview{grid-template-columns:1fr;text-align:center;place-items:center;}
+}
+</style>
+<script>
+(function(){
+    function deSafe(path){
+        if (!path) return path;
+        const v = String(path).trim();
+        if (v.startsWith('http') || v.startsWith('data:')) return v;
+        const clean = v.replace(/^\/+/, '').replace(/^photos\//, '');
+        return '/photos/' + clean;
+    }
+    window.dropEmpireImgFallback = function(img){
+        const current = img.getAttribute('src') || '';
+        const raw = (img.dataset.raw || current || '').replace(/^\/+/, '').replace(/^photos\//, '');
+        const file = raw.split('/').pop();
+        const tries = [
+            '/photos/' + raw,
+            '/photos/' + file,
+            './photos/' + file,
+            'photos/' + file,
+            './' + file,
+            '/' + file,
+            file
+        ].filter(Boolean);
+        let step = Number(img.dataset.fallbackStep || 0);
+        while (step < tries.length && tries[step] === current) step++;
+        if (step < tries.length) {
+            img.dataset.fallbackStep = String(step + 1);
+            img.src = tries[step];
+            return;
+        }
+        img.style.display='none';
+        const parent = img.parentElement;
+        if (parent && !parent.querySelector('.case-img-fallback')) {
+            const f=document.createElement('div');
+            f.className='case-img-fallback';
+            f.textContent=img.dataset.fallbackIcon || '🔫';
+            parent.prepend(f);
+        }
+    };
+    function imgTag(path, alt, icon='🔫'){
+        const raw = String(path || '').replace(/"/g,'&quot;');
+        const src = deSafe(path || 'ak47.redline.png');
+        return `<img src="${src}" data-raw="${raw}" data-fallback-icon="${icon}" alt="${String(alt||'').replace(/"/g,'&quot;')}" onerror="window.dropEmpireImgFallback&&window.dropEmpireImgFallback(this)">`;
+    }
+    function addSkin(skin){
+        if (!window.allSkins || !skin || !skin.id) return;
+        const old = allSkins.find(s => s.id === skin.id);
+        skin.image = deSafe(skin.image || 'ak47.redline.png');
+        if (old) Object.assign(old, skin);
+        else allSkins.push(skin);
+    }
+    const proSkins = [
+        {id:'ak-wild-lotus-pro',name:'AK-47 | Wild Lotus',price:1450,image:'ak47.neonrider.png',type:'Rifle'},
+        {id:'ak-gold-arabesque',name:'AK-47 | Gold Arabesque',price:1180,image:'ak47.neonrider.png',type:'Rifle'},
+        {id:'m4a1-hot-rod',name:'M4A1-S | Hot Rod',price:820,image:'m4a4.theemperor.png',type:'Rifle'},
+        {id:'m4a4-poseidon',name:'M4A4 | Poseidon',price:690,image:'m4a4.theemperor.png',type:'Rifle'},
+        {id:'deagle-blaze-pro',name:'Desert Eagle | Blaze',price:780,image:'deagle.print.png',type:'Pistol'},
+        {id:'awp-desert-hydra',name:'AWP | Desert Hydra',price:1250,image:'awp.asimov.png',type:'AWP'},
+        {id:'awp-lightning',name:'AWP | Lightning Strike',price:540,image:'awp.asimov.png',type:'AWP'},
+        {id:'awp-graphite',name:'AWP | Graphite',price:420,image:'awp.asimov.png',type:'AWP'},
+        {id:'knife-karambit-sapphire',name:'★ Karambit | Sapphire',price:3200,image:'knife.fade.png',type:'Knife'},
+        {id:'knife-butterfly-ruby',name:'★ Butterfly Knife | Ruby',price:4100,image:'knife.fade.png',type:'Knife'},
+        {id:'knife-m9-sapphire',name:'★ M9 Bayonet | Sapphire',price:2850,image:'knife.fade.png',type:'Knife'},
+        {id:'gloves-hedge-maze',name:'★ Sport Gloves | Hedge Maze',price:1600,image:'knife.fade.png',type:'Gloves'},
+        {id:'gloves-superconductor',name:'★ Sport Gloves | Superconductor',price:1900,image:'knife.fade.png',type:'Gloves'}
+    ];
+    proSkins.forEach(addSkin);
+    function item(skinId,chance,rarity){return{skinId,chance,rarity};}
+    function upsertCase(id,data){
+        if (!window.DROP_CASES) return;
+        DROP_CASES[id] = Object.assign({id,title:id.toUpperCase()+' CASE',icon:'📦',image:`case-${id}.png`,price:10,items:[]}, DROP_CASES[id]||{}, data, {id});
+        DROP_CASES[id].image = deSafe(DROP_CASES[id].image || `case-${id}.png`);
+    }
+    upsertCase('donk',{title:'DONK CASE',icon:'🔥',image:'case-donk.png',price:200,items:[
+        item('ak-redline',16,'common'),item('ak-elite-build',13,'common'),item('ak-head-shot',10,'rare'),item('ak-vulcan',9,'rare'),item('ak-bloodsport',8,'epic'),item('ak-case-hardened',7,'epic'),item('ak-fire-serpent',6,'epic'),item('m4a4-howl',5,'legendary'),item('ak-wild-lotus-pro',4,'legendary'),item('ak-gold-arabesque',3,'legendary'),item('knife-karambit-fade',3,'legendary'),item('gloves-vice',2,'legendary'),item('knife-butterfly-ruby',1,'legendary')
+    ]});
+    upsertCase('monesy',{title:'m0NESY CASE',icon:'❄️',image:'case-monesy.png',price:300,items:[
+        item('awp-phobos',15,'common'),item('awp-redline',12,'common'),item('awp-neo-noir',10,'rare'),item('awp-asiimov',9,'rare'),item('awp-wildfire',8,'epic'),item('awp-containment',7,'epic'),item('awp-lightning',6,'epic'),item('awp-lore',5,'legendary'),item('awp-medusa',4,'legendary'),item('awp-gungnir',3,'legendary'),item('awp-desert-hydra',2,'legendary'),item('knife-karambit-sapphire',1,'legendary')
+    ]});
+    upsertCase('niko',{title:'NiKo CASE',icon:'🎯',image:'case-niko.png',price:180,items:[
+        item('deagle-ocean',12,'common'),item('deagle-code-red',10,'rare'),item('ak-vulcan',10,'rare'),item('m4a1-printstream',9,'rare'),item('m4a4-poseidon',6,'epic'),item('deagle-blaze-pro',6,'epic'),item('ak-fire-serpent',5,'epic'),item('m4a4-howl',4,'legendary'),item('knife-m9-doppler',4,'legendary'),item('gloves-superconductor',2,'legendary'),item('knife-m9-sapphire',1,'legendary')
+    ]});
+    upsertCase('zywoo',{title:'ZywOo CASE',icon:'🐝',image:'case-zywoo.png',price:220,items:[
+        item('awp-phobos',14,'common'),item('awp-chromatic',11,'rare'),item('ak-fuel-injector',9,'rare'),item('awp-graphite',8,'epic'),item('m4a1-hot-rod',6,'epic'),item('awp-lore',5,'legendary'),item('awp-prince',4,'legendary'),item('awp-gungnir',3,'legendary'),item('knife-butterfly-fade',3,'legendary'),item('gloves-hedge-maze',2,'legendary'),item('knife-butterfly-ruby',1,'legendary')
+    ]});
+    upsertCase('legends',{title:'LEGENDS CASE',icon:'👑',image:'case-legends.png',price:500,items:[
+        item('m4a4-howl',10,'common'),item('ak-wild-lotus-pro',9,'rare'),item('awp-lore',8,'rare'),item('awp-medusa',7,'epic'),item('awp-gungnir',7,'epic'),item('awp-desert-hydra',6,'epic'),item('ak-gold-arabesque',6,'epic'),item('gloves-pandora',5,'legendary'),item('gloves-superconductor',5,'legendary'),item('knife-karambit-sapphire',4,'legendary'),item('knife-m9-sapphire',3,'legendary'),item('knife-butterfly-ruby',2,'legendary')
+    ]});
+
+    if (typeof renderCasesListDynamic === 'function') {
+        const oldRender = renderCasesListDynamic;
+        window.renderCasesListDynamic = function(){ oldRender(); };
+    }
+    window.addEventListener('load',()=>{try{renderCasesListDynamic&&renderCasesListDynamic();}catch(e){}});
+})();
+</script>
+
 </body>
 </html>
