@@ -5828,602 +5828,111 @@ if (window.location.hash === "#profile") {
 </script>
 
 
-<!-- DROP EMPIRE GGD-INSPIRED PURPLE CASE REDESIGN -->
-<style id="dropempire-ggd-purple-style">
-:root{
-  --de-blue:#06111f;
-  --de-blue2:#071827;
-  --de-card:#08111d;
-  --de-line:rgba(168,85,247,.22);
-  --de-purple:#a855f7;
-  --de-purple2:#7c3aed;
-  --de-glow:rgba(168,85,247,.42);
-}
-#casesPage{
-  max-width:1560px!important;
-  padding:0!important;
-  margin:0 auto!important;
-}
-.de-ggd-shell{
-  display:grid;
-  grid-template-columns:148px minmax(0,1fr);
-  gap:22px;
-  min-height:calc(100vh - 112px);
-  color:#f7f2ff;
-}
-.de-left-rail{
-  position:sticky;
-  top:100px;
-  height:calc(100vh - 120px);
-  align-self:start;
-  padding:14px 10px;
-  border-radius:24px;
-  background:linear-gradient(180deg,rgba(6,17,31,.96),rgba(6,7,13,.96));
-  border:1px solid rgba(168,85,247,.18);
-  box-shadow:0 24px 70px rgba(0,0,0,.42), inset 0 0 28px rgba(168,85,247,.04);
-}
-.de-rail-logo{
-  height:62px;
-  display:grid;
-  place-items:center;
-  font-size:22px;
-  font-weight:1000;
-  letter-spacing:.02em;
-  margin-bottom:12px;
-  color:white;
-}
-.de-rail-logo span{color:#a855f7;text-shadow:0 0 18px rgba(168,85,247,.75)}
-.de-rail-btn{
-  width:100%;
-  min-height:106px;
-  margin:10px 0;
-  border-radius:14px;
-  display:grid;
-  place-items:center;
-  gap:5px;
-  color:#aeb8c9;
-  font-weight:1000;
-  background:transparent;
-  border:1px solid transparent;
-  transition:.22s ease;
-}
-.de-rail-btn .ico{
-  width:58px;height:58px;display:grid;place-items:center;border-radius:14px;
-  font-size:34px;background:radial-gradient(circle at 50% 35%,rgba(168,85,247,.25),rgba(8,16,29,.88));
-  filter:drop-shadow(0 0 18px rgba(168,85,247,.25));
-}
-.de-rail-btn.active,.de-rail-btn:hover{
-  color:white;
-  border-color:rgba(168,85,247,.42);
-  background:linear-gradient(180deg,rgba(29,78,216,.13),rgba(168,85,247,.10));
-  box-shadow:0 0 28px rgba(168,85,247,.16), inset 0 0 22px rgba(168,85,247,.04);
-  transform:translateY(-2px);
-}
-.de-main{
-  min-width:0;
-  padding:2px 0 40px;
-}
-.de-top-mini{
-  display:flex;align-items:center;justify-content:space-between;gap:14px;
-  margin:0 0 18px;
-}
-.de-online-pill,.de-help-pill{
-  min-height:50px;padding:8px 16px;border-radius:16px;
-  background:rgba(4,12,22,.78);
-  border:1px solid rgba(168,85,247,.16);
-  display:flex;align-items:center;gap:10px;font-weight:1000;
-  color:#cbd5e1;
-}
-.de-online-pill strong{color:#86efac;font-size:24px;text-shadow:0 0 14px rgba(34,197,94,.45)}
-.de-section{
-  position:relative;
-  margin-bottom:22px;
-  padding:24px 26px 28px;
-  border-radius:24px;
-  background:
-    radial-gradient(circle at 50% 0%,rgba(168,85,247,.16),transparent 42%),
-    linear-gradient(180deg,rgba(4,16,30,.92),rgba(3,7,14,.92));
-  border:1px solid rgba(168,85,247,.20);
-  box-shadow:0 26px 80px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.035);
-  overflow:hidden;
-}
-.de-section:before{
-  content:"";position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(90deg,rgba(168,85,247,.08),transparent 22%,transparent 78%,rgba(168,85,247,.08));
-}
-.de-section > *{position:relative;z-index:1}
-.de-section-head{
-  display:flex;align-items:end;justify-content:space-between;gap:16px;
-  margin-bottom:18px;padding-bottom:15px;border-bottom:1px solid rgba(168,85,247,.14);
-}
-.de-section-kicker{
-  width:40px;height:40px;border-radius:12px;display:grid;place-items:center;
-  background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.25);
-  color:#d8b4fe;font-weight:1000;
-}
-.de-section-title-wrap{display:flex;align-items:center;gap:16px}
-.de-section-title{
-  font-size:44px;line-height:.95;font-weight:1000;letter-spacing:-.03em;
-  color:white;text-shadow:0 0 22px rgba(168,85,247,.35);
-}
-.de-section-sub{margin-top:7px;color:#93a4b8;font-weight:800}
-.de-range{font-weight:1000;color:#d8b4fe;text-align:right}
-.de-range strong{display:block;color:#f7f2ff;font-size:17px}
-.de-collapse{
-  height:40px;padding:0 16px;border-radius:12px;background:#06111f;
-  border:1px solid rgba(168,85,247,.24);font-weight:1000;color:#e9d5ff;
-}
-.de-case-grid{
-  display:grid;
-  grid-template-columns:repeat(5,minmax(150px,1fr));
-  gap:18px 26px;
-}
-.de-case-card{
-  position:relative;
-  min-height:230px;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:end;
-  padding:8px 10px 4px;
-  border-radius:18px;
-  cursor:pointer;
-  transition:.24s cubic-bezier(.2,.8,.2,1);
-}
-.de-case-card:hover{
-  transform:translateY(-8px) scale(1.025);
-}
-.de-case-art{
-  position:absolute;
-  top:-10px;left:0;right:0;height:170px;
-  display:grid;place-items:center;
-}
-.de-case-art:before{
-  content:"";position:absolute;width:76%;height:50%;bottom:20px;border-radius:50%;
-  background:radial-gradient(circle,rgba(168,85,247,.30),transparent 70%);
-  filter:blur(18px);
-}
-.de-case-art img{
-  position:relative;z-index:2;width:100%;height:168px;object-fit:contain;
-  filter:drop-shadow(0 26px 25px rgba(0,0,0,.65)) drop-shadow(0 0 18px rgba(168,85,247,.26));
-  transition:.24s cubic-bezier(.2,.8,.2,1);
-}
-.de-case-card:hover .de-case-art img{
-  transform:translateY(-7px) scale(1.04);
-  filter:drop-shadow(0 32px 28px rgba(0,0,0,.72)) drop-shadow(0 0 34px rgba(168,85,247,.55));
-}
-.de-case-fallback{
-  width:150px;height:130px;display:grid;place-items:center;font-size:72px;
-  border-radius:22px;background:linear-gradient(180deg,rgba(168,85,247,.23),rgba(9,16,29,.25));
-  box-shadow:0 0 30px rgba(168,85,247,.18);
-}
-.de-case-name{
-  margin-top:155px;
-  min-height:42px;
-  display:grid;place-items:center;text-align:center;
-  font-size:20px;line-height:1.05;font-weight:1000;color:#e8edf8;
-}
-.de-case-price{
-  margin-top:8px;
-  min-width:80px;
-  height:40px;
-  padding:0 16px;
-  border-radius:10px;
-  display:grid;place-items:center;
-  background:rgba(6,13,24,.82);
-  border:1px solid rgba(168,85,247,.20);
-  color:#fde047;font-size:17px;font-weight:1000;
-  box-shadow:inset 0 0 16px rgba(255,255,255,.025);
-}
-.de-open-btn{
-  margin-top:8px;height:42px;padding:0 24px;border-radius:11px;
-  background:linear-gradient(180deg,#a855f7,#6d28d9);
-  color:white;font-weight:1000;
-  box-shadow:0 0 22px rgba(168,85,247,.28);
-  display:none;
-}
-.de-case-card:hover .de-open-btn{display:block}
-.de-detail-layout{
-  display:grid;
-  grid-template-columns:230px minmax(0,1fr);
-  gap:20px;
-}
-.de-case-sidebar{
-  position:sticky;top:100px;align-self:start;
-  max-height:calc(100vh - 120px);overflow:auto;
-  padding:12px;border-radius:20px;
-  background:linear-gradient(180deg,rgba(5,15,28,.95),rgba(4,7,13,.95));
-  border:1px solid rgba(168,85,247,.18);
-}
-.de-side-title{font-weight:1000;color:#e9d5ff;margin:4px 8px 10px}
-.de-side-case{
-  width:100%;display:grid;grid-template-columns:58px 1fr;gap:10px;align-items:center;
-  min-height:68px;padding:8px;margin:5px 0;border-radius:13px;
-  background:rgba(255,255,255,.025);border:1px solid transparent;color:white;text-align:left;
-  transition:.18s ease;
-}
-.de-side-case:hover,.de-side-case.active{
-  border-color:rgba(168,85,247,.46);
-  background:rgba(168,85,247,.10);
-  box-shadow:0 0 24px rgba(168,85,247,.14);
-}
-.de-side-case img{width:58px;height:48px;object-fit:contain;filter:drop-shadow(0 0 12px rgba(168,85,247,.25))}
-.de-side-name{font-size:13px;font-weight:1000;line-height:1.05}
-.de-side-price{font-size:12px;color:#fde047;font-weight:1000;margin-top:3px}
-.de-opener{
-  min-height:620px;
-  padding:22px 24px 26px;
-}
-.de-open-title{text-align:center;margin-bottom:16px}
-.de-open-title .k{font-size:13px;color:#a855f7;font-weight:1000;text-transform:uppercase}
-.de-open-title h1{font-size:50px;line-height:.95;font-weight:1000;text-shadow:0 0 22px rgba(168,85,247,.35)}
-.de-open-title .price{display:inline-grid;place-items:center;margin-top:12px;height:34px;padding:0 18px;border-radius:10px;background:rgba(168,85,247,.13);border:1px solid rgba(168,85,247,.28);color:#fde047;font-weight:1000}
-.de-reel-wrap{
-  position:relative;
-  margin:20px auto 20px;
-  max-width:1120px;
-  padding:22px;
-  border-radius:22px;
-  background:
-    radial-gradient(circle at 50% 50%,rgba(168,85,247,.19),transparent 58%),
-    rgba(2,8,15,.72);
-  border:1px solid rgba(168,85,247,.22);
-  box-shadow:0 24px 80px rgba(0,0,0,.38),0 0 36px rgba(168,85,247,.10), inset 0 0 22px rgba(255,255,255,.015);
-}
-.de-reel-wrap:before{
-  content:"";position:absolute;left:50%;top:-92px;width:460px;height:230px;transform:translateX(-50%);
-  border-radius:999px 999px 0 0;
-  border:1px solid rgba(168,85,247,.18);border-bottom:0;
-  background:radial-gradient(circle at 50% 100%,rgba(168,85,247,.21),transparent 65%);
-  opacity:.75;pointer-events:none;
-}
-.de-reel-viewport{
-  position:relative;height:252px;overflow:hidden;border-radius:14px;
-  background:linear-gradient(90deg,rgba(2,7,13,.92),rgba(8,15,28,.80),rgba(2,7,13,.92));
-  border:1px solid rgba(168,85,247,.38);
-  box-shadow:0 0 30px rgba(168,85,247,.20), inset 0 0 24px rgba(255,255,255,.02);
-}
-.de-reel-viewport:before,.de-reel-viewport:after{
-  content:"";position:absolute;top:0;bottom:0;width:105px;z-index:5;pointer-events:none;
-}
-.de-reel-viewport:before{left:0;background:linear-gradient(90deg,#02070d,transparent)}
-.de-reel-viewport:after{right:0;background:linear-gradient(270deg,#02070d,transparent)}
-.de-reel-track{
-  height:100%;display:flex;align-items:center;gap:10px;padding:10px;
-  will-change:transform;transform:translateX(0);
-}
-.de-reel-item{
-  flex:0 0 188px;height:226px;padding:14px 12px;border-radius:12px;
-  background:linear-gradient(135deg,rgba(88,28,135,.38),rgba(12,20,36,.75));
-  border:1px solid rgba(168,85,247,.30);
-  display:flex;flex-direction:column;justify-content:space-between;
-}
-.de-reel-item.rarity-common{background:linear-gradient(135deg,rgba(59,130,246,.22),rgba(12,20,36,.75));border-color:rgba(96,165,250,.30)}
-.de-reel-item.rarity-rare{background:linear-gradient(135deg,rgba(124,58,237,.34),rgba(12,20,36,.75));border-color:rgba(168,85,247,.44)}
-.de-reel-item.rarity-epic{background:linear-gradient(135deg,rgba(217,70,239,.26),rgba(12,20,36,.75));border-color:rgba(217,70,239,.42)}
-.de-reel-item.rarity-legendary{background:linear-gradient(135deg,rgba(234,179,8,.22),rgba(12,20,36,.75));border-color:rgba(234,179,8,.55)}
-.de-reel-item img{width:100%;height:118px;object-fit:contain;filter:drop-shadow(0 0 18px rgba(0,0,0,.8))}
-.de-reel-weapon{font-size:12px;color:#9aaec5;font-weight:900}
-.de-reel-skin{font-size:15px;line-height:1.05;font-weight:1000;color:white}
-.de-reel-price{font-size:16px;color:#fde047;font-weight:1000}
-.de-marker{
-  position:absolute;top:0;bottom:0;left:50%;width:3px;transform:translateX(-50%);z-index:8;
-  background:linear-gradient(180deg,transparent,#c084fc,transparent);
-  box-shadow:0 0 18px rgba(168,85,247,.9);
-}
-.de-marker:before,.de-marker:after{content:"";position:absolute;left:50%;transform:translateX(-50%);width:0;height:0;border-left:13px solid transparent;border-right:13px solid transparent}
-.de-marker:before{top:0;border-top:22px solid #d8b4fe;filter:drop-shadow(0 0 12px #a855f7)}
-.de-marker:after{bottom:0;border-bottom:22px solid #a855f7;filter:drop-shadow(0 0 12px #a855f7)}
-.de-controls{
-  display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:20px;
-  margin:20px auto 0;max-width:1120px;
-}
-.de-counts{display:flex;gap:8px;justify-content:flex-start;background:rgba(1,7,14,.65);border:1px solid rgba(168,85,247,.14);padding:8px;border-radius:14px;width:max-content}
-.de-counts button{width:48px;height:48px;border-radius:10px;background:#050b14;border:1px solid rgba(168,85,247,.20);color:#b8c8dc;font-size:18px;font-weight:1000}
-.de-counts button.active{color:white;border-color:#a855f7;background:rgba(168,85,247,.16);box-shadow:0 0 18px rgba(168,85,247,.22)}
-.de-open-main{height:56px;min-width:220px;border-radius:12px;background:linear-gradient(180deg,#a855f7,#6d28d9);font-size:18px;font-weight:1000;box-shadow:0 0 26px rgba(168,85,247,.34)}
-.de-fast{justify-self:end;height:56px;min-width:220px;border-radius:12px;background:rgba(3,9,17,.76);border:1px solid rgba(168,85,247,.20);color:#e9d5ff;font-weight:1000}
-.de-result-modal{
-  position:fixed;inset:0;z-index:20000;display:none;align-items:center;justify-content:center;padding:20px;
-  background:rgba(0,0,0,.72);backdrop-filter:blur(8px);
-}
-.de-result-modal.show{display:flex}
-.de-result-card{
-  width:min(620px,94vw);padding:26px;border-radius:22px;text-align:center;
-  background:linear-gradient(180deg,rgba(6,17,31,.98),rgba(3,7,14,.98));
-  border:1px solid rgba(168,85,247,.42);
-  box-shadow:0 30px 100px rgba(0,0,0,.55),0 0 40px rgba(168,85,247,.18);
-}
-.de-result-card h2{font-size:32px;font-weight:1000;margin:0 0 10px}
-.de-result-card img{width:100%;height:260px;object-fit:contain;margin:8px 0 12px;filter:drop-shadow(0 0 26px rgba(168,85,247,.22))}
-.de-result-name{font-size:22px;font-weight:1000}
-.de-result-price{font-size:26px;color:#fde047;font-weight:1000;margin-top:6px}
-.de-result-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
-.de-keep,.de-sell{height:54px;border-radius:12px;font-weight:1000;font-size:16px}
-.de-keep{background:linear-gradient(180deg,#a855f7,#6d28d9)}
-.de-sell{background:rgba(234,179,8,.14);border:1px solid rgba(234,179,8,.45);color:#fde047}
-.de-contains{margin-top:28px}
-.de-contains h3{font-size:28px;font-weight:1000;margin-bottom:14px;color:white}
-.de-contains-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
-.de-contain{min-height:160px;padding:10px;border-radius:14px;background:rgba(5,12,22,.78);border:1px solid rgba(168,85,247,.22)}
-.de-contain img{width:100%;height:84px;object-fit:contain;filter:drop-shadow(0 0 14px rgba(0,0,0,.75))}
-.de-contain .nm{font-size:12px;font-weight:1000;line-height:1.1}
-.de-contain .ch{font-size:11px;color:#d8b4fe;font-weight:1000}
-@media(max-width:1100px){
-  .de-ggd-shell{grid-template-columns:1fr}
-  .de-left-rail{position:relative;top:auto;height:auto;display:flex;overflow:auto}
-  .de-rail-logo{display:none}
-  .de-rail-btn{min-width:110px;min-height:86px}
-  .de-case-grid{grid-template-columns:repeat(3,minmax(145px,1fr))}
-  .de-detail-layout{grid-template-columns:1fr}
-  .de-case-sidebar{position:relative;top:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));max-height:none}
-  .de-side-title{grid-column:1/-1}
-}
-@media(max-width:720px){
-  .de-section-title{font-size:34px}
-  .de-case-grid{grid-template-columns:repeat(2,minmax(130px,1fr));gap:16px}
-  .de-reel-viewport{height:210px}
-  .de-reel-item{flex-basis:150px;height:188px}
-  .de-reel-item img{height:90px}
-  .de-controls{grid-template-columns:1fr}
-  .de-fast{justify-self:stretch}.de-open-main{width:100%}
-}
+<!-- DROP EMPIRE REAL GGD PURPLE REWORK - visible hard override -->
+<style id="dropEmpireGGDHardCSS">
+body.ggdp-cases-mode{background:#07030f!important;}
+#casesPage.ggdp-page{display:block!important;max-width:none!important;margin:0!important;padding:0!important;}
+.ggdp-wrap{display:grid;grid-template-columns:112px minmax(0,1fr);gap:24px;min-height:calc(100vh - 84px);padding:22px 26px 44px;background:radial-gradient(circle at 48% 0%,rgba(156,60,255,.22),transparent 34%),linear-gradient(180deg,#08030f 0%,#120822 55%,#07030d 100%);}
+.ggdp-sidebar{position:sticky;top:104px;height:calc(100vh - 130px);border-radius:26px;background:linear-gradient(180deg,rgba(16,9,28,.92),rgba(7,4,13,.96));border:1px solid rgba(176,88,255,.25);box-shadow:0 0 38px rgba(126,34,206,.18),inset 0 1px 0 rgba(255,255,255,.05);padding:14px 10px;display:flex;flex-direction:column;align-items:center;gap:13px;}
+.ggdp-logo-mini{width:70px;height:56px;border-radius:18px;display:grid;place-items:center;font-size:34px;background:linear-gradient(180deg,rgba(139,92,246,.25),rgba(30,10,48,.78));border:1px solid rgba(192,132,252,.36);box-shadow:0 0 24px rgba(168,85,247,.25);margin-bottom:7px;}
+.ggdp-side-btn{width:84px;min-height:86px;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;color:#cbb7e6;font-weight:1000;font-size:12px;background:rgba(255,255,255,.025);border:1px solid transparent;transition:.22s cubic-bezier(.2,.8,.2,1);}
+.ggdp-side-btn .ico{font-size:32px;filter:drop-shadow(0 0 12px rgba(168,85,247,.5));}
+.ggdp-side-btn.active,.ggdp-side-btn:hover{color:white;background:linear-gradient(180deg,rgba(139,92,246,.24),rgba(35,12,56,.68));border-color:rgba(192,132,252,.5);box-shadow:0 0 30px rgba(168,85,247,.25);transform:translateY(-2px);}
+.ggdp-main{min-width:0;}
+.ggdp-topline{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:18px;}
+.ggdp-titleblock h1{font-size:48px;line-height:.95;font-weight:1000;letter-spacing:.01em;text-shadow:0 0 22px rgba(168,85,247,.45);}
+.ggdp-titleblock p{margin-top:9px;color:#bba7d4;font-weight:800;}
+.ggdp-pillbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.ggdp-pill{min-height:44px;padding:0 16px;border-radius:14px;background:rgba(15,9,27,.86);border:1px solid rgba(168,85,247,.24);box-shadow:inset 0 0 18px rgba(255,255,255,.025);display:flex;align-items:center;gap:9px;font-weight:1000;color:#eadfff;}
+.ggdp-online-dot{width:10px;height:10px;border-radius:50%;background:#22c55e;box-shadow:0 0 14px rgba(34,197,94,.9);}
+.ggdp-section{position:relative;overflow:hidden;border-radius:30px;margin:18px 0;background:linear-gradient(180deg,rgba(18,9,34,.78),rgba(8,5,15,.88));border:1px solid rgba(168,85,247,.23);box-shadow:0 22px 70px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.045);padding:28px 26px 30px;}
+.ggdp-section:before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 0%,rgba(168,85,247,.17),transparent 42%),linear-gradient(90deg,transparent,rgba(168,85,247,.05),transparent);}
+.ggdp-section>*{position:relative;z-index:2;}
+.ggdp-section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;margin-bottom:20px;border-bottom:1px solid rgba(168,85,247,.14);padding-bottom:14px;}
+.ggdp-section-kicker{width:46px;height:46px;border-radius:16px;display:grid;place-items:center;background:rgba(139,92,246,.16);border:1px solid rgba(192,132,252,.34);font-weight:1000;color:#c084fc;}
+.ggdp-section-title{display:flex;align-items:center;gap:16px;}
+.ggdp-section-title h2{font-size:42px;line-height:.92;font-weight:1000;text-shadow:0 0 18px rgba(168,85,247,.36);}
+.ggdp-section-title span{color:#aa94c3;font-weight:900;display:block;margin-top:5px;}
+.ggdp-range{text-align:right;color:#bba7d4;font-size:12px;text-transform:uppercase;font-weight:1000;}
+.ggdp-range strong{display:block;color:#facc15;font-size:18px;}
+.ggdp-cards{display:grid;grid-template-columns:repeat(5,minmax(150px,1fr));gap:18px;}
+.ggdp-case{min-height:230px;border:0;background:transparent;color:white;text-align:center;cursor:pointer;transition:.25s cubic-bezier(.2,.8,.2,1);padding:10px;border-radius:20px;}
+.ggdp-case:hover{transform:translateY(-8px) scale(1.025);background:rgba(168,85,247,.045);}
+.ggdp-case-art{height:150px;display:grid;place-items:center;position:relative;margin-bottom:10px;}
+.ggdp-case-art:before{content:"";position:absolute;left:10%;right:10%;bottom:10px;height:50px;border-radius:50%;background:radial-gradient(circle,rgba(168,85,247,.46),transparent 72%);filter:blur(18px);opacity:.78;transition:.25s;}
+.ggdp-case:hover .ggdp-case-art:before{opacity:1;transform:scale(1.15);}
+.ggdp-case-art img{position:relative;z-index:2;width:100%;height:150px;object-fit:contain;filter:drop-shadow(0 24px 22px rgba(0,0,0,.65)) drop-shadow(0 0 18px rgba(168,85,247,.35));transition:.28s cubic-bezier(.2,.8,.2,1);}
+.ggdp-case:hover .ggdp-case-art img{transform:translateY(-8px) scale(1.08);filter:drop-shadow(0 30px 28px rgba(0,0,0,.75)) drop-shadow(0 0 32px rgba(168,85,247,.65));}
+.ggdp-case-fallback{font-size:76px;filter:drop-shadow(0 0 24px rgba(168,85,247,.55));}
+.ggdp-case-name{font-size:21px;font-weight:1000;line-height:1.05;text-shadow:0 0 12px rgba(168,85,247,.25);}
+.ggdp-price{display:inline-flex;align-items:center;justify-content:center;min-width:82px;margin-top:10px;padding:8px 16px;border-radius:13px;background:linear-gradient(180deg,rgba(124,58,237,.55),rgba(35,12,58,.88));border:1px solid rgba(192,132,252,.42);box-shadow:0 0 22px rgba(168,85,247,.25);font-weight:1000;color:#fde047;font-size:18px;}
+.ggdp-open-layout{display:grid;grid-template-columns:180px minmax(0,1fr);gap:22px;}
+.ggdp-mini-list{position:sticky;top:104px;align-self:start;max-height:calc(100vh - 130px);overflow:auto;border-radius:24px;background:rgba(7,4,13,.74);border:1px solid rgba(168,85,247,.2);padding:10px;}
+.ggdp-mini-card{width:100%;display:grid;grid-template-columns:54px 1fr;gap:10px;align-items:center;padding:9px;border-radius:15px;border:1px solid transparent;color:white;text-align:left;background:transparent;transition:.2s;}
+.ggdp-mini-card:hover,.ggdp-mini-card.active{background:rgba(139,92,246,.14);border-color:rgba(192,132,252,.38);}
+.ggdp-mini-card img{width:54px;height:42px;object-fit:contain;filter:drop-shadow(0 0 10px rgba(168,85,247,.35));}
+.ggdp-mini-card b{font-size:12px;display:block;line-height:1.05;}.ggdp-mini-card span{font-size:11px;color:#fde047;font-weight:1000;}
+.ggdp-open-main{min-width:0;border-radius:30px;background:linear-gradient(180deg,rgba(15,8,28,.82),rgba(7,4,13,.92));border:1px solid rgba(168,85,247,.24);box-shadow:0 24px 80px rgba(0,0,0,.38);padding:24px;overflow:hidden;}
+.ggdp-back{height:42px;padding:0 16px;border-radius:13px;background:rgba(255,255,255,.035);border:1px solid rgba(168,85,247,.25);color:#e9d5ff;font-weight:1000;transition:.2s;}.ggdp-back:hover{background:rgba(168,85,247,.12);transform:translateY(-2px)}
+.ggdp-open-head{text-align:center;margin-top:2px;}.ggdp-open-head h2{font-size:42px;line-height:.95;font-weight:1000;text-shadow:0 0 20px rgba(168,85,247,.45);}.ggdp-open-head .ggdp-price{font-size:16px;min-width:92px;}
+.ggdp-reel-stage{position:relative;margin:34px auto 22px;max-width:1160px;padding:58px 22px 26px;border-radius:28px;background:radial-gradient(circle at 50% 0%,rgba(168,85,247,.25),transparent 48%),linear-gradient(180deg,rgba(8,4,15,.9),rgba(7,3,12,.96));border:1px solid rgba(168,85,247,.30);box-shadow:0 0 50px rgba(168,85,247,.15),inset 0 1px 0 rgba(255,255,255,.05);}
+.ggdp-reel-stage:before{content:"";position:absolute;left:50%;top:-105px;width:360px;height:360px;transform:translateX(-50%);border-radius:50%;background:repeating-conic-gradient(from 0deg,rgba(168,85,247,.45) 0 4deg,transparent 4deg 9deg);mask:radial-gradient(circle,transparent 55%,black 56%,black 67%,transparent 68%);opacity:.38;animation:ggdpRotate 18s linear infinite;pointer-events:none;}
+.ggdp-reel-stage:after{content:"";position:absolute;left:50%;top:56px;width:2px;height:236px;transform:translateX(-50%);background:linear-gradient(180deg,transparent,#c084fc,transparent);box-shadow:0 0 26px rgba(192,132,252,.95);z-index:8;pointer-events:none;}
+@keyframes ggdpRotate{to{transform:translateX(-50%) rotate(360deg)}}
+.ggdp-reel-pointer{position:absolute;left:50%;top:48px;transform:translateX(-50%);z-index:10;width:0;height:0;border-left:17px solid transparent;border-right:17px solid transparent;border-top:28px solid #c084fc;filter:drop-shadow(0 0 14px #a855f7);} .ggdp-reel-pointer.bottom{top:auto;bottom:16px;border-top:0;border-bottom:28px solid #c084fc;}
+.ggdp-reel-window{position:relative;height:248px;border-radius:18px;overflow:hidden;border:1px solid rgba(192,132,252,.5);background:rgba(4,2,9,.66);box-shadow:0 0 34px rgba(168,85,247,.25),inset 0 0 28px rgba(255,255,255,.025);}
+.ggdp-reel-window:before,.ggdp-reel-window:after{content:"";position:absolute;top:0;bottom:0;width:130px;z-index:6;pointer-events:none;}.ggdp-reel-window:before{left:0;background:linear-gradient(90deg,#07030d,transparent)}.ggdp-reel-window:after{right:0;background:linear-gradient(270deg,#07030d,transparent)}
+.ggdp-reel-track{height:100%;display:flex;gap:10px;align-items:center;padding:12px;transform:translateX(0);will-change:transform;}
+.ggdp-item{flex:0 0 180px;height:218px;border-radius:15px;background:linear-gradient(180deg,rgba(22,14,35,.92),rgba(9,6,16,.96));border:1px solid rgba(96,165,250,.36);padding:12px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:inset 0 0 18px rgba(255,255,255,.018);}
+.ggdp-item.rare{border-color:rgba(168,85,247,.65)}.ggdp-item.epic{border-color:rgba(236,72,153,.65)}.ggdp-item.legendary{border-color:rgba(234,179,8,.92);box-shadow:0 0 22px rgba(234,179,8,.18),inset 0 0 18px rgba(255,255,255,.02)}
+.ggdp-item img{width:100%;height:112px;object-fit:contain;filter:drop-shadow(0 0 14px rgba(0,0,0,.85));}.ggdp-item .type{font-size:12px;color:#a995bc;font-weight:900}.ggdp-item b{font-size:14px;line-height:1.08}.ggdp-item .val{color:#fde047;font-weight:1000;font-size:14px;}
+.ggdp-controls{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:22px;}.ggdp-counts{display:flex;gap:8px;padding:8px;border-radius:16px;background:rgba(255,255,255,.025);border:1px solid rgba(168,85,247,.15)}.ggdp-count{width:42px;height:42px;border-radius:11px;background:rgba(7,4,13,.8);border:1px solid rgba(168,85,247,.24);color:#d8b4fe;font-weight:1000}.ggdp-count.active{background:rgba(139,92,246,.32);color:white;border-color:#c084fc;box-shadow:0 0 18px rgba(168,85,247,.25)}
+.ggdp-open-btn,.ggdp-fast-btn{height:58px;min-width:220px;border-radius:16px;font-weight:1000;font-size:17px;border:1px solid rgba(192,132,252,.36);transition:.22s cubic-bezier(.2,.8,.2,1)}.ggdp-open-btn{background:linear-gradient(180deg,#a855f7,#6d28d9);box-shadow:0 0 30px rgba(168,85,247,.35);color:white}.ggdp-fast-btn{background:rgba(255,255,255,.025);color:#e9d5ff}.ggdp-open-btn:hover,.ggdp-fast-btn:hover{transform:translateY(-3px);box-shadow:0 0 36px rgba(168,85,247,.45)}
+.ggdp-result{min-height:56px;text-align:center;margin-top:16px;font-size:22px;font-weight:1000;color:#d8b4fe}.ggdp-result.win{color:#fde047;text-shadow:0 0 18px rgba(234,179,8,.4)}
+.ggdp-win-modal{position:fixed;inset:0;z-index:20000;background:rgba(2,1,6,.78);backdrop-filter:blur(9px);display:none;align-items:center;justify-content:center;padding:20px}.ggdp-win-modal.open{display:flex}.ggdp-win-card{width:min(520px,94vw);border-radius:28px;background:linear-gradient(180deg,rgba(21,12,36,.98),rgba(6,3,12,.98));border:1px solid rgba(192,132,252,.46);box-shadow:0 0 60px rgba(168,85,247,.35);padding:22px;text-align:center}.ggdp-win-card h3{font-size:32px;font-weight:1000;margin:0 0 12px}.ggdp-win-card img{width:100%;height:240px;object-fit:contain;background:rgba(255,255,255,.035);border-radius:18px;border:1px solid rgba(168,85,247,.2);padding:18px}.ggdp-win-card b{display:block;font-size:22px;margin-top:14px}.ggdp-win-card span{color:#fde047;font-weight:1000;font-size:20px}.ggdp-win-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}.ggdp-keep,.ggdp-sell{height:52px;border-radius:15px;font-weight:1000}.ggdp-keep{background:linear-gradient(180deg,#22c55e,#15803d);color:white}.ggdp-sell{background:linear-gradient(180deg,#a855f7,#6d28d9);color:white}
+@media(max-width:1100px){.ggdp-wrap{grid-template-columns:1fr}.ggdp-sidebar{position:relative;top:auto;height:auto;flex-direction:row;overflow:auto}.ggdp-open-layout{grid-template-columns:1fr}.ggdp-mini-list{position:relative;top:auto;display:flex;overflow:auto}.ggdp-mini-card{min-width:150px}.ggdp-cards{grid-template-columns:repeat(2,minmax(150px,1fr))}.ggdp-titleblock h1{font-size:36px}.ggdp-section-title h2{font-size:32px}}
+@media(max-width:720px){.ggdp-wrap{padding:14px;gap:14px}.ggdp-cards{grid-template-columns:1fr}.ggdp-reel-window{height:220px}.ggdp-item{flex-basis:150px;height:190px}.ggdp-item img{height:90px}.ggdp-section{padding:20px 14px}.ggdp-open-main{padding:16px}.ggdp-controls{flex-direction:column}.ggdp-open-btn,.ggdp-fast-btn{width:100%}}
 </style>
-<script id="dropempire-ggd-purple-script">
+<script id="dropEmpireGGDHardJS">
 (function(){
-  const money = v => '$' + Number(v||0).toFixed(Number(v||0)%1?2:0);
-  const caseOrder = ['purple','storm','premium','neon','knife','simple','donk','monesy','niko','zywoo','device','kennys','dragon','covert','empire','legends','barbecue','rat','courier','tick','fire','doner','worldcup','frog','souvenir','enduro','catch'];
-  const caseIcons = {purple:'💜',storm:'⚡',premium:'👑',neon:'💎',knife:'🔪',simple:'🐐',donk:'🔥',monesy:'🎯',niko:'💥',zywoo:'🐝',device:'🧠',kennys:'⚡',dragon:'🐉',covert:'🔴',empire:'🦁',legends:'👑',barbecue:'🍖',rat:'🐀',courier:'📦',tick:'🟢',fire:'🔥',doner:'🥙',worldcup:'🏆',frog:'🐸',souvenir:'🎁',enduro:'🏍️',catch:'🌊'};
-  const demoImages = ['case-purple.png','case-storm.png','case-premium.png','case-neon.png','case-knife.png','case-simple.png','case-donk.png','case-monesy.png','case-niko.png','case-zywoo.png','case-device.png','case-kennys.png','case-dragon.png','case-covert.png','case-empire.png','case-legends.png'];
-  let currentCaseId = 'purple';
-  let openCount = 1;
-  let spinning = false;
-  let lastWin = null;
-
-  function ready(fn){ document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', fn) : fn(); }
-  function imgSrc(path){
-    if(!path) return '';
-    const v = String(path).trim();
-    if(v.startsWith('http') || v.startsWith('data:') || v.startsWith('/photos/')) return v;
-    return '/photos/' + v.replace(/^\/+/, '').replace(/^photos\//,'');
-  }
-  window.deGgdImgFallback = function(img){
-    const icon = img.dataset.icon || '📦';
-    const box = document.createElement('div');
-    box.className = img.dataset.small ? 'de-case-fallback' : 'de-case-fallback';
-    box.textContent = icon;
-    img.replaceWith(box);
-  };
-  function skinImg(skin){
-    const src = imgSrc(skin && skin.image || 'ak47.png.png');
-    const name = (skin && skin.name || 'Skin').replace(/"/g,'&quot;');
-    return `<img src="${src}" alt="${name}" data-icon="🔫" onerror="window.deGgdImgFallback&&window.deGgdImgFallback(this)">`;
-  }
-  function caseImg(c, small=false){
-    const icon = c.icon || caseIcons[c.id] || '📦';
-    const src = imgSrc(c.image || `case-${c.id}.png`);
-    return `<img src="${src}" alt="${c.title}" data-icon="${icon}" ${small?'data-small="1"':''} onerror="window.deGgdImgFallback&&window.deGgdImgFallback(this)">`;
-  }
-  function fallbackSkins(){
-    return (window.allSkins && allSkins.length ? allSkins : [
-      {id:'ak-neon',name:'AK-47 | Neon Rider',price:50,image:'ak47.png.png'},
-      {id:'awp-asiimov',name:'AWP | Asiimov',price:120,image:'awp.png.png'},
-      {id:'knife-fade',name:'★ Knife | Fade',price:250,image:'knife.fade.png'},
-      {id:'ak-redline',name:'AK-47 | Redline',price:35,image:'ak47.png.png'}
-    ]);
-  }
-  function ensureCaseData(){
-    if(!window.DROP_CASES) window.DROP_CASES = {};
-    const skins = fallbackSkins();
-    const pick = (i)=>skins[i % skins.length];
-    function add(id,title,price,img,itemsCount=12){
-      if(!DROP_CASES[id]){
-        DROP_CASES[id] = {id,title,price,image:img,icon:caseIcons[id]||'📦',items:[]};
-      }
-      Object.assign(DROP_CASES[id], {id,title: DROP_CASES[id].title || title, price: DROP_CASES[id].price || price, image: DROP_CASES[id].image || img, icon: DROP_CASES[id].icon || caseIcons[id] || '📦'});
-      if(!DROP_CASES[id].items || DROP_CASES[id].items.length < 8){
-        DROP_CASES[id].items = Array.from({length:itemsCount},(_,i)=>({skinId:pick(i).id,chance: Math.max(.5, Math.round((100/itemsCount)*(1+(itemsCount-i)/itemsCount))), rarity:i>itemsCount-3?'legendary':i>itemsCount-6?'epic':i>itemsCount-9?'rare':'common'}));
-      }
-    }
-    add('barbecue','BARBECUE CASE',19,'case-barbecue.png',14);
-    add('rat','RAT CASE',19,'case-rat.png',12);
-    add('courier','COURIER CASE',45,'case-courier.png',12);
-    add('tick','TICK CASE',87,'case-tick.png',12);
-    add('fire','FIRE CASE',175,'case-fire.png',14);
-    add('doner','DONER CASE',199,'case-doner.png',12);
-    add('worldcup','WORLD CUP 2026',300,'case-worldcup.png',12);
-    add('frog','FROG CASE',484,'case-frog.png',14);
-    add('souvenir','SOUVENIR CASE',777,'case-souvenir.png',14);
-    add('enduro','ENDURO CASE',1399,'case-enduro.png',14);
-    add('catch','CATCH CASE',24999,'case-catch.png',14);
-    add('simple','S1MPLE CASE',199,'case-simple.png',14);
-    add('donk','DONK CASE',199,'case-donk.png',14);
-    add('monesy','m0NESY CASE',199,'case-monesy.png',14);
-    add('niko','NiKo CASE',199,'case-niko.png',14);
-    add('zywoo','ZywOo CASE',199,'case-zywoo.png',14);
-    add('device','device CASE',199,'case-device.png',14);
-    add('kennys','kennyS CASE',199,'case-kennys.png',14);
-    add('legends','LEGENDS CASE',299,'case-legends.png',16);
-  }
-  function orderedCases(){
-    ensureCaseData();
-    const vals = Object.values(DROP_CASES);
-    return caseOrder.map(id=>DROP_CASES[id]).filter(Boolean).concat(vals.filter(c=>!caseOrder.includes(c.id)));
-  }
-  function getCaseItems(c){
-    const skins = fallbackSkins();
-    const byId = new Map(skins.map(s=>[s.id,s]));
-    const items = (c.items||[]).map(it=>{
-      const skin = byId.get(it.skinId) || skins[Math.floor(Math.random()*skins.length)];
-      return {...it, skin, rarity: it.rarity || (skin.price > 300 ? 'legendary' : skin.price > 120 ? 'epic' : skin.price > 50 ? 'rare' : 'common')};
-    });
-    return items.length ? items : skins.slice(0,12).map((skin,i)=>({skin, chance:8, rarity:i>9?'legendary':i>6?'epic':i>3?'rare':'common'}));
-  }
-  function pickItem(c){
-    const items = getCaseItems(c);
-    const total = items.reduce((s,i)=>s+Number(i.chance||1),0);
-    let r = Math.random()*total;
-    for(const item of items){ r -= Number(item.chance||1); if(r<=0) return item; }
-    return items[items.length-1];
-  }
-  function renderShell(){
-    const page = document.getElementById('casesPage');
-    if(!page) return;
-    page.innerHTML = `
-      <div class="de-ggd-shell">
-        <aside class="de-left-rail">
-          <div class="de-rail-logo">DROP<br><span>EMPIRE</span></div>
-          <button class="de-rail-btn active" data-de-tab="cases"><div class="ico">📦</div><div>Кейсы</div></button>
-          <button class="de-rail-btn" data-de-tab="contracts"><div class="ico">🔁</div><div>Контракты</div></button>
-          <button class="de-rail-btn" data-de-tab="upgrade"><div class="ico">⚡</div><div>Апгрейды</div></button>
-          <button class="de-rail-btn" data-de-tab="prizes"><div class="ico">🎁</div><div>Призы</div></button>
-          <button class="de-rail-btn" data-de-tab="leader"><div class="ico">🏆</div><div>Лидерборд</div></button>
-        </aside>
-        <main class="de-main">
-          <div class="de-top-mini">
-            <div class="de-online-pill"><span>🟢</span><strong id="deOnline">249</strong><span>онлайн</span></div>
-            <div class="de-help-pill">Вопросы</div>
-          </div>
-          <div id="deCasesContent"></div>
-        </main>
-      </div>
-      <div class="de-result-modal" id="deResultModal"></div>
-    `;
-    renderList();
-  }
-  function renderList(){
-    const root = document.getElementById('deCasesContent');
-    if(!root) return;
-    const cases = orderedCases();
-    const groups = [
-      {num:'01', title:'Доставка Скинов', sub:'10 кейсов', range:'19 - 24 999', list:['rat','courier','tick','fire','doner','worldcup','frog','souvenir','enduro','catch']},
-      {num:'02', title:'Player Cases', sub:'8 кейсов', range:'199 - 299', list:['simple','donk','monesy','niko','zywoo','device','kennys','legends']},
-      {num:'03', title:'Drop Empire Cases', sub:'основные кейсы', range:'5 - 250', list:['purple','storm','premium','neon','knife','dragon','covert','empire']}
-    ];
-    root.innerHTML = groups.map(g=>{
-      const list = g.list.map(id=>DROP_CASES[id]).filter(Boolean);
-      return `<section class="de-section">
-        <div class="de-section-head">
-          <div class="de-section-title-wrap">
-            <div class="de-section-kicker">${g.num}</div>
-            <div><div class="de-section-title">${g.title}</div><div class="de-section-sub">${g.sub}</div></div>
-          </div>
-          <div class="de-range">ДИАПАЗОН<strong>${g.range}</strong></div>
-        </div>
-        <div class="de-case-grid">
-          ${list.map(c=>`<button class="de-case-card" data-de-case="${c.id}">
-            <div class="de-case-art">${caseImg(c)}</div>
-            <div class="de-case-name">${c.title.replace(/ CASE$/i,'')}</div>
-            <div class="de-case-price">${money(c.price)}</div>
-            <div class="de-open-btn">Открыть</div>
-          </button>`).join('')}
-        </div>
-      </section>`;
-    }).join('');
-    root.querySelectorAll('[data-de-case]').forEach(btn=>btn.addEventListener('click',()=>renderDetail(btn.dataset.deCase)));
-  }
-  function renderDetail(id){
-    ensureCaseData();
-    currentCaseId = id;
-    const c = DROP_CASES[id] || orderedCases()[0];
-    currentCaseId = c.id;
-    const root = document.getElementById('deCasesContent');
-    if(!root) return;
-    root.innerHTML = `<div class="de-detail-layout">
-      <aside class="de-case-sidebar">
-        <div class="de-side-title">▾ CASES</div>
-        ${orderedCases().map(x=>`<button class="de-side-case ${x.id===c.id?'active':''}" data-side-case="${x.id}">
-          ${caseImg(x,true)}
-          <div><div class="de-side-name">${x.title.replace(/ CASE$/i,' Case')}</div><div class="de-side-price">${money(x.price)}</div></div>
-        </button>`).join('')}
-      </aside>
-      <section class="de-section de-opener">
-        <div class="de-open-title">
-          <div class="k">КЕЙС</div>
-          <h1>${c.title}</h1>
-          <div class="price">${money(c.price)}</div>
-        </div>
-        <div class="de-reel-wrap">
-          <div class="de-reel-viewport">
-            <div class="de-marker"></div>
-            <div class="de-reel-track" id="deReelTrack">${renderReelItems(c, 18)}</div>
-          </div>
-        </div>
-        <div class="de-controls">
-          <div class="de-counts">${[1,2,3,4,5].map(n=>`<button class="${openCount===n?'active':''}" data-count="${n}">${n}</button>`).join('')}</div>
-          <button class="de-open-main" id="deOpenBtn">Открыть демо</button>
-          <button class="de-fast" id="deFastBtn">Открывать быстро ⚡</button>
-        </div>
-        <div class="de-contains">
-          <h3>Содержимое кейса</h3>
-          <div class="de-contains-grid">${getCaseItems(c).map(it=>`<div class="de-contain">${skinImg(it.skin)}<div class="nm">${it.skin.name}</div><div class="ch">${Number(it.chance||1).toFixed((it.chance||1)<1?2:0)}%</div></div>`).join('')}</div>
-        </div>
-      </section>
-    </div>`;
-    root.querySelectorAll('[data-side-case]').forEach(b=>b.addEventListener('click',()=>renderDetail(b.dataset.sideCase)));
-    root.querySelectorAll('[data-count]').forEach(b=>b.addEventListener('click',()=>{openCount=Number(b.dataset.count); renderDetail(currentCaseId);}));
-    document.getElementById('deOpenBtn')?.addEventListener('click',()=>spinCase(false));
-    document.getElementById('deFastBtn')?.addEventListener('click',()=>spinCase(true));
-  }
-  function renderReelItems(c, amount=20, winning=null, winIndex=12){
-    const items = getCaseItems(c);
-    let arr = Array.from({length:amount},(_,i)=>items[Math.floor(Math.random()*items.length)]);
-    if(winning) arr[winIndex] = winning;
-    return arr.map(it=>{
-      const parts = String(it.skin.name||'Skin').split('|').map(s=>s.trim());
-      return `<div class="de-reel-item rarity-${it.rarity}">
-        ${skinImg(it.skin)}
-        <div><div class="de-reel-weapon">${parts[0]||'CS2'}</div><div class="de-reel-skin">${parts[1]||parts[0]||'Skin'}</div></div>
-        <div class="de-reel-price">${money(it.skin.price)}</div>
-      </div>`;
-    }).join('');
-  }
-  function spinCase(fast=false){
-    if(spinning) return;
-    const c = DROP_CASES[currentCaseId]; if(!c) return;
-    const track = document.getElementById('deReelTrack'); if(!track) return;
-    spinning = true;
-    const win = pickItem(c);
-    lastWin = win.skin;
-    track.style.transition = 'none';
-    track.style.transform = 'translateX(0)';
-    track.innerHTML = renderReelItems(c, 34, win, 25);
-    track.offsetHeight;
-    const itemW = 198;
-    const viewport = track.parentElement.getBoundingClientRect().width;
-    const target = -(25 * itemW) + (viewport/2) - (itemW/2);
-    track.style.transition = `transform ${fast?900:4300}ms cubic-bezier(.08,.78,.08,1)`;
-    track.style.transform = `translateX(${target}px)`;
-    setTimeout(()=>{ spinning=false; showResult(win.skin); }, fast?950:4400);
-  }
-  function showResult(skin){
-    const modal = document.getElementById('deResultModal');
-    if(!modal) return;
-    modal.innerHTML = `<div class="de-result-card">
-      <h2>Выигрыш</h2>
-      ${skinImg(skin)}
-      <div class="de-result-name">${skin.name}</div>
-      <div class="de-result-price">${money(skin.price)}</div>
-      <div class="de-result-actions">
-        <button class="de-keep">Оставить</button>
-        <button class="de-sell">Продать за ${money(skin.price)}</button>
-      </div>
-    </div>`;
-    modal.classList.add('show');
-    modal.querySelector('.de-keep').onclick = ()=>{ try{ if(window.inventory && window.cloneSkin){ inventory.push(cloneSkin(skin)); saveInventory?.(); updateStats?.(); }}catch(e){} modal.classList.remove('show'); };
-    modal.querySelector('.de-sell').onclick = ()=>{ try{ window.demoBalance = (window.demoBalance||0) + Number(skin.price||0); updateBalanceUI?.(); }}catch(e){} modal.classList.remove('show'); };
-    modal.addEventListener('click', e=>{ if(e.target===modal) modal.classList.remove('show'); }, {once:true});
-  }
-  ready(()=>{
-    ensureCaseData();
-    const casesBtn = document.getElementById('navCasesBtn') || document.querySelector('[data-page="cases"], #openCasesBtn');
-    if(casesBtn) casesBtn.addEventListener('click',()=>setTimeout(renderShell,60), true);
-    const obs = new MutationObserver(()=>{ const page=document.getElementById('casesPage'); if(page && !page.classList.contains('hidden') && !page.querySelector('.de-ggd-shell')) renderShell(); });
-    obs.observe(document.body,{attributes:true,subtree:true,attributeFilter:['class']});
-    const page=document.getElementById('casesPage');
-    if(page && !page.classList.contains('hidden')) renderShell();
-    window.renderDropEmpirePurpleCases = renderShell;
-  });
+const IMG='/photos/';
+const skins=[
+ {type:'AK-47',name:'Neon Rider',price:24.18,img:'ak47.png.png',rarity:'rare'}, {type:'M4A4',name:'Neo-Noir',price:18.66,img:'ak47.png.png',rarity:'rare'}, {type:'Bowie Knife',name:'Tiger Tooth',price:312.75,img:'knife.fade.png',rarity:'legendary'}, {type:'Glock-18',name:'Water Elemental',price:6.45,img:'ak47.png.png',rarity:'epic'}, {type:'AWP',name:'Asiimov',price:150.35,img:'awp.png.png',rarity:'rare'}, {type:'M4A1-S',name:'Hyper Beast',price:22.17,img:'ak47.png.png',rarity:'rare'}, {type:'Karambit',name:'Doppler',price:845.2,img:'knife.fade.png',rarity:'legendary'}, {type:'AK-47',name:'Bloodsport',price:37.99,img:'ak47.png.png',rarity:'epic'}, {type:'USP-S',name:'Kill Confirmed',price:28.36,img:'awp.png.png',rarity:'epic'}, {type:'AWP',name:'Dragon Lore',price:1200,img:'awp.png.png',rarity:'legendary'}, {type:'AK-47',name:'Redline',price:35,img:'ak47.png.png',rarity:'common'}, {type:'Desert Eagle',name:'Printstream',price:65,img:'awp.png.png',rarity:'epic'}, {type:'MP9',name:'Starlight Protector',price:42,img:'ak47.png.png',rarity:'rare'}, {type:'AWP',name:'Chromatic Aberration',price:55,img:'awp.png.png',rarity:'epic'}, {type:'M4A4',name:'Howl',price:960,img:'ak47.png.png',rarity:'legendary'}
+];
+const sections=[
+ {title:'Drop Delivery',range:'5 - 299',items:[['purple','Purple Case',5,'case-purple.png','💜'],['storm','Storm Case',12,'case-storm.png','⚡'],['premium','Premium Case',25,'case-premium.png','👑'],['neon','Neon Case',45,'case-neon.png','💎'],['dragon','Dragon Case',100,'case-dragon.png','🐉']]},
+ {title:'Player Cases',range:'149 - 299',items:[['simple','s1mple Case',199,'case-empire.png','🐐'],['donk','Donk Case',199,'case-storm.png','🔥'],['monesy','m0NESY Case',199,'case-neon.png','🎯'],['niko','NiKo Case',199,'case-dragon.png','⚔️'],['zywoo','ZywOo Case',199,'case-premium.png','👑']]},
+ {title:'Summer Collection',range:'59 - 50000',items:[['barbecue','Barbecue',59,'case-barbecue.png','🍖'],['surf','Surf Case',87,'case-neon.png','🌊'],['fire','Fire Case',175,'case-storm.png','🔥'],['diamond','Diamond Case',300,'case-premium.png','💎'],['empire','Empire Case',250,'case-empire.png','♛']]}
+];
+const caseMap={}; sections.forEach(s=>s.items.forEach(i=>caseMap[i[0]]={id:i[0],name:i[1],price:i[2],img:i[3],emoji:i[4],section:s.title}));
+let current='storm', count=1, spinning=false, lastWin=null;
+function src(file){ if(!file) return ''; if(file.startsWith('/')) return file; return IMG+file; }
+function imgHtml(file,alt,emoji){return `<img src="${src(file)}" alt="${alt}" onerror="this.outerHTML='<div class=&quot;ggdp-case-fallback&quot;>${emoji||'📦'}</div>'">`;}
+function showCases(){
+ document.body.classList.add('ggdp-cases-mode');
+ document.getElementById('homePage')?.classList.add('hidden'); document.getElementById('profilePage')?.classList.add('hidden');
+ const page=document.getElementById('casesPage'); if(!page) return; page.className='ggdp-page'; page.classList.remove('hidden'); renderList();
+ document.querySelectorAll('.main-nav-btn').forEach(b=>b.classList.remove('active')); document.querySelector('[data-page="cases"]')?.classList.add('active');
+}
+function hideCases(){document.body.classList.remove('ggdp-cases-mode');document.getElementById('casesPage')?.classList.add('hidden');document.getElementById('homePage')?.classList.remove('hidden');}
+function side(){return `<aside class="ggdp-sidebar"><div class="ggdp-logo-mini">♛</div><button class="ggdp-side-btn active"><span class="ico">📦</span>Кейсы</button><button class="ggdp-side-btn"><span class="ico">🔁</span>Контракты</button><button class="ggdp-side-btn"><span class="ico">⚡</span>Апгрейды</button><button class="ggdp-side-btn"><span class="ico">🎁</span>Призы</button><button class="ggdp-side-btn"><span class="ico">🏆</span>Топ</button></aside>`}
+function renderList(){
+ const page=document.getElementById('casesPage'); if(!page) return;
+ page.innerHTML=`<div class="ggdp-wrap">${side()}<main class="ggdp-main"><div class="ggdp-topline"><div class="ggdp-titleblock"><h1>DROP EMPIRE CASES</h1><p>Большие кейсы, плавная прокрутка и фиолетовый вайб.</p></div><div class="ggdp-pillbar"><div class="ggdp-pill"><span class="ggdp-online-dot"></span><span id="ggdpOnline">${Math.max(1, Number((document.getElementById('onlineBadge')||{}).textContent?.match(/\d+/)?.[0]||3))}</span> ONLINE</div><div class="ggdp-pill">💎 $${Number((document.getElementById('balanceBadge')||{}).textContent?.match(/\d+/)?.[0]||1427)}</div><button class="ggdp-back" id="ggdpBackHome">← Upgrader</button></div></div>${sections.map((sec,idx)=>`<section class="ggdp-section"><div class="ggdp-section-head"><div class="ggdp-section-title"><div class="ggdp-section-kicker">0${idx+1}</div><div><h2>${sec.title}</h2><span>${sec.items.length} cases</span></div></div><div class="ggdp-range">Range<strong>$${sec.range}</strong></div></div><div class="ggdp-cards">${sec.items.map(c=>`<button class="ggdp-case" data-open-case="${c[0]}"><div class="ggdp-case-art">${imgHtml(c[3],c[1],c[4])}</div><div class="ggdp-case-name">${c[1]}</div><div class="ggdp-price">$${c[2]}</div></button>`).join('')}</div></section>`).join('')}</main></div>`;
+ page.querySelector('#ggdpBackHome').onclick=hideCases; page.querySelectorAll('[data-open-case]').forEach(b=>b.onclick=()=>renderOpen(b.dataset.openCase));
+}
+function renderOpen(id){ current=id||current; const c=caseMap[current]||caseMap.storm; const page=document.getElementById('casesPage'); if(!page)return;
+ page.innerHTML=`<div class="ggdp-wrap">${side()}<main class="ggdp-main ggdp-open-layout"><div class="ggdp-mini-list"><button class="ggdp-back" id="ggdpToList" style="width:100%;margin-bottom:10px">← Все кейсы</button>${Object.values(caseMap).map(x=>`<button class="ggdp-mini-card ${x.id===current?'active':''}" data-mini-case="${x.id}">${imgHtml(x.img,x.name,x.emoji)}<div><b>${x.name}</b><span>$${x.price}</span></div></button>`).join('')}</div><section class="ggdp-open-main"><button class="ggdp-back" id="ggdpBackList">← Back to cases</button><div class="ggdp-open-head"><h2>${c.name}</h2><div class="ggdp-price">$${c.price}</div></div><div class="ggdp-reel-stage"><div class="ggdp-reel-pointer"></div><div class="ggdp-reel-pointer bottom"></div><div class="ggdp-reel-window"><div id="ggdpReelTrack" class="ggdp-reel-track">${makeItems(c,0).join('')}</div></div><div id="ggdpResult" class="ggdp-result">Ready to open</div></div><div class="ggdp-controls"><div class="ggdp-counts">${[1,2,3,4,5].map(n=>`<button class="ggdp-count ${n===count?'active':''}" data-count="${n}">${n}</button>`).join('')}</div><button id="ggdpOpen" class="ggdp-open-btn">📦 OPEN CASE $${c.price}</button><button id="ggdpFast" class="ggdp-fast-btn">⚡ OPEN FAST</button></div><div class="case-contains-title" style="margin-top:28px">CASE CONTAINS</div><div class="case-contains-grid">${skins.concat(skins.slice(0,5)).map(s=>`<div class="case-contain-card rarity-${s.rarity}"><span class="case-contain-chance">${(Math.random()*8+0.5).toFixed(2)}%</span><img src="${src(s.img)}" onerror="this.style.display='none'"><div class="case-contain-name">${s.type}<br>${s.name}</div></div>`).join('')}</div></section></main></div><div id="ggdpWinModal" class="ggdp-win-modal"><div class="ggdp-win-card"><h3>YOU WON</h3><img id="ggdpWinImg"><b id="ggdpWinName"></b><span id="ggdpWinPrice"></span><div class="ggdp-win-actions"><button class="ggdp-keep" id="ggdpKeep">ОСТАВИТЬ</button><button class="ggdp-sell" id="ggdpSell">ПРОДАТЬ</button></div></div></div>`;
+ page.querySelector('#ggdpToList').onclick=renderList; page.querySelector('#ggdpBackList').onclick=renderList; page.querySelectorAll('[data-mini-case]').forEach(b=>b.onclick=()=>renderOpen(b.dataset.miniCase)); page.querySelectorAll('[data-count]').forEach(b=>b.onclick=()=>{count=Number(b.dataset.count); renderOpen(current)}); page.querySelector('#ggdpOpen').onclick=()=>openCase(false); page.querySelector('#ggdpFast').onclick=()=>openCase(true); page.querySelector('#ggdpKeep').onclick=keepWin; page.querySelector('#ggdpSell').onclick=sellWin;
+}
+function pick(){let pool=[...skins]; let s=pool[Math.floor(Math.random()*pool.length)]; return {...s,uid:String(Date.now()+Math.random())};}
+function makeItems(c, winIndex, win){let arr=[]; for(let i=0;i<34;i++) arr.push(skins[(i*3+winIndex)%skins.length]); if(win) arr[winIndex]=win; return arr.map(s=>`<div class="ggdp-item ${s.rarity}"><img src="${src(s.img)}" onerror="this.style.opacity=.15"><div><div class="type">${s.type}</div><b>${s.name}</b><div class="val">$${Number(s.price).toFixed(2)}</div></div></div>`);}
+function openCase(fast){if(spinning)return; spinning=true; const c=caseMap[current]; const win=pick(); lastWin=win; const track=document.getElementById('ggdpReelTrack'); const result=document.getElementById('ggdpResult'); const winIndex=24; track.innerHTML=makeItems(c,winIndex,win).join(''); track.style.transition='none'; track.style.transform='translateX(0px)'; result.textContent=`Opening ${count} case${count>1?'s':''}...`; result.className='ggdp-result'; requestAnimationFrame(()=>{const viewport=document.querySelector('.ggdp-reel-window'); const item=190; const target=(winIndex*item)-(viewport.clientWidth/2)+(180/2); track.style.transition=`transform ${fast?650:4300}ms cubic-bezier(.08,.76,.08,1)`; track.style.transform=`translateX(${-target}px)`; setTimeout(()=>finishWin(win),fast?720:4400);});}
+function finishWin(win){spinning=false; const result=document.getElementById('ggdpResult'); result.textContent=`YOU WON: ${win.type} | ${win.name} • $${Number(win.price).toFixed(2)}`; result.className='ggdp-result win'; const modal=document.getElementById('ggdpWinModal'); document.getElementById('ggdpWinImg').src=src(win.img); document.getElementById('ggdpWinName').textContent=`${win.type} | ${win.name}`; document.getElementById('ggdpWinPrice').textContent=`$${Number(win.price).toFixed(2)}`; modal.classList.add('open');}
+function keepWin(){ try{ if(typeof inventory!=='undefined'&&lastWin){inventory.push({id:'case-'+Date.now(),name:`${lastWin.type} | ${lastWin.name}`,price:lastWin.price,image:src(lastWin.img),uid:String(Date.now())}); if(typeof saveInventory==='function')saveInventory(); if(typeof updateStats==='function')updateStats();}}catch(e){} document.getElementById('ggdpWinModal')?.classList.remove('open');}
+function sellWin(){ try{ if(typeof balance!=='undefined'&&lastWin){balance+=Number(lastWin.price); if(typeof saveBalance==='function')saveBalance(); if(typeof updateBalanceUI==='function')updateBalanceUI();}}catch(e){} document.getElementById('ggdpWinModal')?.classList.remove('open');}
+function wire(){document.querySelectorAll('[data-page="cases"],#openCasesBtn').forEach(btn=>{btn.onclick=(e)=>{e.preventDefault();showCases();};}); window.showCasesPage=showCases;}
+setTimeout(()=>{wire(); if(location.hash==='#cases')showCases();},250);
 })();
 </script>
 
