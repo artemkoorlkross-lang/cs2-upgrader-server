@@ -1720,6 +1720,269 @@ body.spin-locked #marketGrid .skin-tile{
 @media(max-width:1180px){.profile-v5-grid{grid-template-columns:1fr}.profile-v5-best img{width:160px}.profile-v5-shell:after{font-size:70px;}}
 @media(max-width:720px){#profilePage.profile-page-v5{padding:10px 0 28px!important}.profile-v5-shell{padding:12px;border-radius:22px}.profile-v5-account{grid-template-columns:72px 1fr}.profile-v5-avatar-wrap{width:72px;height:72px}.profile-v5-name{font-size:20px}.profile-v5-inventory-head .profile-tab{min-width:0;flex:1}.profile-v5-body{padding:14px}.profile-v5-inventory-grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))!important}.profile-v5-vip{font-size:12px}.profile-v5-shell:after{display:none}}
 
+
+/* Drop Empire profile functions + account settings modal */
+.profile-v5-settings,
+.profile-v5-toggle,
+.profile-v5-deposit,
+.profile-v5-coupon button,
+.profile-v5-balance-card .text-gray-400,
+.profile-v5-vip-badge{
+    cursor:pointer;
+    user-select:none;
+}
+.profile-v5-settings:hover,
+.profile-v5-balance-card .text-gray-400:hover,
+.profile-v5-vip-badge:hover{
+    color:#fff;
+    transform:translateY(-1px);
+    text-shadow:0 0 14px rgba(168,85,247,.55);
+}
+.profile-v5-switch{
+    position:relative;
+}
+.profile-v5-switch.active{
+    background:#a855f7!important;
+    box-shadow:0 0 18px rgba(168,85,247,.65)!important;
+}
+.profile-v5-switch.active:after{
+    left:22px!important;
+    background:white!important;
+}
+.profile-v5-switch:after{
+    content:"";
+    position:absolute;
+    left:4px;
+    top:4px;
+    width:16px;
+    height:16px;
+    border-radius:50%;
+    background:#9ca3af;
+    transition:.22s cubic-bezier(.2,.8,.2,1);
+}
+.account-settings-overlay{
+    position:fixed;
+    inset:0;
+    z-index:12000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    background:rgba(0,0,0,.48);
+    backdrop-filter:blur(13px);
+}
+.account-settings-overlay.open{display:flex;animation:settingsFade .18s ease both;}
+@keyframes settingsFade{from{opacity:0}to{opacity:1}}
+.account-settings-modal{
+    width:min(760px,94vw);
+    max-height:90vh;
+    overflow:auto;
+    border-radius:14px;
+    background:#16171b;
+    border:1px solid rgba(255,255,255,.08);
+    box-shadow:0 26px 90px rgba(0,0,0,.72), 0 0 50px rgba(168,85,247,.12);
+    padding:28px 22px 24px;
+    color:#f4f4f5;
+    animation:settingsPop .22s cubic-bezier(.2,.8,.2,1) both;
+}
+@keyframes settingsPop{from{transform:translateY(14px) scale(.985);opacity:.2}to{transform:translateY(0) scale(1);opacity:1}}
+.account-settings-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:16px;
+    margin-bottom:26px;
+}
+.account-settings-title{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    font-size:20px;
+    font-weight:1000;
+}
+.account-settings-close{
+    width:28px;
+    height:28px;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    color:#a1a1aa;
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.05);
+    font-size:22px;
+    line-height:1;
+    transition:.18s ease;
+}
+.account-settings-close:hover{
+    color:white;
+    background:rgba(255,255,255,.09);
+    transform:rotate(90deg);
+}
+.account-settings-label{
+    display:block;
+    margin:0 0 10px;
+    color:#f5f5f5;
+    font-weight:1000;
+    font-size:16px;
+}
+.account-settings-input{
+    width:100%;
+    height:40px;
+    margin-bottom:26px;
+    padding:0 14px;
+    border-radius:11px;
+    background:#121316;
+    border:1px solid rgba(255,255,255,.12);
+    color:white;
+    outline:none;
+    font-weight:800;
+    transition:.18s ease;
+}
+.account-settings-input:focus{
+    border-color:#facc15;
+    box-shadow:0 0 0 3px rgba(250,204,21,.08);
+}
+.account-settings-link{
+    display:inline-block;
+    margin-top:-18px;
+    margin-bottom:24px;
+    color:#aeb4c0;
+    text-decoration:underline;
+    font-size:12px;
+    font-weight:700;
+}
+.account-settings-section-title{
+    margin:0 0 12px;
+    font-size:17px;
+    font-weight:1000;
+}
+.account-radio{
+    display:grid;
+    grid-template-columns:18px 1fr;
+    gap:8px;
+    align-items:start;
+    margin:12px 0;
+    color:#e7e7ea;
+    font-weight:1000;
+}
+.account-radio input{
+    appearance:none;
+    width:17px;
+    height:17px;
+    border-radius:50%;
+    margin-top:2px;
+    border:1px solid #a1a1aa;
+    background:#17181c;
+    position:relative;
+}
+.account-radio input:checked{
+    border-color:#facc15;
+    box-shadow:0 0 0 2px rgba(250,204,21,.12);
+}
+.account-radio input:checked:after{
+    content:"";
+    position:absolute;
+    inset:3px;
+    border-radius:50%;
+    background:#facc15;
+}
+.account-radio small{
+    display:block;
+    margin-top:6px;
+    color:#9ca3af;
+    font-size:13px;
+    line-height:1.35;
+    font-weight:700;
+}
+.account-settings-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:18px;
+    margin:28px 0 22px;
+}
+.account-settings-row p{
+    margin:7px 0 0;
+    color:#a1a1aa;
+    font-size:13px;
+    font-weight:700;
+}
+.account-switch{
+    width:37px;
+    height:22px;
+    border-radius:999px;
+    background:#3f4147;
+    border:1px solid rgba(255,255,255,.08);
+    position:relative;
+    flex:0 0 auto;
+    transition:.18s ease;
+}
+.account-switch:after{
+    content:"";
+    position:absolute;
+    top:3px;
+    left:3px;
+    width:14px;
+    height:14px;
+    border-radius:50%;
+    background:#aaa;
+    transition:.18s ease;
+}
+.account-switch.active{
+    background:#facc15;
+}
+.account-switch.active:after{
+    left:18px;
+    background:#111;
+}
+.account-settings-save{
+    display:block;
+    width:min(260px,100%);
+    height:48px;
+    margin:18px auto 0;
+    border-radius:8px;
+    border:1px solid #facc15;
+    color:#facc15;
+    font-weight:1000;
+    background:transparent;
+    transition:.2s ease;
+}
+.account-settings-save:hover{
+    background:#facc15;
+    color:#121212;
+    box-shadow:0 0 24px rgba(250,204,21,.25);
+    transform:translateY(-2px);
+}
+.profile-toast{
+    position:fixed;
+    right:22px;
+    bottom:24px;
+    z-index:13000;
+    max-width:min(380px,calc(100vw - 36px));
+    padding:14px 16px;
+    border-radius:15px;
+    background:linear-gradient(180deg,rgba(20,20,25,.96),rgba(12,12,16,.96));
+    border:1px solid rgba(250,204,21,.28);
+    color:white;
+    box-shadow:0 20px 50px rgba(0,0,0,.45),0 0 24px rgba(250,204,21,.14);
+    font-weight:900;
+    opacity:0;
+    transform:translateY(12px);
+    pointer-events:none;
+    transition:.22s ease;
+}
+.profile-toast.show{
+    opacity:1;
+    transform:translateY(0);
+}
+body.streamer-mode #balanceAmount,
+body.streamer-mode #profileBalance,
+body.streamer-mode #inventoryValue,
+body.streamer-mode #profileInventorySellValue,
+body.streamer-mode #profileSoldValue{
+    filter:blur(7px);
+}
+
 </style>
 </head>
 <body class="text-white font-sans">
@@ -2542,6 +2805,10 @@ function sellAllInventory() {
     if (total <= 0) return;
 
     balance += total;
+    if (typeof profileSettings !== "undefined") {
+        profileSettings.soldTotal = (Number(profileSettings.soldTotal) || 0) + total;
+        saveProfileSettings?.();
+    }
     inventory = [];
     selectedInventoryIndex = 0;
     balanceBoost = 0;
@@ -4306,6 +4573,221 @@ async function openSelectedCase(fast = false) {
     updateCaseButtons();
 }
 
+
+/* Drop Empire profile functional upgrade */
+const DEFAULT_PROFILE_SETTINGS = {
+    nickname: "GuArd",
+    tradeLink: "https://steamcommunity.com/tradeoffer/new/?partner=1103583146&token=DLLPsXQS",
+    privacy: "private",
+    streamerMode: false,
+    pushNotifications: false,
+    soldTotal: 0,
+    payments: []
+};
+
+function loadProfileSettings() {
+    try {
+        return { ...DEFAULT_PROFILE_SETTINGS, ...(JSON.parse(localStorage.getItem("dropempire-profile-settings")) || {}) };
+    } catch {
+        return { ...DEFAULT_PROFILE_SETTINGS };
+    }
+}
+
+let profileSettings = loadProfileSettings();
+
+function saveProfileSettings() {
+    localStorage.setItem("dropempire-profile-settings", JSON.stringify(profileSettings));
+}
+
+function showProfileToast(message) {
+    const toast = document.getElementById("profileToast");
+    if (!toast) return alert(message);
+    toast.textContent = message;
+    toast.classList.add("show");
+    clearTimeout(showProfileToast._t);
+    showProfileToast._t = setTimeout(() => toast.classList.remove("show"), 2300);
+}
+
+function applyProfileSettingsUI() {
+    const nickname = profileSettings.nickname || "GuArd";
+
+    const profileNameEl = document.getElementById("profileName");
+    if (profileNameEl) profileNameEl.textContent = nickname;
+
+    const topProfileLink = document.querySelector("#steamProfile a");
+    if (topProfileLink && topProfileLink.textContent.trim() && !topProfileLink.querySelector("img")) {
+        topProfileLink.textContent = topProfileLink.textContent.includes("Steam") ? topProfileLink.textContent : nickname;
+    }
+
+    const soldValueEl = document.getElementById("profileSoldValue");
+    if (soldValueEl) soldValueEl.textContent = "$" + (Number(profileSettings.soldTotal) || 0);
+
+    const pushSwitch = document.querySelector(".profile-v5-switch");
+    if (pushSwitch) pushSwitch.classList.toggle("active", !!profileSettings.pushNotifications);
+
+    document.body.classList.toggle("streamer-mode", !!profileSettings.streamerMode);
+}
+
+function openAccountSettings() {
+    const overlay = document.getElementById("accountSettingsOverlay");
+    if (!overlay) return;
+
+    document.getElementById("settingsNickname").value = profileSettings.nickname || "GuArd";
+    document.getElementById("settingsTradeLink").value = profileSettings.tradeLink || "";
+    document.querySelectorAll('input[name="steamPrivacy"]').forEach(input => {
+        input.checked = input.value === (profileSettings.privacy || "private");
+    });
+    document.getElementById("settingsStreamerSwitch")?.classList.toggle("active", !!profileSettings.streamerMode);
+
+    overlay.classList.add("open");
+    overlay.setAttribute("aria-hidden", "false");
+}
+
+function closeAccountSettings() {
+    const overlay = document.getElementById("accountSettingsOverlay");
+    if (!overlay) return;
+    overlay.classList.remove("open");
+    overlay.setAttribute("aria-hidden", "true");
+}
+
+function saveAccountSettingsFromModal() {
+    const nickname = document.getElementById("settingsNickname")?.value.trim() || "GuArd";
+    const tradeLink = document.getElementById("settingsTradeLink")?.value.trim() || "";
+    const privacy = document.querySelector('input[name="steamPrivacy"]:checked')?.value || "private";
+    const streamerMode = document.getElementById("settingsStreamerSwitch")?.classList.contains("active") || false;
+
+    profileSettings.nickname = nickname;
+    profileSettings.tradeLink = tradeLink;
+    profileSettings.privacy = privacy;
+    profileSettings.streamerMode = streamerMode;
+    saveProfileSettings();
+    applyProfileSettingsUI();
+    closeAccountSettings();
+    showProfileToast("✅ Settings saved");
+}
+
+function addPaymentHistory(type, amount, note = "") {
+    profileSettings.payments = Array.isArray(profileSettings.payments) ? profileSettings.payments : [];
+    profileSettings.payments.unshift({
+        type,
+        amount,
+        note,
+        date: new Date().toLocaleString()
+    });
+    profileSettings.payments = profileSettings.payments.slice(0, 12);
+    saveProfileSettings();
+}
+
+function showPaymentHistory() {
+    const payments = Array.isArray(profileSettings.payments) ? profileSettings.payments : [];
+    if (!payments.length) {
+        showProfileToast("Payment history is empty for now");
+        return;
+    }
+    alert(payments.map(p => `${p.date}\n${p.type}: $${p.amount}${p.note ? " · " + p.note : ""}`).join("\n\n"));
+}
+
+function setupProfileFunctions() {
+    document.querySelector(".profile-v5-settings")?.addEventListener("click", openAccountSettings);
+    document.getElementById("accountSettingsClose")?.addEventListener("click", closeAccountSettings);
+    document.getElementById("accountSettingsOverlay")?.addEventListener("click", (event) => {
+        if (event.target.id === "accountSettingsOverlay") closeAccountSettings();
+    });
+    document.getElementById("accountSettingsSave")?.addEventListener("click", saveAccountSettingsFromModal);
+    document.getElementById("settingsStreamerSwitch")?.addEventListener("click", (event) => {
+        event.currentTarget.classList.toggle("active");
+    });
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeAccountSettings();
+    });
+
+    document.querySelector(".profile-v5-toggle")?.addEventListener("click", () => {
+        profileSettings.pushNotifications = !profileSettings.pushNotifications;
+        saveProfileSettings();
+        applyProfileSettingsUI();
+        showProfileToast(profileSettings.pushNotifications ? "🔔 Push notifications enabled" : "🔕 Push notifications disabled");
+    });
+
+    document.querySelector(".profile-v5-deposit")?.addEventListener("click", () => {
+        const raw = prompt("How much demo balance to add?", "100");
+        if (raw === null) return;
+        const amount = Math.max(1, Math.floor(Number(raw) || 0));
+        if (!amount) return showProfileToast("Enter a valid amount");
+        balance += amount;
+        saveBalance();
+        addPaymentHistory("Deposit", amount, "Demo balance");
+        updateStats();
+        showProfileToast(`💎 Added $${amount}`);
+    });
+
+    document.querySelector(".profile-v5-coupon button")?.addEventListener("click", () => {
+        const input = document.querySelector(".profile-v5-coupon input");
+        const code = (input?.value || "").trim().toUpperCase();
+        const used = JSON.parse(localStorage.getItem("dropempire-used-coupons") || "[]");
+        const coupons = { "EMPIRE": 100, "DROP": 50, "CEO": 250, "GUARD": 500 };
+
+        if (!code) return showProfileToast("Enter coupon code");
+        if (!coupons[code]) return showProfileToast("❌ Invalid coupon");
+        if (used.includes(code)) return showProfileToast("Coupon already used");
+
+        balance += coupons[code];
+        used.push(code);
+        localStorage.setItem("dropempire-used-coupons", JSON.stringify(used));
+        saveBalance();
+        addPaymentHistory("Coupon", coupons[code], code);
+        if (input) input.value = "";
+        updateStats();
+        showProfileToast(`🎁 Coupon activated: +$${coupons[code]}`);
+    });
+
+    document.querySelector(".profile-v5-balance-card .text-gray-400")?.addEventListener("click", showPaymentHistory);
+    document.querySelector(".profile-v5-vip-badge")?.addEventListener("click", () => {
+        const total = inventory.reduce((s, item) => s + (Number(item.price) || 0), 0);
+        const level = total >= 1000 ? "LEGEND" : total >= 500 ? "ELITE" : total >= 100 ? "VIP" : "ROOKIE";
+        showProfileToast(`👑 VIP level: ${level}`);
+    });
+
+    applyProfileSettingsUI();
+}
+
+/* hook sold totals into existing profile sell buttons */
+const originalRenderProfileInventoryDropEmpire = renderProfileInventory;
+renderProfileInventory = function() {
+    originalRenderProfileInventoryDropEmpire();
+
+    document.querySelectorAll("[data-profile-sell-index]").forEach((btn) => {
+        const cloned = btn.cloneNode(true);
+        btn.parentNode.replaceChild(cloned, btn);
+        cloned.addEventListener("click", (event) => {
+            event.stopPropagation();
+            const index = Number(cloned.dataset.profileSellIndex);
+            const item = inventory[index];
+            if (!item) return;
+            const ok = confirm(`Sell ${item.name} for $${item.price}?`);
+            if (!ok) return;
+            balance += Number(item.price) || 0;
+            profileSettings.soldTotal = (Number(profileSettings.soldTotal) || 0) + (Number(item.price) || 0);
+            inventory.splice(index, 1);
+            saveInventory();
+            saveBalance();
+            saveProfileSettings();
+            updateStats();
+            showProfileToast(`Sold ${item.name} for $${item.price}`);
+        });
+    });
+
+    applyProfileSettingsUI();
+};
+
+const originalUpdateStatsDropEmpire = updateStats;
+updateStats = function() {
+    originalUpdateStatsDropEmpire();
+    applyProfileSettingsUI();
+};
+
+setupProfileFunctions();
+
 setupProfileTabs();
 setupCasesOpening();
 renderProfileHistory();
@@ -4325,5 +4807,47 @@ if (window.location.hash === "#profile") {
 }
 
 </script>
+
+<div id="accountSettingsOverlay" class="account-settings-overlay" aria-hidden="true">
+    <div class="account-settings-modal" role="dialog" aria-modal="true" aria-label="Account settings">
+        <div class="account-settings-head">
+            <div class="account-settings-title">⚙ Settings</div>
+            <button id="accountSettingsClose" class="account-settings-close" type="button">×</button>
+        </div>
+
+        <label class="account-settings-label" for="settingsNickname">Nickname</label>
+        <input id="settingsNickname" class="account-settings-input" type="text" value="GuArd">
+
+        <label class="account-settings-label" for="settingsTradeLink">Trade link</label>
+        <input id="settingsTradeLink" class="account-settings-input" type="text" value="https://steamcommunity.com/tradeoffer/new/?partner=1103583146&token=DLLPsXQS">
+        <a class="account-settings-link" href="https://steamcommunity.com/my/tradeoffers/privacy" target="_blank" rel="noopener">The link can be found here</a>
+
+        <div class="account-settings-section-title">Steam Privacy</div>
+        <label class="account-radio">
+            <input type="radio" name="steamPrivacy" value="private">
+            <span>Private <small>Default value. Only you will see your Steam profile information, allowing you to hide your profile from parser bots and malicious users.</small></span>
+        </label>
+        <label class="account-radio">
+            <input type="radio" name="steamPrivacy" value="friends">
+            <span>Available only to friends <small>All authorized users can see your profile information.</small></span>
+        </label>
+        <label class="account-radio">
+            <input type="radio" name="steamPrivacy" value="public">
+            <span>Public <small>All users will see your profile information.</small></span>
+        </label>
+
+        <div class="account-settings-row">
+            <div>
+                <div class="account-settings-section-title">Streamer mode</div>
+                <p>Hides personal information and balance for security while streaming</p>
+            </div>
+            <button id="settingsStreamerSwitch" class="account-switch" type="button" aria-label="Streamer mode"></button>
+        </div>
+
+        <button id="accountSettingsSave" class="account-settings-save" type="button">Save and close</button>
+    </div>
+</div>
+<div id="profileToast" class="profile-toast"></div>
+
 </body>
 </html>
